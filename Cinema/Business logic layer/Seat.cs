@@ -7,9 +7,8 @@ public class Seat
     private (int x, int y) _coordinates;
     private string _auditorium;
     private string _typePricing;
-    private double _price;
 
-    public double Price { get { return _price; } }
+    public double Price { get; set; }
     public string TypePricing
     {
         get { return _typePricing; }
@@ -22,7 +21,7 @@ public class Seat
 
             _typePricing = value;
 
-            _price = TypePricing switch
+            Price = TypePricing switch
             {
                 "normal" => 12.0,
                 "luxe" => 14.0,
