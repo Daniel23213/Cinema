@@ -27,6 +27,8 @@
         Coordinates = (x, y);
         Theater = theater;
         SeatType = seatType;
+
+        Price = PriceCalculator.CalculatePrice(seatType);
         _id = counter++;
     }
 
