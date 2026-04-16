@@ -1,36 +1,14 @@
-﻿// to set prices go to TypePricing, you can change and add values, also cange calid pricings
-public class Seat
+﻿public class Seat : IEquatable<Seat>
 {
-    public int ID { get; }
     public static List<string> ValidAuditoriums = new List<string> { "a", "b", "c" }; // add here the names of valid auditoriums, so this can be expanded
     public static List<string> ValidPricing = new List<string> { "normal", "luxe", "super luxe" }; // add here the names of valid pricings, so this can be expanded
 
     private (int x, int y) _coordinates;
-    private string _auditorium;
-    private string _typePricing;
+    private int _id;
+    private static int counter = 0;
 
-    public double Price { get; set; }
-    public string TypePricing
-    {
-        get { return _typePricing; }
-        set
-        {
-            if (!ValidPricing.Contains(value))
-            {
-                throw new ArgumentException($"'{value}' is not a valid pricing type.");
-            }
-
-            _typePricing = value;
-
-            Price = TypePricing switch
-            {
-                "normal" => 12.0,
-                "luxe" => 14.0,
-                "super luxe" => 16.0,
-                _ => throw new ArgumentException($"'{value}' is not a valid Price.")
-            };
-        }
-    }
+    public decimal Price { get; set; }
+    public string SeatType { get; set; }
     public (int x, int y) Coordinates
     {
         get { return _coordinates; }
@@ -44,24 +22,47 @@ public class Seat
             _coordinates = value;
         }
     }
-    public string Auditorium
-    {
-        get { return _auditorium; }
-        set
-        {
-            if (!ValidAuditoriums.Contains(value))
-            {
-                throw new ArgumentException($"'{value}' is not a valid auditorium.");
-            }
+    public string Theater { get; set; }
 
-            _auditorium = value;
-        }
-    }
-
-    public Seat(int x, int y, string auditorium, string typePricing)
+    public Seat(int x, int y, string theater, string seatType)
     {
         Coordinates = (x, y);
-        Auditorium = auditorium;
-        TypePricing = typePricing;
+        Theater = theater;
+        SeatType = seatType;
+
+        Price = PriceCalculator.CalculatePrice(seatType);
+        _id = counter++;
+    }
+
+    public void MakeSeatTaken()
+    {
+        _isTaken = true;
+    }
+
+    public override string ToString()
+    {
+        return $"ID: {_id}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
+    }
+
+    public bool Equals(Seat other)
+    {
+        if (other is null) { return false; }
+
+        return this._coordinates == other._coordinates 
+            && this.Price == other.Price
+            && this.Theater == other.Theater
+            && this.SeatType == other.SeatType;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is null) { return false; }
+
+        if (obj is Seat other) { return Equals(other); } else { return false; }
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_coordinates, Price, Theater, SeatType);
     }
 }
