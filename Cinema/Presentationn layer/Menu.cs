@@ -1,4 +1,6 @@
-﻿public static class Menu
+﻿//using Cinema.Presentationn_layer;
+
+public static class Menu
 {
     public static void ShowMenu()
     {
@@ -12,6 +14,7 @@
             Console.WriteLine("[4]: Cancel tickets");
             Console.WriteLine("[5]: Food menu");
             Console.WriteLine("[6]: Manage account");
+            Console.WriteLine("[10]: Register");
             //use this when UserRole will be implemented
             //if (role == UserRole.Manager || role == UserRole.SuperManager)
             //{
@@ -57,6 +60,10 @@
                 case "6":
                     //implement cancel ticket
                     Console.WriteLine("Cancel ticket feature coming soon...");
+                    break;
+                case "10":
+                    //implement cancel ticket
+                    RegisterMenu.ShowRegisterMenu();
                     break;
 
                 //use this when UserRole will be implemented
