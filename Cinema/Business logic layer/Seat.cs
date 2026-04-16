@@ -29,7 +29,7 @@
         SeatType = seatType;
 
         Price = PriceCalculator.CalculatePrice(seatType);
-        _id = counter++;
+        ID = counter++;
     }
 
     public void MakeSeatTaken()
@@ -39,7 +39,7 @@
 
     public override string ToString()
     {
-        return $"ID: {_id}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
+        return $"ID: {ID}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
     }
 
     public bool Equals(Seat other)
