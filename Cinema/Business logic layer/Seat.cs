@@ -5,7 +5,7 @@
     private int _id;
     private static int counter = 0;
 
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public string SeatType { get; set; }
     public (int x, int y) Coordinates
     {
