@@ -2,9 +2,9 @@
 {
     private bool _isTaken = false;
     private (int x, int y) _coordinates;
-    private int _id;
     private static int counter = 0;
 
+    public int ID { get; }
     public decimal Price { get; set; }
     public string SeatType { get; set; }
     public (int x, int y) Coordinates
