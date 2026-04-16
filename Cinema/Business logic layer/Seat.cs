@@ -1,8 +1,6 @@
 ﻿public class Seat : IEquatable<Seat>
 {
-    public static List<string> ValidAuditoriums = new List<string> { "a", "b", "c" }; // add here the names of valid auditoriums, so this can be expanded
-    public static List<string> ValidPricing = new List<string> { "normal", "luxe", "super luxe" }; // add here the names of valid pricings, so this can be expanded
-
+    private bool _isTaken = false;
     private (int x, int y) _coordinates;
     private int _id;
     private static int counter = 0;
@@ -44,7 +42,7 @@
         return $"ID: {_id}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
     }
 
-    public bool Equals(Seat other)
+    public bool Equals(Seat? other)
     {
         if (other is null) { return false; }
 
@@ -54,7 +52,7 @@
             && this.SeatType == other.SeatType;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is null) { return false; }
 
