@@ -17,7 +17,10 @@
         // For example:
         UserModel newAccount = new UserModel(firstName, lastName, email, password, age);
         UserAccess accountsAccess = new UserAccess();
-        accountsAccess.Write(newAccount);
-        Console.WriteLine("Registration successful! You can now log in with your credentials.");
+        if(accountsAccess.Write(newAccount)== true) 
+        {
+            Console.WriteLine("Register sucessfull");
+        }
+        
     }
 }

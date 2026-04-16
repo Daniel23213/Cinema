@@ -12,10 +12,11 @@ public class UserAccess
 
     private string Table = "users";
 
-    public void Write(UserModel account)
+    public bool Write(UserModel account)
     {
-        string sql = $"INSERT INTO {Table} (FirstName, Lastname Email, Password, Age ) VALUES (@FirstName, @LastName, @Email, @Password, @Age)";
+        string sql = $"INSERT INTO {Table} (FirstName, Lastname, Email, Password, Age ) VALUES (@FirstName, @LastName, @Email, @Password, @Age)";
         _connection.Execute(sql, account);
+        return true;
     }
 
     public UserModel GetByEmail(string email)

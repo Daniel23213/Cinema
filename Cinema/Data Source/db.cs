@@ -26,7 +26,8 @@ class db
             Lastname TEXT NOT NULL,
             Email TEXT NOT NULL,
             Password TEXT NOT NULL,
-            Age INTEGER NOT NULL
+            Age INTEGER NOT NULL,
+            Role TEXT
         );";
 
         // MOVIES
