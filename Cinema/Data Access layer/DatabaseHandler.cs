@@ -3,45 +3,35 @@ using Microsoft.Data.Sqlite;
 class DatabaseHandler
 {
     private const string _databaseLoc = "./auditorium.db";
-    private static readonly List<string> _csvLoc = new() {"./auditorium.csv"};
-    public string Name;
 
-    public DatabaseHandler(string table) => Name = table;
+    public DatabaseHandler() {}
 
-    public static void InitialiseTables()
+    public Seat GetSeatFromID(int id)
     {
-        using SqliteConnection connection = new($"Data Source={_databaseLoc}");
-        connection.Open();
-
-        foreach (string auditorium in _csvLoc)
-        {
-            string name = Path.GetFileNameWithoutExtension(auditorium);
-            string sql = $@"
-                CREATE TABLE IF NOT EXISTS {name} (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    auditorium STRING NOT NULL,
-                    row INTEGER NOT NULL,
-                    column INTEGER NOT NULL,
-                    type STRING NOT NULL,
-                    booked BOOL NOT NULL DEFAULT 0,
-                );";
-            using var command = new SqliteCommand(sql, connection);
-            command.ExecuteNonQuery();
-        }
-        connection.Close();
+        string sql = "SELECT * FROM seats WHERE id = @ID";
+        SqliteConnection connection = new($"Data Source={_databaseLoc}");
+        return connection.QuerySingle<Seat>(sql, new { @ID = id });
     }
 
-    public string GetSeatFromID(int id, string auditorium)
+    public void BookSeat(int id, bool istaken)
     {
-        string sql = "SELECT * FROM auditorium = @Auditorium WHERE id = @ID";
+        string sql = "UPDATE seats SET istaken = @Istaken WHERE id = @ID";
         SqliteConnection connection = new($"Data Source={_databaseLoc}");
-        return connection.QuerySingle<string>(sql, new { @Auditorium = auditorium, @ID = id });
+        connection.QuerySingle<string>(sql, new { @Istaken = istaken, @ID = id });
     }
 
-    public void BookSeat(int id, string auditorium)
+    public Auditorium GetAuditoriumFromID(int id)
     {
-        string sql = "UPDATE auditorium = @Auditorium SET booked = @Booked WHERE id = @ID";
+        string sql = "SELECT * FROM auditorium WHERE id = @ID";
         SqliteConnection connection = new($"Data Source={_databaseLoc}");
-        connection.QuerySingle<string>(sql, new { @Auditorium = auditorium, @ID = id });
+        return connection.QuerySingle<Auditorium>(sql, new { @ID = id });
+    }
+
+    public Auditorium GetAuditoriumFromID(Seat seat)
+    {
+        int id = seat.ID;
+        string sql = "SELECT * FROM auditorium WHERE id = @ID";
+        SqliteConnection connection = new($"Data Source={_databaseLoc}");
+        return connection.QuerySingle<Auditorium>(sql, new { @ID = id });
     }
 }

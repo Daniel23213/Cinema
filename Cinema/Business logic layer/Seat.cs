@@ -1,6 +1,7 @@
 ﻿// to set prices go to TypePricing, you can change and add values, also cange calid pricings
 public class Seat
 {
+    public int ID { get; }
     public static List<string> ValidAuditoriums = new List<string> { "a", "b", "c" }; // add here the names of valid auditoriums, so this can be expanded
     public static List<string> ValidPricing = new List<string> { "normal", "luxe", "super luxe" }; // add here the names of valid pricings, so this can be expanded
 
