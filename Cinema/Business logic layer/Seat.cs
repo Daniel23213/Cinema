@@ -1,8 +1,9 @@
-﻿public class Seat
+﻿public class Seat : IEquatable<Seat>
 {
+    private bool _isTaken = false;
     private (int x, int y) _coordinates;
-    private string _auditorium;
-    private string _typePricing;
+    private int _id;
+    private static int counter = 0;
 
     public double Price { get; set; }
     public string SeatType { get; set; }
@@ -19,24 +20,45 @@
             _coordinates = value;
         }
     }
-    public string Auditorium
-    {
-        get { return _auditorium; }
-        set
-        {
-            if (!ValidAuditoriums.Contains(value))
-            {
-                throw new ArgumentException($"'{value}' is not a valid auditorium.");
-            }
+    public string Theater { get; set; }
 
-            _auditorium = value;
-        }
-    }
-
-    public Seat(int x, int y, string auditorium, string typePricing)
+    public Seat(int x, int y, string theater, string seatType)
     {
         Coordinates = (x, y);
-        Auditorium = auditorium;
-        SeatType = typePricing;
+        Theater = theater;
+        SeatType = seatType;
+        _id = counter++;
+    }
+
+    public void MakeSeatTaken()
+    {
+        _isTaken = true;
+    }
+
+    public override string ToString()
+    {
+        return $"ID: {_id}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
+    }
+
+    public bool Equals(Seat other)
+    {
+        if (other is null) { return false; }
+
+        return this._coordinates == other._coordinates 
+            && this.Price == other.Price
+            && this.Theater == other.Theater
+            && this.SeatType == other.SeatType;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is null) { return false; }
+
+        if (obj is Seat other) { return Equals(other); } else { return false; }
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_coordinates, Price, Theater, SeatType);
     }
 }
