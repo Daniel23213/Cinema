@@ -5,16 +5,24 @@ public static class Menu
     public static void ShowMenu()
     {
         bool running = true;
+        bool isLogged = false;
 
         while (running)
         {
+
             Console.WriteLine("\n[1]: Airing movies");
             Console.WriteLine("[2]: Buy tickets");
             Console.WriteLine("[3]: Booked tickets");
             Console.WriteLine("[4]: Cancel tickets");
             Console.WriteLine("[5]: Food menu");
             Console.WriteLine("[6]: Manage account");
-            Console.WriteLine("[10]: Register");
+            Console.WriteLine("[7]: Exit");
+            if (isLogged == false)
+            {
+                Console.WriteLine("[10]: Register");
+                Console.WriteLine("[11]: Login");
+            }
+            
             //use this when UserRole will be implemented
             //if (role == UserRole.Manager || role == UserRole.SuperManager)
             //{
@@ -25,7 +33,7 @@ public static class Menu
             //{
             //Console.WriteLine("[9]: Manage users");
             //}
-            Console.WriteLine("[7]: Exit");
+            
 
             Console.Write("Choose an option: ");
             string input = Console.ReadLine();
@@ -63,7 +71,15 @@ public static class Menu
                     break;
                 case "10":
                     //implement cancel ticket
-                    RegisterMenu.ShowRegisterMenu();
+                    if(RegisterMenu.ShowRegisterMenu() == true) 
+                    {
+                        isLogged = true;
+                    }
+                    
+                    break;
+                case "11":
+                    //implement cancel ticket
+                    LoginMenu.Show();
                     break;
 
                 //use this when UserRole will be implemented

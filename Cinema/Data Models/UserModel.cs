@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-public class UserModel
+public class UserModel : IEquatable<UserModel>
 {
     public int Id { get; set; }
     public string FirstName { get; set; }
@@ -27,6 +27,24 @@ public class UserModel
         using var sha = SHA256.Create();
         var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
         return Convert.ToBase64String(bytes);
+    }
+
+    public bool Equals(UserModel other) 
+    {
+        if(other == null) 
+        {
+            return false;
+        }
+        if(Email == other.Email) 
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public override string ToString()
+    {
+        return $"FirstName {FirstName} \n LastName {LastName}, \n Email {Email}, \n Age {Age}";
     }
 
 }

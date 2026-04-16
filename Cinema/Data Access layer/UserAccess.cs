@@ -1,5 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
-using Dapper;
+﻿using Dapper;
+using Microsoft.Data.Sqlite;
+using System.Security.Principal;
 
 
 
@@ -14,6 +15,16 @@ public class UserAccess
 
     public bool Write(UserModel account)
     {
+
+        int count = _connection.ExecuteScalar<int>(
+     $"SELECT COUNT(*) FROM {Table} WHERE Email = @Email",
+     new { Email = account.Email }
+ );
+
+        if (count > 0)
+        {
+            return false; // user already exists
+        }
         string sql = $"INSERT INTO {Table} (FirstName, Lastname, Email, Password, Age ) VALUES (@FirstName, @LastName, @Email, @Password, @Age)";
         _connection.Execute(sql, account);
         return true;
@@ -23,6 +34,18 @@ public class UserAccess
     {
         string sql = $"SELECT * FROM {Table} WHERE email = @Email";
         return _connection.QueryFirstOrDefault<UserModel>(sql, new { Email = email });
+    }
+
+    public bool Login(string email , string password)
+    {
+        string sql = $"SELECT * FROM {Table} WHERE email = @Email";
+        int rows = _connection.QueryFirstOrDefault<int>(sql, new { Email = email, Pasword = UserModel.HashPassword(password)});
+
+        if (rows > 0) 
+        {
+            return true;
+        }
+        return false;
     }
 
     public void Update(UserModel account)

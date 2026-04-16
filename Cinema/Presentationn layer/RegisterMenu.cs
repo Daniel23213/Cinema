@@ -1,6 +1,6 @@
 ﻿public static class RegisterMenu
 {
-    public static void ShowRegisterMenu()
+    public static bool ShowRegisterMenu()
     {
         Console.WriteLine("\n--- Register ---");
         Console.Write("Enter your email: ");
@@ -19,7 +19,14 @@
         UserAccess accountsAccess = new UserAccess();
         if(accountsAccess.Write(newAccount)== true) 
         {
-            Console.WriteLine("Register sucessfull");
+            Console.WriteLine("Register sucessfull.");
+            newAccount.ToString();
+            return true;
+        }
+        else 
+        {
+            Console.WriteLine("Email is taken!");
+            return false;
         }
         
     }
