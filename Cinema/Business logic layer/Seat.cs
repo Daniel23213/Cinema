@@ -1,10 +1,10 @@
 ﻿public class Seat : IEquatable<Seat>
 {
-
+    private bool _isTaken = false;
     private (int x, int y) _coordinates;
-    private int _id;
     private static int counter = 0;
 
+    public int ID { get; }
     public decimal Price { get; set; }
     public string SeatType { get; set; }
     public (int x, int y) Coordinates
@@ -29,7 +29,7 @@
         SeatType = seatType;
 
         Price = PriceCalculator.CalculatePrice(seatType);
-        _id = counter++;
+        ID = counter++;
     }
 
     public void MakeSeatTaken()
@@ -39,14 +39,14 @@
 
     public override string ToString()
     {
-        return $"ID: {_id}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
+        return $"ID: {ID}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
     }
 
     public bool Equals(Seat other)
     {
         if (other is null) { return false; }
 
-        return this._coordinates == other._coordinates 
+        return this._coordinates == other._coordinates
             && this.Price == other.Price
             && this.Theater == other.Theater
             && this.SeatType == other.SeatType;
