@@ -36,16 +36,11 @@ public class UserAccess
         return _connection.QueryFirstOrDefault<UserModel>(sql, new { Email = email });
     }
 
-    public bool Login(string email , string password)
+    public UserModel Login(string email, string password)
     {
-        string sql = $"SELECT * FROM {Table} WHERE email = @Email";
-        int rows = _connection.QueryFirstOrDefault<int>(sql, new { Email = email, Pasword = UserModel.HashPassword(password)});
-
-        if (rows > 0) 
-        {
-            return true;
-        }
-        return false;
+        password = UserModel.HashPassword(password);
+        string sql = $"SELECT * FROM {Table} WHERE email = @Email AND password = @Password";
+        return _connection.QueryFirstOrDefault<UserModel>(sql, new { Email = email, Password = password });
     }
 
     public void Update(UserModel account)
@@ -58,6 +53,24 @@ public class UserAccess
     {
         string sql = $"DELETE FROM {Table} WHERE id = @Id";
         _connection.Execute(sql, new { Id = account.Id });
+        account = null;
+    }
+    public IEnumerable<UserModel> ShowUsers()
+    {
+     
+        string sql = $"SELECT * FROM {Table}";
+        return _connection.Query<UserModel>(sql).ToList();
+    }
+
+    public void Delete(int  id)
+    {
+        string sql = $"DELETE FROM {Table} WHERE id = @Id";
+        _connection.Execute(sql, new { Id = id });
+    }
+    public void UpdatePassword(int id ,string password)
+    {
+        string sql = $"UPDATE {Table} SET  Password = @Password  WHERE id = @Id";
+        _connection.Execute(sql, new { Id = id, Password = UserModel.HashPassword(password) });
     }
 
 

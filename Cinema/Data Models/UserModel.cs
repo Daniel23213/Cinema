@@ -13,6 +13,8 @@ public class UserModel : IEquatable<UserModel>
     public string Password { get; set; }
     public int Age { get; set; }
 
+    public string Role { get; set; }
+
     public UserModel(string firstName, string lastName, string email, string password , int age)
     {
         FirstName = firstName;
@@ -20,6 +22,10 @@ public class UserModel : IEquatable<UserModel>
         Email = email;
         Password = HashPassword(password);
         Age = age;
+    }
+    public UserModel()
+    {
+
     }
 
     public static string HashPassword(string password)
@@ -44,7 +50,7 @@ public class UserModel : IEquatable<UserModel>
 
     public override string ToString()
     {
-        return $"FirstName {FirstName} \n LastName {LastName}, \n Email {Email}, \n Age {Age}";
+        return $"Id{Id} \n FirstName {FirstName} \n LastName {LastName}, \n Email {Email}, \n Age {Age}";
     }
 
 }

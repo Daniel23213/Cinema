@@ -1,39 +1,50 @@
 ﻿//using Cinema.Presentationn_layer;
 
-public static class Menu
+public static class Menu 
 {
     public static void ShowMenu()
     {
         bool running = true;
-        bool isLogged = false;
+        UserModel isLogged = null ;
 
         while (running)
         {
-
-            Console.WriteLine("\n[1]: Airing movies");
-            Console.WriteLine("[2]: Buy tickets");
-            Console.WriteLine("[3]: Booked tickets");
-            Console.WriteLine("[4]: Cancel tickets");
-            Console.WriteLine("[5]: Food menu");
-            Console.WriteLine("[6]: Manage account");
-            Console.WriteLine("[7]: Exit");
-            if (isLogged == false)
+            // User first Name and Last Name print put up in another if not to confuse the user
+            if(isLogged != null) 
             {
-                Console.WriteLine("[10]: Register");
-                Console.WriteLine("[11]: Login");
+                Console.WriteLine($"Logged in as: {isLogged.FirstName} {isLogged.LastName}");
             }
-            
-            //use this when UserRole will be implemented
-            //if (role == UserRole.Manager || role == UserRole.SuperManager)
-            //{
-            //Console.WriteLine("[8]: Manage movies");
-            //}
+            Console.WriteLine("\n[1]: Airing movies");
+            if (isLogged != null)
+            {
+                
+                Console.WriteLine("[2]: Buy tickets");
+                Console.WriteLine("[4]: Cancel tickets");
+                Console.WriteLine("[3]: Booked tickets");
+                Console.WriteLine("[6]: Manage account");
+                if (isLogged.Role == "Admin" || isLogged.Role == "SuperManager")
+                {
+                    Console.WriteLine("[M]: Manage movies");
+                }
 
-            //if (role == UserRole.SuperManager)
-            //{
-            //Console.WriteLine("[9]: Manage users");
-            //}
+                if (isLogged.Role == "SuperManager")
+                {
+                    Console.WriteLine("[U]: Manage users");
+                }
+
+            }
+            Console.WriteLine("[5]: Food menu");
+
+            Console.WriteLine("[E]: Exit");
+            if (isLogged == null)
+            {
+                Console.WriteLine("[R]: Register");
+                Console.WriteLine("[L]: Login");
+            }
+
+            //use this when UserRole will be implemented
             
+
 
             Console.Write("Choose an option: ");
             string input = Console.ReadLine();
@@ -56,30 +67,56 @@ public static class Menu
                     break;
 
                 case "4":
+                    //implement cancel ticket
+                    Console.WriteLine("Cancel ticket feature coming soon...");
+                    break;
+
+                case "5":
                     //implement food menu
                     Console.WriteLine("Food menu feature coming soon...");
                     break;
 
-                case "5":
+                case "6":
                     //implement manage account
                     Console.WriteLine("Manage account feature coming soon...");
-                    break;
-
-                case "6":
-                    //implement cancel ticket
-                    Console.WriteLine("Cancel ticket feature coming soon...");
-                    break;
-                case "10":
-                    //implement cancel ticket
-                    if(RegisterMenu.ShowRegisterMenu() == true) 
+                    Console.WriteLine("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
+                    string manageInput = Console.ReadLine();
+                    UserAccess userAccess = new UserAccess();
+                    if (manageInput == "D" || manageInput == "d")
                     {
-                        isLogged = true;
+                        // Implement delete account
+                        
+                        userAccess.Delete(isLogged);
+                        Console.WriteLine("Your account has been deleted!");
+                        isLogged = null;
+                        continue;
+
+
                     }
+                    else if (manageInput == "C" || manageInput == "c")
+                    {
+                        // Implement change password
+                        string newpassword = Console.ReadLine();
+                        userAccess.UpdatePassword(isLogged.Id, newpassword);
+                    }
+                    break;
+                case "R" or "r":
+                    //Register sysyem
+
+                    isLogged = RegisterMenu.ShowRegisterMenu();
+                    
+                   
+                    break;
+                case "L" or "l":
+                   //login sysyem
+            
+                        isLogged = LoginMenu.Show();
                     
                     break;
-                case "11":
-                    //implement cancel ticket
-                    LoginMenu.Show();
+                case "U" or "u":
+
+                     ManageUsers.Show();
+
                     break;
 
                 //use this when UserRole will be implemented
@@ -105,7 +142,7 @@ public static class Menu
                 //}
                 //break;
 
-                case "7":
+                case "E" or "e":
                     Console.WriteLine("Exiting...");
                     running = false;
                     break;

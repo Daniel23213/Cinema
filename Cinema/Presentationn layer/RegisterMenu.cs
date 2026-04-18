@@ -1,6 +1,6 @@
 ﻿public static class RegisterMenu
 {
-    public static bool ShowRegisterMenu()
+    public static UserModel ShowRegisterMenu()
     {
         Console.WriteLine("\n--- Register ---");
         Console.Write("Enter your email: ");
@@ -21,12 +21,12 @@
         {
             Console.WriteLine("Register sucessfull.");
             newAccount.ToString();
-            return true;
+            return newAccount;
         }
         else 
         {
             Console.WriteLine("Email is taken!");
-            return false;
+            return null;
         }
         
     }

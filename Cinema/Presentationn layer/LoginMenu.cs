@@ -1,6 +1,6 @@
 ﻿static class LoginMenu 
 {
-    public static bool  Show() 
+    public static UserModel  Show() 
     {
         Console.WriteLine("\n--- Login ---");
         Console.Write("Enter your email: ");
@@ -8,18 +8,18 @@
         Console.Write("Enter your password: ");
         string password = Console.ReadLine();
         UserAccess accountsAccess = new UserAccess();
-        if (accountsAccess.Login(email, password) == true)
+        if (accountsAccess.Login(email, password) != null)
         {
             Console.WriteLine("Login sucessfull.");
 
-            return true;
+            return accountsAccess.Login(email, password);
             
 
         }
         else
         {
-            Console.WriteLine("Email is taken!");
-            return false;
+            Console.WriteLine("Wrong name or  password!");
+            return null;
         }
 
     }
