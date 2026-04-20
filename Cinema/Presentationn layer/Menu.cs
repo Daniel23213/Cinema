@@ -1,5 +1,49 @@
 ﻿public static class Menu
 {
+    private static void AddMovieMenu()
+    {
+        Console.Write("Enter title: ");
+        string title = Console.ReadLine();
+
+        Console.Write("Enter author: ");
+        string author = Console.ReadLine();
+
+        Console.Write("Enter genre: ");
+        string genre = Console.ReadLine();
+
+        Console.Write("Enter duration in minutes: ");
+        int minutes = int.Parse(Console.ReadLine());
+        TimeSpan duration = TimeSpan.FromMinutes(minutes);
+
+        Console.Write("Enter premiere date (yyyy-MM-dd): ");
+        DateTime premier = DateTime.Parse(Console.ReadLine());
+
+        MovieService service = new MovieService();
+
+        service.AddMovie(title, author, genre, duration, premier);
+
+        Console.WriteLine("✅ Movie added successfully!");
+    }
+
+    private static void ShowAiringMovies()
+    {
+        var service = new MovieService();
+        var movies = service.GetAiringMovies();
+
+        if (movies.Count == 0)
+        {
+            Console.WriteLine("No airing movies right now.");
+            return;
+        }
+
+        Console.WriteLine("\n🎬 Airing Movies:\n");
+
+        foreach (var movie in movies)
+        {
+            Console.WriteLine(movie);
+        }
+    }
+
     public static void ShowMenu()
     {
         bool running = true;
