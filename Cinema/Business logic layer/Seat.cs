@@ -42,17 +42,17 @@
         return $"ID: {ID}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
     }
 
-    public bool Equals(Seat other)
+    public bool Equals(Seat? other)
     {
         if (other is null) { return false; }
 
-        return this._coordinates == other._coordinates 
+        return this._coordinates == other._coordinates
             && this.Price == other.Price
             && this.Theater == other.Theater
             && this.SeatType == other.SeatType;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is null) { return false; }
 
