@@ -6,7 +6,7 @@ public class AuditoriumAccess
 
     public AuditoriumAccess() {}
 
-    public List<int> GetSeatsIDFromAuditoriumID(int id)
+    public List<int> GetAuditoriumByID(int id)
     {
         List<int> seats = [];
         string sql = "SELECT seats_id FROM theater_has_seats WHERE theater_id = @ID";

@@ -5,21 +5,11 @@ public class Auditorium
     public string CurrentMovie { get; set; }
     
     
-    public Auditorium(int id, string currentMovie)
+    public Auditorium(int id, List<int> seats, string currentMovie)
     {
         ID = id;
-        Seats = AuditoriumAccess.GetSeatsIDFromAuditoriumID(id);
+        Seats = seats;
         CurrentMovie = currentMovie;
-    }
-
-    public Seat? FindSeat(int id)
-    {
-        foreach (int seat in Seats)
-        {
-            if (seat.ID == id)
-                return seat;
-        }
-        return null;
     }
 
     public override string ToString() => $"Auditorium {ID} has {Seats.Count} seats and the movie thats airing is {CurrentMovie}";
