@@ -28,20 +28,45 @@
     private static void ShowAiringMovies()
     {
         var service = new MovieService();
-        var movies = service.GetAiringMovies();
 
-        if (movies.Count == 0)
+        bool inScreen = true;
+
+        while (inScreen)
         {
-            Console.WriteLine("No airing movies right now.");
-            return;
-        }
+            Console.Clear();
+            Console.WriteLine("\n🎬 Airing Movies:\n");
 
-        Console.WriteLine("\n🎬 Airing Movies:\n");
+            var movies = service.GetAiringMovies();
 
-        foreach (var movie in movies)
-        {
-            Console.WriteLine(movie);
+            if (movies.Count == 0)
+            {
+                Console.WriteLine("No airing movies right now.");
+                return;
+            }
+            else
+            {
+                foreach (var movie in movies)
+                {
+                    Console.WriteLine(movie);
+                }
+            }
+
+            Console.WriteLine("\n[E] Go back");
+
+            Console.Write("\nChoose: ");
+            string input = Console.ReadLine();
+
+            switch (input)
+            {
+                case "E":
+                    inScreen = false;
+                    break;
+                default:
+                    Console.WriteLine("Invalid option...");
+                    break;
+            }
         }
+        Console.Clear();
     }
 
     public static void ShowMenu()
@@ -74,8 +99,9 @@
             switch (input)
             {
                 case "1":
-                    //implement Airing movies
-                    Console.WriteLine("Airing movies feature coming soon...");
+                    //Add movie will go to adming
+                    AddMovieMenu();
+                    ShowAiringMovies();
                     break;
 
                 case "2":
