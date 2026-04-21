@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-public class Movies
+public class Movie
 {
     public int Id { get; set; }
     public string Title { get; }
@@ -10,7 +10,7 @@ public class Movies
     public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1.5);
     public DateTime Premier { get; set; }
 
-    public Movies(int id, string title, string author, string genre, TimeSpan duration, DateTime premier)
+    public Movie(int id, string title, string author, string genre, TimeSpan duration, DateTime premier)
     {
         Id = id;
         Title = title;
