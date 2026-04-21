@@ -1,7 +1,7 @@
 public class Auditorium
 {
     public int ID { get; }
-    public List<Seat> Seats { get; }
+    public List<Seat> Seats { get; set; }
     public Movie CurrentMovie { get; set; }
     
     
