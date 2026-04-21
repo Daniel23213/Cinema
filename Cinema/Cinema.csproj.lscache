@@ -63,13 +63,18 @@ Business logic layer/
 Data Access layer/
  AuditoriumAccess.cs
  MovieRepository.cs
- UserModel.cs
+ UserAccess.cs
+Data Models/UserModel.cs
 Data Source/db.cs
 obj/Debug/net8.0/
  .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
  Cinema.AssemblyInfo.cs
  Cinema.GlobalUsings.g.cs
-Presentationn layer/Menu.cs
+Presentationn layer/
+ LoginMenu.cs
+ ManageUsers.cs
+ Menu.cs
+ RegisterMenu.cs
 Program.cs
 
 [metadataReferences]
