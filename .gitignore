@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+Cinema/Presentationn layer/Menu.cs
+Cinema/Data Source/Cinema.db
