@@ -1,4 +1,4 @@
-﻿public class Seat : IEquatable<Seat>
+﻿public class SeatModel : IEquatable<SeatModel>
 {
     private bool _isTaken = false;
     private (int x, int y) _coordinates;
@@ -22,13 +22,13 @@
     }
     public string Theater { get; set; }
 
-    public Seat(int x, int y, string theater, string seatType)
+    public SeatModel(int x, int y, string theater, string seatType)
     {
         Coordinates = (x, y);
         Theater = theater;
         SeatType = seatType;
 
-        Price = PriceCalculator.CalculatePrice(seatType);
+        Price = PriceCalculatorLogic.CalculatePrice(seatType);
         ID = counter++;
     }
 
@@ -42,7 +42,7 @@
         return $"ID: {ID}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
     }
 
-    public bool Equals(Seat? other)
+    public bool Equals(SeatModel? other)
     {
         if (other is null) { return false; }
 
@@ -56,7 +56,7 @@
     {
         if (obj is null) { return false; }
 
-        if (obj is Seat other) { return Equals(other); } else { return false; }
+        if (obj is SeatModel other) { return Equals(other); } else { return false; }
     }
 
     public override int GetHashCode()
