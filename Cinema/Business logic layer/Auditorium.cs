@@ -2,10 +2,10 @@ public class Auditorium
 {
     public int ID { get; }
     public List<Seat> Seats { get; }
-    public string CurrentMovie { get; set; }
+    public Movie CurrentMovie { get; set; }
     
     
-    public Auditorium(int id, List<Seat> seats, string currentMovie)
+    public Auditorium(int id, List<Seat> seats, Movie currentMovie)
     {
         ID = id;
         Seats = seats;

@@ -17,7 +17,7 @@ public class AuditoriumAccess
             seats.Add(seat);
         }
         sql = "SELECT Movie FROM theater_has_seats WHERE theater_id = @ID";
-        string movie = connection.QuerySingle<string>(sql, new { @ID = id });
+        Movie movie = connection.QuerySingle<Movie>(sql, new { @ID = id });
         Auditorium auditorium = new(id, seats, movie);
         return auditorium;
     }
