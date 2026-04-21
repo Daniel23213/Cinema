@@ -1,8 +1,8 @@
-public class MovieService
+public class MovieServiceLogic
 {
-    private readonly MovieRepository _repo = new MovieRepository();
+    private readonly MovieAcess _repo = new MovieAcess();
 
-    public List<Movies> GetAiringMovies()
+    public List<MovieModel> GetAiringMovies()
     {
         return _repo.GetAiringMovies();
     }

@@ -20,7 +20,7 @@ public static class Menu
         Console.Write("Enter premiere date (yyyy-MM-dd): ");
         DateTime premier = DateTime.Parse(Console.ReadLine());
 
-        MovieService service = new MovieService();
+        MovieServiceLogic service = new MovieServiceLogic();
 
         service.AddMovie(title, author, genre, duration, premier);
 
@@ -29,7 +29,7 @@ public static class Menu
 
     private static void ShowAiringMovies()
     {
-        var service = new MovieService();
+        var service = new MovieServiceLogic();
 
         bool inScreen = true;
 

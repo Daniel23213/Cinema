@@ -1,11 +1,11 @@
-public class Auditorium
+public class AuditoriumModel
 {
     public int ID { get; }
-    public List<Seat> Seats { get; }
-    public Movie CurrentMovie { get; set; }
+    public List<SeatModel> Seats { get; set; }
+    public MovieModel CurrentMovie { get; set; }
     
     
-    public Auditorium(int id, List<Seat> seats, Movie currentMovie)
+    public AuditoriumModel(int id, List<SeatModel> seats, MovieModel currentMovie)
     {
         ID = id;
         Seats = seats;
