@@ -2,6 +2,75 @@
 
 public static class Menu 
 {
+    private static void AddMovieMenu()
+    {
+        Console.Write("Enter title: ");
+        string title = Console.ReadLine();
+
+        Console.Write("Enter author: ");
+        string author = Console.ReadLine();
+
+        Console.Write("Enter genre: ");
+        string genre = Console.ReadLine();
+
+        Console.Write("Enter duration in minutes: ");
+        int minutes = int.Parse(Console.ReadLine());
+        TimeSpan duration = TimeSpan.FromMinutes(minutes);
+
+        Console.Write("Enter premiere date (yyyy-MM-dd): ");
+        DateTime premier = DateTime.Parse(Console.ReadLine());
+
+        MovieService service = new MovieService();
+
+        service.AddMovie(title, author, genre, duration, premier);
+
+        Console.WriteLine("✅ Movie added successfully!");
+    }
+
+    private static void ShowAiringMovies()
+    {
+        var service = new MovieService();
+
+        bool inScreen = true;
+
+        while (inScreen)
+        {
+            Console.Clear();
+            Console.WriteLine("\n🎬 Airing Movies:\n");
+
+            var movies = service.GetAiringMovies();
+
+            if (movies.Count == 0)
+            {
+                Console.WriteLine("No airing movies right now.");
+                return;
+            }
+            else
+            {
+                foreach (var movie in movies)
+                {
+                    Console.WriteLine(movie);
+                }
+            }
+
+            Console.WriteLine("\n[E] Go back");
+
+            Console.Write("\nChoose: ");
+            string input = Console.ReadLine();
+
+            switch (input)
+            {
+                case "E":
+                    inScreen = false;
+                    break;
+                default:
+                    Console.WriteLine("Invalid option...");
+                    break;
+            }
+        }
+        Console.Clear();
+    }
+
     public static void ShowMenu()
     {
         bool running = true;
@@ -52,8 +121,9 @@ public static class Menu
             switch (input)
             {
                 case "1":
-                    //implement Airing movies
-                    Console.WriteLine("Airing movies feature coming soon...");
+                    //Add movie will go to adming
+                    AddMovieMenu();
+                    ShowAiringMovies();
                     break;
 
                 case "2":
