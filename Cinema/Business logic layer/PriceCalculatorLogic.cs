@@ -1,4 +1,4 @@
-﻿public static class PriceCalculator
+﻿public static class PriceCalculatorLogic
 {
     // you can overload this method to allow for additional requirements when calculating the price
     public static decimal CalculatePrice(string seatType)

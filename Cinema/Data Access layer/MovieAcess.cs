@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 
-public class MovieRepository
+public class MovieAcess
 {
     private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
 
@@ -24,9 +24,9 @@ public class MovieRepository
         command.ExecuteNonQuery();
     }
 
-    public List<Movies> GetAiringMovies()
+    public List<MovieModel> GetAiringMovies()
     {
-        List<Movies> movies = new List<Movies>();
+        List<MovieModel> movies = new List<MovieModel>();
 
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -41,7 +41,7 @@ public class MovieRepository
 
         while (reader.Read())
         {
-            Movies movie = new Movies(
+            MovieModel movie = new MovieModel(
                 reader.GetInt32(0),
                 reader.GetString(1),
                 reader.GetString(2),
