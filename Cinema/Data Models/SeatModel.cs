@@ -2,8 +2,6 @@
 {
     private bool _isTaken = false;
     private (int x, int y) _coordinates;
-    private static int counter = 0;
-
     public int ID { get; }
     public decimal Price { get; set; }
     public string SeatType { get; set; }
@@ -22,14 +20,14 @@
     }
     public string Theater { get; set; }
 
-    public SeatModel(int x, int y, string theater, string seatType)
+    public SeatModel(int id, int x, int y, string theater, string seatType)
     {
+        ID = id;
         Coordinates = (x, y);
         Theater = theater;
         SeatType = seatType;
 
         Price = PriceCalculatorLogic.CalculatePrice(seatType);
-        ID = counter++;
     }
 
     public void MakeSeatTaken()
@@ -63,4 +61,4 @@
     {
         return HashCode.Combine(_coordinates, Price, Theater, SeatType);
     }
-}
+}  
