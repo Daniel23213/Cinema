@@ -54,17 +54,18 @@ TemporaryDependencyNodeTargetIdentifier=net8.0
 
 [sourceFiles]
 Business logic layer/
- Auditorium.cs
- Movies.cs
- MovieService.cs
- PriceCalculator.cs
- Seat.cs
- UserAccess.cs
+ MovieServiceLogic.cs
+ PriceCalculatorLogic.cs
 Data Access layer/
  AuditoriumAccess.cs
- MovieRepository.cs
+ MovieAcess.cs
+ SeatAccess.cs
  UserAccess.cs
-Data Models/UserModel.cs
+Data Models/
+ AuditoriumModel.cs
+ MovieModel.cs
+ SeatModel.cs
+ UserModel.cs
 Data Source/db.cs
 obj/Debug/net8.0/
  .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
