@@ -54,10 +54,12 @@ TemporaryDependencyNodeTargetIdentifier=net8.0
 
 [sourceFiles]
 Business logic layer/
+ IMovieServiceLogic.cs
  MovieServiceLogic.cs
  PriceCalculatorLogic.cs
 Data Access layer/
  AuditoriumAccess.cs
+ IMovieAcces.cs
  MovieAcess.cs
  ReserveSeatAccess.cs
  SeatAccess.cs
@@ -77,6 +79,7 @@ Presentationn layer/
  LoginMenu.cs
  ManageUsers.cs
  Menu.cs
+ MovieMenu.cs
  RegisterMenu.cs
 Program.cs
 
