@@ -59,8 +59,17 @@ public static class Menu
 
                 case "2":
                     //implement buy tickets movies
-                    Console.WriteLine("Buy tickets feature coming soon...");
-                    break;
+                    // Console.WriteLine("Buy tickets feature coming soon...");
+                    // break;
+                    Console.WriteLine("Enter Seat Number");
+                    string ?Input = Console.ReadLine();
+
+                    int seatID = Convert.ToInt32(Input);
+                    SeatModel seat = new SeatModel(seatID, 1, "A", "Normal");
+                    ReservationModel reserve = new ReservationModel(0,isLogged.FirstName, seat,isLogged.Id);
+
+                    string results = reserve.SeatAvailble(seat,isLogged.FirstName);
+                    Console.WriteLine(results);
 
                 case "3":
                     //implement view booked tickets
