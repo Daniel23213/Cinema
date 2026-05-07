@@ -73,6 +73,12 @@ public class UserAccess
         _connection.Execute(sql, new { Id = id, Password = UserModel.HashPassword(password) });
     }
 
+    public void ReserveToUser(UserModel user , int seatId, int show_id)
+    {
+        string sql = "INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id) VALUES (@UserId, @SeatId, @ShowId)";
+        _connection.Execute(sql, new { UserId = user.Id, SeatId = seatId, ShowId = show_id });
+    }
+
 
 
 }

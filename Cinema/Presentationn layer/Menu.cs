@@ -82,17 +82,13 @@ public static class Menu
                     if (seatAccess.ReserveSeat(seat))
                     {
                         Console.WriteLine("Seat reserved successfully.");
+                        UserAccess user = new UserAccess();
+                        user.ReserveToUser(isLogged, seatAccess.GetId(seat), choice);
+
 
                     }
                    
                     break;
-
-                    int seatID = Convert.ToInt32(Input);
-                    SeatModel seat = new SeatModel(seatID, 1, "A", "Normal");
-                    ReservationModel reserve = new ReservationModel(0,isLogged.FirstName, seat,isLogged.Id);
-
-                    string results = reserve.SeatAvailble(seat,isLogged.FirstName);
-                    Console.WriteLine(results);
 
                 case "3":
                     //implement view booked tickets

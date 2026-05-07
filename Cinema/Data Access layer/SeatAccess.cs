@@ -15,6 +15,28 @@ public  class SeatAccess
 
     }
 
+    public int GetId(string seat) 
+    {
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+    SELECT Id
+    FROM seats
+    WHERE Seat = @Seat;
+    ";
+
+        command.Parameters.AddWithValue("@Seat", seat);
+
+        var result = command.ExecuteScalar();
+        int res = Convert.ToInt32(result);
+        return res;
+       
+
+    }
+
     public bool ReserveSeat(string seat)
     {
         using var connection = new SqliteConnection(ConnectionString);
