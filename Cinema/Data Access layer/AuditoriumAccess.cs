@@ -2,7 +2,7 @@ using Dapper;
 using Microsoft.Data.Sqlite;
 public class AuditoriumAccess
 {
-    private const string _databaseLoc = "./cinima.db";
+    private const string _databaseLoc = "./Cinema.db";
 
     public AuditoriumModel GetAuditoriumByID(int id)
     {

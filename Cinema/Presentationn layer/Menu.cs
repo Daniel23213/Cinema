@@ -1,5 +1,7 @@
 ﻿//using Cinema.Presentationn_layer;
 
+using System.Threading.Channels;
+
 public static class Menu
 {
     private static MovieMenu movieMenu = new MovieMenu();
@@ -54,12 +56,35 @@ public static class Menu
             switch (input)
             {
                 case "1":
-                    movieMenu.GetAiringMovies();
+                    MovieAcces movieAcces = new MovieAcces();
+                    movieAcces.GetShowings();
+
                     break;
 
                 case "2":
                     //implement buy tickets movies
-                    Console.WriteLine("Buy tickets feature coming soon...");
+                    MovieAcces movieAccess = new MovieAcces();
+                    movieAccess.GetShowings();
+                    Console.Write("Enter showing ID: ");
+                    string choiceInput = Console.ReadLine();
+
+
+                    if (!int.TryParse(choiceInput, out int choice))
+                    {
+                        Console.WriteLine("Please enter a valid number.");
+
+                        break;
+                    }
+                    movieAccess.PrintSeatsByShowingId(choice);
+                    SeatAccess seatAccess = new SeatAccess();
+                    string seat = Console.ReadLine();
+
+                    if (seatAccess.ReserveSeat(seat))
+                    {
+                        Console.WriteLine("Seat reserved successfully.");
+
+                    }
+                   
                     break;
 
                 case "3":
@@ -130,30 +155,6 @@ public static class Menu
                         Console.WriteLine("Access denied.");
                     }
                     break;
-
-                //use this when UserRole will be implemented
-                //case "8":
-                //if (role == UserRole.Manager || role == UserRole.SuperManager)
-                //{
-                //Console.WriteLine("Manager feature coming soon...");
-                //}
-                //else
-                //{
-                //Console.WriteLine("Access denied.");
-                //}
-                //break;
-
-                //case "9":
-                //if (role == UserRole.SuperManager)
-                //{
-                //Console.WriteLine("Super manager users feature coming soon...");
-                //}
-                //else
-                //{
-                //Console.WriteLine("Access denied.");
-                //}
-                //break;
-
                 case "E" or "e":
                     Console.WriteLine("Exiting...");
                     running = false;
