@@ -1,4 +1,4 @@
-﻿//using Cinema.Presentationn_layer;
+//using Cinema.Presentationn_layer;
 
 using System.Threading.Channels;
 
@@ -86,6 +86,13 @@ public static class Menu
                     }
                    
                     break;
+
+                    int seatID = Convert.ToInt32(Input);
+                    SeatModel seat = new SeatModel(seatID, 1, "A", "Normal");
+                    ReservationModel reserve = new ReservationModel(0,isLogged.FirstName, seat,isLogged.Id);
+
+                    string results = reserve.SeatAvailble(seat,isLogged.FirstName);
+                    Console.WriteLine(results);
 
                 case "3":
                     //implement view booked tickets
