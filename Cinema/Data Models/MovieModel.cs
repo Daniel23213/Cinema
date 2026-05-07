@@ -22,7 +22,7 @@ public class MovieModel
 
     public override string ToString()
     {
-        return $"Name:{Title} by {Author} and the Duration is: {Duration}";
+        return $"ID: {Id} Name:{Title} by {Author} and the Duration is: {Duration}";
     }
 
 

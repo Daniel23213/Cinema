@@ -1,4 +1,6 @@
-﻿//using Cinema.Presentationn_layer;
+//using Cinema.Presentationn_layer;
+
+using System.Threading.Channels;
 
 public static class Menu
 {
@@ -54,22 +56,39 @@ public static class Menu
             switch (input)
             {
                 case "1":
-                    movieMenu.GetAiringMovies();
+                    MovieAcces movieAcces = new MovieAcces();
+                    movieAcces.GetShowings();
+
                     break;
 
                 case "2":
                     //implement buy tickets movies
-                    // Console.WriteLine("Buy tickets feature coming soon...");
-                    // break;
-                    Console.WriteLine("Enter Seat Number");
-                    string ?Input = Console.ReadLine();
+                    MovieAcces movieAccess = new MovieAcces();
+                    movieAccess.GetShowings();
+                    Console.Write("Enter showing ID: ");
+                    string choiceInput = Console.ReadLine();
 
-                    int seatID = Convert.ToInt32(Input);
-                    SeatModel seat = new SeatModel(seatID, 1, "A", "Normal");
-                    ReservationModel reserve = new ReservationModel(0,isLogged.FirstName, seat,isLogged.Id);
 
-                    string results = reserve.SeatAvailble(seat,isLogged.FirstName);
-                    Console.WriteLine(results);
+                    if (!int.TryParse(choiceInput, out int choice))
+                    {
+                        Console.WriteLine("Please enter a valid number.");
+
+                        break;
+                    }
+                    movieAccess.PrintSeatsByShowingId(choice);
+                    SeatAccess seatAccess = new SeatAccess();
+                    string seat = Console.ReadLine();
+
+                    if (seatAccess.ReserveSeat(seat))
+                    {
+                        Console.WriteLine("Seat reserved successfully.");
+                        UserAccess user = new UserAccess();
+                        user.ReserveToUser(isLogged, seatAccess.GetId(seat), choice);
+
+
+                    }
+                   
+                    break;
 
                 case "3":
                     //implement view booked tickets
@@ -139,30 +158,6 @@ public static class Menu
                         Console.WriteLine("Access denied.");
                     }
                     break;
-
-                //use this when UserRole will be implemented
-                //case "8":
-                //if (role == UserRole.Manager || role == UserRole.SuperManager)
-                //{
-                //Console.WriteLine("Manager feature coming soon...");
-                //}
-                //else
-                //{
-                //Console.WriteLine("Access denied.");
-                //}
-                //break;
-
-                //case "9":
-                //if (role == UserRole.SuperManager)
-                //{
-                //Console.WriteLine("Super manager users feature coming soon...");
-                //}
-                //else
-                //{
-                //Console.WriteLine("Access denied.");
-                //}
-                //break;
-
                 case "E" or "e":
                     Console.WriteLine("Exiting...");
                     running = false;

@@ -21,7 +21,7 @@ class db
         // USERS
         string usersTable = @"
         CREATE TABLE IF NOT EXISTS users (
-            Id INTEGER PRIMARY KEY,
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
             Firstname TEXT NOT NULL,
             Lastname TEXT NOT NULL,
             Email TEXT NOT NULL,
@@ -33,29 +33,39 @@ class db
         // MOVIES
         string moviesTable = @"
         CREATE TABLE IF NOT EXISTS movies (
-            Id INTEGER PRIMARY KEY,
-            Title TEXT,
-            Duration TEXT,
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Title TEXT NOT NULL,
+            Duration TEXT NOT NULL,
             Author TEXT,
             Genre TEXT,
             Premier DATETIME
         );";
 
-        // THEATER
+        // THEATER / AUDITORIUMS
         string theaterTable = @"
         CREATE TABLE IF NOT EXISTS theater (
-            Id INTEGER PRIMARY KEY,
-            Movies_Id INTEGER,
-            Description TEXT,
-            FOREIGN KEY (Movies_Id) REFERENCES movies(Id)
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Description TEXT NOT NULL
+        );";
+
+        // MOVIE SHOWINGS
+        string movieShowingsTable = @"
+        CREATE TABLE IF NOT EXISTS movie_showings (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Movie_Id INTEGER NOT NULL,
+            Theater_Id INTEGER NOT NULL,
+            ShowTime DATETIME NOT NULL,
+
+            FOREIGN KEY (Movie_Id) REFERENCES movies(Id),
+            FOREIGN KEY (Theater_Id) REFERENCES theater(Id)
         );";
 
         // SEATS
         string seatsTable = @"
         CREATE TABLE IF NOT EXISTS seats (
-            Id INTEGER PRIMARY KEY,
-            Seat TEXT,
-            IsTaken INTEGER,
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Seat TEXT NOT NULL,
+            IsTaken INTEGER DEFAULT 0,
             PricingType TEXT
         );";
 
@@ -64,36 +74,43 @@ class db
         CREATE TABLE IF NOT EXISTS theater_has_seats (
             Theater_Id INTEGER,
             Seats_Id INTEGER,
+
             PRIMARY KEY (Theater_Id, Seats_Id),
+
             FOREIGN KEY (Theater_Id) REFERENCES theater(Id),
             FOREIGN KEY (Seats_Id) REFERENCES seats(Id)
         );";
 
-        // RESERVATION
+        // RESERVATIONS
         string reservationTable = @"
         CREATE TABLE IF NOT EXISTS reservation (
-            Users_Id INTEGER,
-            Seats_Id INTEGER,
-            PRIMARY KEY (Users_Id, Seats_Id),
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Users_Id INTEGER NOT NULL,
+            Seats_Id INTEGER NOT NULL,
+            Showing_Id INTEGER NOT NULL,
+
             FOREIGN KEY (Users_Id) REFERENCES users(Id),
-            FOREIGN KEY (Seats_Id) REFERENCES seats(Id)
+            FOREIGN KEY (Seats_Id) REFERENCES seats(Id),
+            FOREIGN KEY (Showing_Id) REFERENCES movie_showings(Id)
         );";
 
-        // Execute all
+        // Execute tables
         Execute(connection, usersTable);
         Execute(connection, moviesTable);
         Execute(connection, theaterTable);
+        Execute(connection, movieShowingsTable);
         Execute(connection, seatsTable);
         Execute(connection, theaterSeatsTable);
         Execute(connection, reservationTable);
 
-        // 🔍 Debug: show tables
+        // Debug: show all tables
         using var check = connection.CreateCommand();
         check.CommandText = "SELECT name FROM sqlite_master WHERE type='table';";
 
         using var reader = check.ExecuteReader();
 
-        Console.WriteLine("Tables in DB:");
+        Console.WriteLine("\nTables in database:");
+
         while (reader.Read())
         {
             Console.WriteLine("- " + reader.GetString(0));
