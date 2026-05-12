@@ -57,6 +57,10 @@ Business logic layer/
  IMovieServiceLogic.cs
  MovieServiceLogic.cs
  PriceCalculatorLogic.cs
+CinemaTests/
+ MSTestSettings.cs
+ obj/Debug/net10.0/CinemaTests.GlobalUsings.g.cs
+ Test1.cs
 Data Access layer/
  AuditoriumAccess.cs
  IMovieAcces.cs
