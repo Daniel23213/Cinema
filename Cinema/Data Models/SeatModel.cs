@@ -1,6 +1,5 @@
 ﻿public class SeatModel : IEquatable<SeatModel>
 {
-    public bool _isTaken {get; private set;}= false;
     private (int x, int y) _coordinates;
     private static int counter = 0;
 

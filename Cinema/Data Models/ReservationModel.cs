@@ -1,9 +1,11 @@
 public class ReservationModel
 {
-    public int ReservationId {get; set;}
-    public string UserName {get; set;}
-    public int UserId {get; set;}
-    public SeatModel ReservedSeat {get; set;}
+    public bool _isTaken { get; private set; } = false;
+
+    public int ReservationId { get; set; }
+    public string UserName { get; set; }
+    public int UserId { get; set; }
+    public SeatModel ReservedSeat { get; set; }
 
     private ReserveSeatAccess _db = new ReserveSeatAccess();
 
