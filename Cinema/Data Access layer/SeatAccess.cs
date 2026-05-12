@@ -10,9 +10,21 @@ public  class SeatAccess
     private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
 
 
-    public static void AddSeat(string id, bool isTaken, decimal price, string seatType, (int, int) coordinates, string theater)
+    public void AddSeat(string seatName, bool isTaken, string pricingType)
     {
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
 
+        var command = connection.CreateCommand();
+        command.CommandText = @"
+        INSERT INTO seats (Seat, IsTaken, PricingType)
+        VALUES (@Seat, @IsTaken, @PricingType)";
+
+        command.Parameters.AddWithValue("@Seat", seatName);
+        command.Parameters.AddWithValue("@IsTaken", isTaken ? 1 : 0);
+        command.Parameters.AddWithValue("@PricingType", pricingType);
+
+        command.ExecuteNonQuery();
     }
 
     public int GetId(string seat) 
