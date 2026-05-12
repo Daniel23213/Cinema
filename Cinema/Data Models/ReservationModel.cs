@@ -20,7 +20,7 @@ public class ReservationModel
 
     public string SeatAvailble(SeatModel selectedSeat, string customerName)
     {
-        if (selectedSeat._isTaken)
+        if (_isTaken)
         {
             return $"{selectedSeat.ID} is taken";
         }
@@ -28,9 +28,13 @@ public class ReservationModel
         {
            int NewId = _db.SeatReserve(UserId, selectedSeat.ID);
            ReservationId = NewId;
-           selectedSeat.MakeSeatTaken();
+           MakeSeatTaken();
            return $"Seat: {selectedSeat.ID} is sucessfully reserved on {customerName} ID: {ReservationId}";
         }
+    }
+    public void MakeSeatTaken()
+    {
+        _isTaken = true;
     }
 
 

@@ -31,11 +31,6 @@
         ID = counter++;
     }
 
-    public void MakeSeatTaken()
-    {
-        _isTaken = true;
-    }
-
     public override string ToString()
     {
         return $"ID: {ID}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
