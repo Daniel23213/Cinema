@@ -20,8 +20,11 @@ public class AuditoriumAccess
         
         sql = "SELECT movie_id FROM theater WHERE id = @ID";
         MovieModel movie = connection.QuerySingle<MovieModel>(sql, new { @ID = id });
+
+        sql = "SELECT Discription FROM theater WHERE id = @ID";
+        string discription = connection.QuerySingle<string>(sql, new { @ID = id });
         
-        AuditoriumModel auditorium = new(id, seats, movie);
+        AuditoriumModel auditorium = new(id, seats, movie, discription);
         return auditorium;
     }
 
