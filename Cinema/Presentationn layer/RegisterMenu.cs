@@ -15,8 +15,8 @@
         int  age = Convert.ToInt32(Console.ReadLine());
         // Here you would typically call a method to create the account in the database
         // For example:
-        UserModel newAccount = new UserModel(firstName, lastName, email, password, age);
-        UserAccess accountsAccess = new UserAccess();
+        UserModel newAccount = new(firstName, lastName, email, password, age);
+        UserAccess accountsAccess = new();
         if(accountsAccess.Write(newAccount)== true) 
         {
             Console.WriteLine("Register sucessfull.");

@@ -8,7 +8,7 @@ using System.Security.Principal;
 public class UserAccess
 {
     private SqliteConnection _connection =
-    new SqliteConnection("Data Source=../../../Data Source/Cinema.db");
+    new("Data Source=../../../Data Source/Cinema.db");
 
 
     private string Table = "users";

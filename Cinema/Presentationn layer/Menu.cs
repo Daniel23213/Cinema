@@ -4,7 +4,7 @@ using System.Threading.Channels;
 
 public static class Menu
 {
-    private static MovieMenu movieMenu = new MovieMenu();
+    private static MovieMenu movieMenu = new();
 
     public static void ShowMenu()
     {
@@ -56,14 +56,14 @@ public static class Menu
             switch (input)
             {
                 case "1":
-                    MovieAcces movieAcces = new MovieAcces();
+                    MovieAcces movieAcces = new();
                     movieAcces.GetShowings();
 
                     break;
 
                 case "2":
                     //implement buy tickets movies
-                    MovieAcces movieAccess = new MovieAcces();
+                    MovieAcces movieAccess = new();
                     movieAccess.GetShowings();
                     Console.Write("Enter showing ID: ");
                     string choiceInput = Console.ReadLine();
@@ -76,13 +76,13 @@ public static class Menu
                         break;
                     }
                     movieAccess.PrintSeatsByShowingId(choice);
-                    SeatAccess seatAccess = new SeatAccess();
+                    SeatAccess seatAccess = new();
                     string seat = Console.ReadLine();
 
                     if (seatAccess.ReserveSeat(seat))
                     {
                         Console.WriteLine("Seat reserved successfully.");
-                        UserAccess user = new UserAccess();
+                        UserAccess user = new();
                         user.ReserveToUser(isLogged, seatAccess.GetId(seat), choice);
 
 
@@ -110,7 +110,7 @@ public static class Menu
                     Console.WriteLine("Manage account feature coming soon...");
                     Console.WriteLine("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
                     string manageInput = Console.ReadLine();
-                    UserAccess userAccess = new UserAccess();
+                    UserAccess userAccess = new();
                     if (manageInput == "D" || manageInput == "d")
                     {
                         // Implement delete account

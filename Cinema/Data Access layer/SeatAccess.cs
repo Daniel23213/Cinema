@@ -5,7 +5,7 @@ using System.Reflection.Emit;
 public  class SeatAccess
 {
     private SqliteConnection _connection =
-    new SqliteConnection("Data Source=../../../Data Source/Cinema.db");
+    new("Data Source=../../../Data Source/Cinema.db");
 
     private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
 

@@ -108,7 +108,7 @@ public class MovieMenu
             Pause();
             return;
         }
-        MovieAcces movieAcces = new MovieAcces();
+        MovieAcces movieAcces = new();
         if (movieAcces.AddMovieShowing(id, theaterId, showTime))
         {
             Console.WriteLine("✅ Movie showing added!");
@@ -172,7 +172,7 @@ public class MovieMenu
                 Pause();
                 return;
             }
-            MovieAcces movieAcces = new MovieAcces();
+            MovieAcces movieAcces = new();
             if(movieAcces.AddMovieShowing(id, theaterId, showTime))
             {
                 Console.WriteLine("✅ Movie showing added!");
