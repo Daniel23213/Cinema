@@ -8,7 +8,7 @@ using System.Security.Principal;
 public class UserAccess
 {
     private SqliteConnection _connection =
-    new SqliteConnection("Data Source=../../../Data Source/Cinema.db");
+    new("Data Source=../../../Data Source/Cinema.db");
 
 
     private string Table = "users";
@@ -71,6 +71,12 @@ public class UserAccess
     {
         string sql = $"UPDATE {Table} SET  Password = @Password  WHERE id = @Id";
         _connection.Execute(sql, new { Id = id, Password = UserModel.HashPassword(password) });
+    }
+
+    public void ReserveToUser(UserModel user , int seatId, int show_id)
+    {
+        string sql = "INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id) VALUES (@UserId, @SeatId, @ShowId)";
+        _connection.Execute(sql, new { UserId = user.Id, SeatId = seatId, ShowId = show_id });
     }
 
 

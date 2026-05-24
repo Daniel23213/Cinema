@@ -1,6 +1,5 @@
 ﻿public class SeatModel : IEquatable<SeatModel>
 {
-    private bool _isTaken = false;
     private (int x, int y) _coordinates;
     private static int counter = 0;
 
@@ -30,11 +29,6 @@
 
         Price = PriceCalculatorLogic.CalculatePrice(seatType);
         ID = counter++;
-    }
-
-    public void MakeSeatTaken()
-    {
-        _isTaken = true;
     }
 
     public override string ToString()

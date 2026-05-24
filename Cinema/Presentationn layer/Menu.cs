@@ -1,8 +1,10 @@
-﻿//using Cinema.Presentationn_layer;
+//using Cinema.Presentationn_layer;
+
+using System.Threading.Channels;
 
 public static class Menu
 {
-    private static MovieMenu movieMenu = new MovieMenu();
+    private static MovieMenu movieMenu = new();
 
     public static void ShowMenu()
     {
@@ -54,12 +56,38 @@ public static class Menu
             switch (input)
             {
                 case "1":
-                    movieMenu.GetAiringMovies();
+                    MovieAcces movieAcces = new();
+                    movieAcces.GetShowings();
+
                     break;
 
                 case "2":
                     //implement buy tickets movies
-                    Console.WriteLine("Buy tickets feature coming soon...");
+                    MovieAcces movieAccess = new();
+                    movieAccess.GetShowings();
+                    Console.Write("Enter showing ID: ");
+                    string choiceInput = Console.ReadLine();
+
+
+                    if (!int.TryParse(choiceInput, out int choice))
+                    {
+                        Console.WriteLine("Please enter a valid number.");
+
+                        break;
+                    }
+                    movieAccess.PrintSeatsByShowingId(choice);
+                    SeatAccess seatAccess = new();
+                    string seat = Console.ReadLine();
+
+                    if (seatAccess.ReserveSeat(seat))
+                    {
+                        Console.WriteLine("Seat reserved successfully.");
+                        UserAccess user = new();
+                        user.ReserveToUser(isLogged, seatAccess.GetId(seat), choice);
+
+
+                    }
+                   
                     break;
 
                 case "3":
@@ -82,7 +110,7 @@ public static class Menu
                     Console.WriteLine("Manage account feature coming soon...");
                     Console.WriteLine("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
                     string manageInput = Console.ReadLine();
-                    UserAccess userAccess = new UserAccess();
+                    UserAccess userAccess = new();
                     if (manageInput == "D" || manageInput == "d")
                     {
                         // Implement delete account
@@ -130,30 +158,6 @@ public static class Menu
                         Console.WriteLine("Access denied.");
                     }
                     break;
-
-                //use this when UserRole will be implemented
-                //case "8":
-                //if (role == UserRole.Manager || role == UserRole.SuperManager)
-                //{
-                //Console.WriteLine("Manager feature coming soon...");
-                //}
-                //else
-                //{
-                //Console.WriteLine("Access denied.");
-                //}
-                //break;
-
-                //case "9":
-                //if (role == UserRole.SuperManager)
-                //{
-                //Console.WriteLine("Super manager users feature coming soon...");
-                //}
-                //else
-                //{
-                //Console.WriteLine("Access denied.");
-                //}
-                //break;
-
                 case "E" or "e":
                     Console.WriteLine("Exiting...");
                     running = false;
