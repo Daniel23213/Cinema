@@ -57,14 +57,14 @@ public static class Menu
             {
                 case "1":
                     MovieAcces movieAcces = new();
-                    movieAcces.GetShowings();
+                    movieAcces.GetShowings(isLogged);
 
                     break;
 
                 case "2":
                     //implement buy tickets movies
                     MovieAcces movieAccess = new();
-                    movieAccess.GetShowings();
+                    movieAccess.GetShowings(isLogged);
                     Console.Write("Enter showing ID: ");
                     string choiceInput = Console.ReadLine();
 

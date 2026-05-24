@@ -1,7 +1,7 @@
 public interface IMovieServiceLogic
 {
     List<MovieModel> GetAiringMovies();
-    void AddMovie(string title, string author, string genre, TimeSpan duration, DateTime premier);
-    void UpdateMovie(int id, string title, string author, string genre, TimeSpan duration, DateTime premier);
+    void AddMovie(string title, string author, string genre, TimeSpan duration, DateTime premier, int age);
+    void UpdateMovie(int id, string title, string author, string genre, TimeSpan duration, DateTime premier, int age);
     void DeleteMovie(int id);
 }

@@ -1,4 +1,8 @@
-﻿namespace CinemaTests;
+﻿/// <summary>
+/// Container for MSTest unit tests related to Cinema functionality.
+/// </summary>
+ /*
+namespace Cinema.CinemaTests;
 
 [TestClass]
 public sealed class Test1
@@ -8,3 +12,4 @@ public sealed class Test1
     {
     }
 }
+ */

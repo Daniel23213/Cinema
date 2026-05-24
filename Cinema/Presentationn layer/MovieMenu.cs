@@ -143,8 +143,10 @@ public class MovieMenu
             Pause();
             return;
         }
+        Console.Write("Enter Age: ");
+        int age = Convert.ToInt32(Console.ReadLine());
 
-        _service.AddMovie(title, author, genre, duration, premier);
+        _service.AddMovie(title, author, genre, duration, premier, age);
 
         Console.WriteLine("✅ Movie added!");
         Console.WriteLine("🎬 Do you want to add to auditorium and time:\n");
@@ -219,8 +221,10 @@ public class MovieMenu
             Pause();
             return;
         }
+        Console.Write("Enter Age: ");
+        int age = Convert.ToInt32(Console.ReadLine());
 
-        _service.UpdateMovie(id, title, author, genre, duration, premier);
+        _service.UpdateMovie(id, title, author, genre, duration, premier, age);
 
         Console.WriteLine("✏️ Movie updated!");
         Pause();
