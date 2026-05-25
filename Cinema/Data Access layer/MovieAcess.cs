@@ -1,10 +1,11 @@
+using System.Text.RegularExpressions;
 using Microsoft.Data.Sqlite;
 
 public class MovieAcces : IMovieAcces
 {
     private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
 
-    public List<MovieModel> GetAiringMovies()
+    public List<MovieModel> GetAiringMovies(MoviesGenres genre)
     {
         var movies = new List<MovieModel>();
 
@@ -12,7 +13,12 @@ public class MovieAcces : IMovieAcces
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id, Title, Author, Genre, Duration, Premier FROM movies";
+        command.CommandText =
+        @"SELECT Id, Title, Author, Genre, Duration, Premier
+        FROM movies
+        WHERE Genre = @genre";
+
+        command.Parameters.AddWithValue("@genre", genre.ToString());
 
         using var reader = command.ExecuteReader();
 
@@ -22,7 +28,7 @@ public class MovieAcces : IMovieAcces
                 reader.GetInt32(0),
                 reader.GetString(1),
                 reader.GetString(2),
-                reader.GetString(3),
+                (MoviesGenres)Enum.Parse(typeof(MoviesGenres), reader.GetString(3)),
                 TimeSpan.Parse(reader.GetString(4)),
                 DateTime.Parse(reader.GetString(5))
             ));
@@ -31,7 +37,7 @@ public class MovieAcces : IMovieAcces
         return movies;
     }
 
-    public void AddMovie(string title, string author, string genre, TimeSpan duration, DateTime premier)
+    public void AddMovie(string title, string author, MoviesGenres genre, TimeSpan duration, DateTime premier)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -44,13 +50,13 @@ public class MovieAcces : IMovieAcces
         command.Parameters.AddWithValue("@title", title);
         command.Parameters.AddWithValue("@duration", duration.ToString());
         command.Parameters.AddWithValue("@author", author);
-        command.Parameters.AddWithValue("@genre", genre);
+        command.Parameters.AddWithValue("@genre", genre.ToString());
         command.Parameters.AddWithValue("@premier", premier.ToString("yyyy-MM-dd HH:mm:ss"));
 
         command.ExecuteNonQuery();
     }
 
-    public void UpdateMovie(int id, string title, string author, string genre, TimeSpan duration, DateTime premier)
+    public void UpdateMovie(int id, string title, string author, MoviesGenres genre, TimeSpan duration, DateTime premier)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -64,7 +70,7 @@ public class MovieAcces : IMovieAcces
         command.Parameters.AddWithValue("@id", id);
         command.Parameters.AddWithValue("@title", title);
         command.Parameters.AddWithValue("@author", author);
-        command.Parameters.AddWithValue("@genre", genre);
+        command.Parameters.AddWithValue("@genre", genre.ToString());
         command.Parameters.AddWithValue("@duration", duration.ToString());
         command.Parameters.AddWithValue("@premier", premier.ToString("yyyy-MM-dd HH:mm:ss"));
 
@@ -112,7 +118,7 @@ public class MovieAcces : IMovieAcces
 
 
     // From here its Showings related methods
-    public void GetShowings()
+    public void GetShowings(MoviesGenres? genre = null)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -123,6 +129,7 @@ public class MovieAcces : IMovieAcces
         SELECT 
             movie_showings.Id,
             movies.Title,
+            movies.Genre,
             theater.Description,
             movie_showings.ShowTime
         FROM movie_showings
@@ -130,21 +137,32 @@ public class MovieAcces : IMovieAcces
             ON movie_showings.Movie_Id = movies.Id
         JOIN theater 
             ON movie_showings.Theater_Id = theater.Id
-        ORDER BY movie_showings.ShowTime;
         ";
+
+        if (genre != null)
+        {
+            command.CommandText += " WHERE movies.Genre = @genre";
+            command.Parameters.AddWithValue("@genre", genre.ToString());
+        }
+
+        command.CommandText += " ORDER BY movie_showings.ShowTime;";
+
         using var reader = command.ExecuteReader();
 
         Console.WriteLine("\n=== Movie Showings ===");
 
         while (reader.Read())
         {
+            MoviesGenres parsedGenre =
+                (MoviesGenres)Enum.Parse(typeof(MoviesGenres), reader.GetString(2));
+
             Console.WriteLine(
                 $"Showing ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
-                $"Theater: {reader.GetString(2)} | " +
-                $"Time: {reader.GetString(3)}"
+                $"Genre: {parsedGenre} | " +
+                $"Theater: {reader.GetString(3)} | " +
+                $"Time: {reader.GetString(4)}"
             );
-
         }
     }
 

@@ -1,4 +1,4 @@
-//using Cinema.Presentationn_layer;
+﻿//using Cinema.Presentationn_layer;
 
 using System.Threading.Channels;
 
@@ -56,10 +56,47 @@ public static class Menu
             switch (input)
             {
                 case "1":
-                    MovieAcces movieAcces = new();
-                    movieAcces.GetShowings();
+                    {
+                        MovieAcces movieAcces = new();
 
-                    break;
+                        Console.WriteLine("\n1 - Show all showings");
+                        Console.WriteLine("2 - Filter by genre");
+                        Console.Write("Choose option: ");
+
+                        string showingChoice = Console.ReadLine();
+
+                        if (showingChoice == "1")
+                        {
+                            movieAcces.GetShowings();
+                        }
+                        else if (showingChoice == "2")
+                        {
+                            Console.WriteLine("\nAvailable genres:");
+
+                            foreach (var g in Enum.GetValues(typeof(MoviesGenres)))
+                            {
+                                Console.WriteLine($"- {g}");
+                            }
+
+                            Console.Write("\nEnter genre: ");
+                            string genreInput = Console.ReadLine();
+
+                            if (Enum.TryParse<MoviesGenres>(genreInput, true, out var genre))
+                            {
+                                movieAcces.GetShowings(genre);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid genre.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid option.");
+                        }
+
+                        break;
+                    }
 
                 case "2":
                     //implement buy tickets movies
@@ -87,7 +124,7 @@ public static class Menu
 
 
                     }
-                   
+
                     break;
 
                 case "3":
