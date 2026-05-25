@@ -85,7 +85,7 @@ public class MovieMenu
 
     }
 
-    private void AssignMovie() 
+    private void AssignMovie()
     {
         Console.WriteLine("Enter movie ID: ");
         if (!int.TryParse(Console.ReadLine(), out int id))
@@ -123,8 +123,13 @@ public class MovieMenu
         Console.Write("Enter author: ");
         string author = Console.ReadLine();
 
-        Console.Write("Enter genre: ");
-        string genre = Console.ReadLine();
+        Console.Write("Enter genre (Action, Comedy, Drama...): ");
+        if (!Enum.TryParse<MoviesGenres>(Console.ReadLine(), true, out MoviesGenres genre))
+        {
+            Console.WriteLine("Invalid genre!");
+            Pause();
+            return;
+        }
 
         Console.Write("Enter duration in minutes: ");
         if (!int.TryParse(Console.ReadLine(), out int minutes))
@@ -173,12 +178,12 @@ public class MovieMenu
                 return;
             }
             MovieAcces movieAcces = new();
-            if(movieAcces.AddMovieShowing(id, theaterId, showTime))
+            if (movieAcces.AddMovieShowing(id, theaterId, showTime))
             {
                 Console.WriteLine("✅ Movie showing added!");
             }
-            
-            
+
+
         }
         Pause();
     }
@@ -199,8 +204,13 @@ public class MovieMenu
         Console.Write("New author: ");
         string author = Console.ReadLine();
 
-        Console.Write("New genre: ");
-        string genre = Console.ReadLine();
+        Console.Write("Enter genre (Action, Comedy, Drama...): ");
+        if (!Enum.TryParse<MoviesGenres>(Console.ReadLine(), true, out MoviesGenres genre))
+        {
+            Console.WriteLine("Invalid genre!");
+            Pause();
+            return;
+        }
 
         Console.Write("New duration (minutes): ");
         if (!int.TryParse(Console.ReadLine(), out int minutes))
