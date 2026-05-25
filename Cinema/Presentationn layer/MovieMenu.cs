@@ -108,11 +108,23 @@ public class MovieMenu
             Pause();
             return;
         }
+
+        Console.WriteLine("Is this Culinary Cinema? (y/n): ");
+        bool isCulinary = Console.ReadLine()?.ToLower() == "y";
+
         MovieAcces movieAcces = new();
-        if (movieAcces.AddMovieShowing(id, theaterId, showTime))
+
+        if (movieAcces.AddMovieShowing(id, theaterId ,showTime, isCulinary))
         {
-            Console.WriteLine("✅ Movie showing added!");
+            Console.WriteLine("Movie showing added!");
+
+            if (isCulinary)
+            {
+                Console.WriteLine("Culinary Cinema enabled (+€50)");
+            }
         }
+
+        Pause();
     }
 
     private void AddMovie()
@@ -177,13 +189,20 @@ public class MovieMenu
                 Pause();
                 return;
             }
+            Console.WriteLine("Is this Culinary Cinema? (y/n): ");
+            bool isCulinary = Console.ReadLine()?.ToLower() == "y";
+
             MovieAcces movieAcces = new();
-            if (movieAcces.AddMovieShowing(id, theaterId, showTime))
+
+            if (movieAcces.AddMovieShowing(id, theaterId, showTime, isCulinary))
             {
                 Console.WriteLine("✅ Movie showing added!");
+
+                if (isCulinary)
+                {
+                    Console.WriteLine("🍽️ Culinary Cinema enabled (+€50)");
+                }
             }
-
-
         }
         Pause();
     }
