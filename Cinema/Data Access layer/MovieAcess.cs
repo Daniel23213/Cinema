@@ -148,7 +148,9 @@ public class MovieAcces : IMovieAcces
                 movies.Title,
                 movies.Genre,
                 theater.Description,
-                movie_showings.ShowTime
+                movie_showings.ShowTime,
+                movie_showings.ExtraPrice,
+                movie_showings.IsCulinary
             FROM movie_showings
             JOIN movies ON movie_showings.Movie_Id = movies.Id
             JOIN theater ON movie_showings.Theater_Id = theater.Id
@@ -162,13 +164,20 @@ public class MovieAcces : IMovieAcces
         while (reader.Read())
         {
             MoviesGenres genre = Enum.Parse<MoviesGenres>(reader.GetString(2));
+            bool isCulinary = reader.GetInt32(6) == 1;
+            double extraPrice = reader.GetDouble(5);
+
+            string culinaryLabel = isCulinary
+                ? $"Culinary Cinema (+{extraPrice}e)"
+                : "";
 
             Console.WriteLine(
                 $"ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
                 $"Genre: {genre} | " +
                 $"Theater: {reader.GetString(3)} | " +
-                $"Time: {reader.GetString(4)}"
+                $"Time: {reader.GetString(4)} | " +
+                $"{culinaryLabel}"
             );
         }
     }
@@ -186,7 +195,9 @@ public class MovieAcces : IMovieAcces
                 movies.Title,
                 movies.Genre,
                 theater.Description,
-                movie_showings.ShowTime
+                movie_showings.ShowTime,
+                movie_showings.ExtraPrice,
+                movie_showings.IsCulinary
             FROM movie_showings
             JOIN movies ON movie_showings.Movie_Id = movies.Id
             JOIN theater ON movie_showings.Theater_Id = theater.Id
@@ -214,19 +225,23 @@ public class MovieAcces : IMovieAcces
         }
     }
 
-    public bool AddMovieShowing(int movieId, int theaterId, DateTime showTime)
+    public bool AddMovieShowing(int movieId, int theaterId, DateTime showTime, bool isCulinary)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
+        double extraPrice = isCulinary ? 50 : 0;
+
         var command = connection.CreateCommand();
         command.CommandText = @"
-            INSERT INTO movie_showings (Movie_Id, Theater_Id, ShowTime)
-            VALUES (@movieId, @theaterId, @showTime)";
+            INSERT INTO movie_showings (Movie_Id, Theater_Id, ShowTime, ExtraPrice, IsCulinary)
+            VALUES (@movieId, @theaterId, @showTime, @extraPrice, @isCulinary)";
 
         command.Parameters.AddWithValue("@movieId", movieId);
         command.Parameters.AddWithValue("@theaterId", theaterId);
         command.Parameters.AddWithValue("@showTime", showTime.ToString("yyyy-MM-dd HH:mm:ss"));
+        command.Parameters.AddWithValue("@extraPrice", extraPrice);
+        command.Parameters.AddWithValue("@isCulinary", isCulinary ? 1 : 0);
 
         return command.ExecuteNonQuery() > 0;
     }
