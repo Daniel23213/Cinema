@@ -1,8 +1,10 @@
 ﻿//using Cinema.Presentationn_layer;
 
+using System.Threading.Channels;
+
 public static class Menu
 {
-    private static MovieMenu movieMenu = new MovieMenu();
+    private static MovieMenu movieMenu = new();
 
     public static void ShowMenu()
     {
@@ -54,12 +56,76 @@ public static class Menu
             switch (input)
             {
                 case "1":
-                    movieMenu.GetAiringMovies();
-                    break;
+                    {
+                        MovieAcces movieAcces = new();
+
+                        Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
+                        Console.WriteLine("1 - Show all showings");
+                        Console.WriteLine("2 - Filter by genre");
+                        Console.Write("\nChoose option: ");
+
+                        string option = Console.ReadLine();
+
+                        if (option == "1")
+                        {
+                            movieAcces.GetShowings();
+                        }
+                        else if (option == "2")
+                        {
+                            Console.WriteLine("\nAvailable genres:");
+
+                            foreach (MoviesGenres g in Enum.GetValues(typeof(MoviesGenres)))
+                            {
+                                Console.WriteLine($"- {g}");
+                            }
+
+                            Console.Write("\nEnter genre: ");
+                            string genreInput = Console.ReadLine();
+
+                            if (Enum.TryParse<MoviesGenres>(genreInput, true, out var genre))
+                            {
+                                movieAcces.GetShowingsByGenre(genre);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid genre.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid option.");
+                        }
+
+                        break;
+                    }
 
                 case "2":
                     //implement buy tickets movies
-                    Console.WriteLine("Buy tickets feature coming soon...");
+                    MovieAcces movieAccess = new();
+                    movieAccess.GetShowings();
+                    Console.Write("Enter showing ID: ");
+                    string choiceInput = Console.ReadLine();
+
+
+                    if (!int.TryParse(choiceInput, out int choice))
+                    {
+                        Console.WriteLine("Please enter a valid number.");
+
+                        break;
+                    }
+                    movieAccess.PrintSeatsByShowingId(choice);
+                    SeatAccess seatAccess = new();
+                    string seat = Console.ReadLine();
+
+                    if (seatAccess.ReserveSeat(seat))
+                    {
+                        Console.WriteLine("Seat reserved successfully.");
+                        UserAccess user = new();
+                        user.ReserveToUser(isLogged, seatAccess.GetId(seat), choice);
+
+
+                    }
+
                     break;
 
                 case "3":
@@ -82,7 +148,7 @@ public static class Menu
                     Console.WriteLine("Manage account feature coming soon...");
                     Console.WriteLine("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
                     string manageInput = Console.ReadLine();
-                    UserAccess userAccess = new UserAccess();
+                    UserAccess userAccess = new();
                     if (manageInput == "D" || manageInput == "d")
                     {
                         // Implement delete account
@@ -130,30 +196,6 @@ public static class Menu
                         Console.WriteLine("Access denied.");
                     }
                     break;
-
-                //use this when UserRole will be implemented
-                //case "8":
-                //if (role == UserRole.Manager || role == UserRole.SuperManager)
-                //{
-                //Console.WriteLine("Manager feature coming soon...");
-                //}
-                //else
-                //{
-                //Console.WriteLine("Access denied.");
-                //}
-                //break;
-
-                //case "9":
-                //if (role == UserRole.SuperManager)
-                //{
-                //Console.WriteLine("Super manager users feature coming soon...");
-                //}
-                //else
-                //{
-                //Console.WriteLine("Access denied.");
-                //}
-                //break;
-
                 case "E" or "e":
                     Console.WriteLine("Exiting...");
                     running = false;

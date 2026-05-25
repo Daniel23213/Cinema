@@ -7,7 +7,7 @@
         string email = Console.ReadLine();
         Console.Write("Enter your password: ");
         string password = Console.ReadLine();
-        UserAccess accountsAccess = new UserAccess();
+        UserAccess accountsAccess = new();
         if (accountsAccess.Login(email, password) != null)
         {
             Console.WriteLine("Login sucessfull.");

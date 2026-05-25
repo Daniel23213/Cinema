@@ -19,6 +19,7 @@ public class MovieMenu
             Console.WriteLine("[2] Add Movie");
             Console.WriteLine("[3] Update Movie");
             Console.WriteLine("[4] Delete Movie");
+            Console.WriteLine("[5] Assign a movie");
             Console.WriteLine("[E] Back");
 
             Console.Write("\nChoose: ");
@@ -40,6 +41,9 @@ public class MovieMenu
 
                 case "4":
                     DeleteMovie();
+                    break;
+                case "5":
+                    AssignMovie();
                     break;
 
                 case "E":
@@ -76,6 +80,41 @@ public class MovieMenu
         Pause();
     }
 
+    public void ShowMovies()
+    {
+
+    }
+
+    private void AssignMovie()
+    {
+        Console.WriteLine("Enter movie ID: ");
+        if (!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Invalid ID!");
+            Pause();
+            return;
+        }
+        Console.WriteLine("Enter theater ID: ");
+        if (!int.TryParse(Console.ReadLine(), out int theaterId))
+        {
+            Console.WriteLine("Invalid theater ID!");
+            Pause();
+            return;
+        }
+        Console.WriteLine("Enter show time (yyyy-MM-dd HH:mm): ");
+        if (!DateTime.TryParse(Console.ReadLine(), out DateTime showTime))
+        {
+            Console.WriteLine("Invalid show time!");
+            Pause();
+            return;
+        }
+        MovieAcces movieAcces = new();
+        if (movieAcces.AddMovieShowing(id, theaterId, showTime))
+        {
+            Console.WriteLine("✅ Movie showing added!");
+        }
+    }
+
     private void AddMovie()
     {
         Console.Write("Enter title: ");
@@ -84,8 +123,13 @@ public class MovieMenu
         Console.Write("Enter author: ");
         string author = Console.ReadLine();
 
-        Console.Write("Enter genre: ");
-        string genre = Console.ReadLine();
+        Console.Write("Enter genre (Action, Comedy, Drama...): ");
+        if (!Enum.TryParse<MoviesGenres>(Console.ReadLine(), true, out MoviesGenres genre))
+        {
+            Console.WriteLine("Invalid genre!");
+            Pause();
+            return;
+        }
 
         Console.Write("Enter duration in minutes: ");
         if (!int.TryParse(Console.ReadLine(), out int minutes))
@@ -108,6 +152,39 @@ public class MovieMenu
         _service.AddMovie(title, author, genre, duration, premier);
 
         Console.WriteLine("✅ Movie added!");
+        Console.WriteLine("🎬 Do you want to add to auditorium and time:\n");
+        string input = Console.ReadLine();
+        if (input.ToLower() == "yes" || input.ToLower() == "y")
+        {
+            Console.WriteLine("Enter movie ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Invalid ID!");
+                Pause();
+                return;
+            }
+            Console.WriteLine("Enter theater ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int theaterId))
+            {
+                Console.WriteLine("Invalid theater ID!");
+                Pause();
+                return;
+            }
+            Console.WriteLine("Enter show time (yyyy-MM-dd HH:mm): ");
+            if (!DateTime.TryParse(Console.ReadLine(), out DateTime showTime))
+            {
+                Console.WriteLine("Invalid show time!");
+                Pause();
+                return;
+            }
+            MovieAcces movieAcces = new();
+            if (movieAcces.AddMovieShowing(id, theaterId, showTime))
+            {
+                Console.WriteLine("✅ Movie showing added!");
+            }
+
+
+        }
         Pause();
     }
 
@@ -127,8 +204,13 @@ public class MovieMenu
         Console.Write("New author: ");
         string author = Console.ReadLine();
 
-        Console.Write("New genre: ");
-        string genre = Console.ReadLine();
+        Console.Write("Enter genre (Action, Comedy, Drama...): ");
+        if (!Enum.TryParse<MoviesGenres>(Console.ReadLine(), true, out MoviesGenres genre))
+        {
+            Console.WriteLine("Invalid genre!");
+            Pause();
+            return;
+        }
 
         Console.Write("New duration (minutes): ");
         if (!int.TryParse(Console.ReadLine(), out int minutes))
