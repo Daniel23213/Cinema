@@ -38,7 +38,8 @@ class db
             Duration TEXT NOT NULL,
             Author TEXT,
             Genre TEXT,
-            Premier DATETIME
+            Premier DATETIME,
+            Age INTEGER NOT NULL
         );";
 
         // THEATER / AUDITORIUMS
