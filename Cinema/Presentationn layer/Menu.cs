@@ -68,7 +68,7 @@ public static class Menu
 
                         if (option == "1")
                         {
-                            movieAcces.GetShowings();
+                            movieAcces.GetShowings(isLogged);
                         }
                         else if (option == "2")
                         {

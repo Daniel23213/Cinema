@@ -12,7 +12,7 @@ public class MovieServiceLogic : IMovieServiceLogic
         return _repo.GetAiringMovies();
     }
 
-    public void AddMovie(string title, string author, string genre, TimeSpan duration, DateTime premier, int age)
+    public void AddMovie(string title, string author, MoviesGenres genre, TimeSpan duration, DateTime premier, int age)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new ArgumentException("Title cannot be empty");
@@ -23,7 +23,7 @@ public class MovieServiceLogic : IMovieServiceLogic
         _repo.AddMovie(title, author, genre, duration, premier, age);
     }
 
-    public void UpdateMovie(int id, string title, string author, string genre, TimeSpan duration, DateTime premier, int age)
+    public void UpdateMovie(int id, string title, string author, MoviesGenres genre, TimeSpan duration, DateTime premier, int age)
     {
         if (id <= 0)
             throw new ArgumentOutOfRangeException(nameof(id));

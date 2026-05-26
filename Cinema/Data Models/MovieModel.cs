@@ -11,7 +11,7 @@ public class MovieModel
     public DateTime Premier { get; set; }
     public int Age { get; set; }
 
-    public MovieModel(int id, string title, string author, string genre, TimeSpan duration, DateTime premier, int age)
+    public MovieModel(int id, string title, string author, MoviesGenres genre, TimeSpan duration, DateTime premier, int age)
     {
         Id = id;
         Title = title;
