@@ -1,4 +1,10 @@
-﻿public enum Prices
+﻿/*
+    When changing the values for ages, prices or discounts modify the enums or const,
+    do not change values in code, there is a build in logic that applies
+    the highest discount available so no need to adjust the order of discounts
+*/
+
+public enum Prices
 {
     normal = 12,
     luxe = 14,
@@ -14,10 +20,10 @@ public enum Ages
 public static class PriceCalculatorLogic
 {
     private const decimal seniorDiscount = 0.85M;
-    private const decimal childDiscount = 0.85M;
+    private const decimal childDiscount = 0.75M;
+    private const decimal studentDiscount = 0.80M;
 
-    // you can overload this method to allow for additional requirements when calculating the price
-    public static decimal CalculatePrice(string seatType)
+    private static decimal GetBasePrice(string seatType)
     {
         return seatType.ToLower() switch
         {
@@ -28,19 +34,19 @@ public static class PriceCalculatorLogic
         };
     }
 
-    public static decimal CalculatePrice(string seatType, int age)
+    public static decimal GetPrice(string seatType, int age, bool isStudent = false)
     {
-        decimal basePrice = CalculatePrice(seatType);
+        decimal basePrice = GetBasePrice(seatType);
+        decimal discount = 1.0M;
 
-        if (age >= (int)Ages.senior)
+        if (age >= (int)Ages.senior) { discount = seniorDiscount; }
+        else if (age <= (int)Ages.child) { discount = childDiscount; }
+
+        if (isStudent)
         {
-            return basePrice * seniorDiscount;
-        }
-        if (age <= (int)Ages.child)
-        {
-            return basePrice * childDiscount;
+            if (discount > studentDiscount) { discount = studentDiscount; }
         }
 
-        return basePrice;
+        return basePrice * discount;
     }
 }
