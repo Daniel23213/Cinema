@@ -35,9 +35,9 @@ public  class SeatAccess
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-    SELECT Id
-    FROM seats
-    WHERE Seat = @Seat;
+        SELECT Id
+        FROM seats
+        WHERE Seat = @Seat;
     ";
 
         command.Parameters.AddWithValue("@Seat", seat);

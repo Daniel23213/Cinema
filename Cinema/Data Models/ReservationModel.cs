@@ -25,7 +25,7 @@ public class ReservationModel
         }
         else
         {
-           int NewId = _db.SeatReserve(UserId, selectedSeat.ID);
+           int NewId = _db.SeatReserve(UserId, selectedSeat.ID, _isTaken);
            ReservationId = NewId;
            MakeSeatTaken();
            return $"Seat: {selectedSeat.ID} is sucessfully reserved on {customerName} ID: {ReservationId}";

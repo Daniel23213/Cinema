@@ -65,7 +65,8 @@ class db
         CREATE TABLE IF NOT EXISTS seats (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             Seat TEXT NOT NULL,
-            IsTaken INTEGER DEFAULT 0,
+            Width INTEGER,
+            Height INTEGER,
             PricingType TEXT
         );";
 
@@ -88,6 +89,7 @@ class db
             Users_Id INTEGER NOT NULL,
             Seats_Id INTEGER NOT NULL,
             Showing_Id INTEGER NOT NULL,
+            isTaken INTEGER DEFAULT 0,
 
             FOREIGN KEY (Users_Id) REFERENCES users(Id),
             FOREIGN KEY (Seats_Id) REFERENCES seats(Id),
