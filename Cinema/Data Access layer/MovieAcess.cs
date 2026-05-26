@@ -115,6 +115,7 @@ public class MovieAcces : IMovieAcces
             movie_showings.Id,
             movies.Title,
             movies.Age,
+            movies.Genre,
             theater.Description,
             movie_showings.ShowTime
         FROM movie_showings
@@ -142,7 +143,8 @@ public class MovieAcces : IMovieAcces
                 $"Showing ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
                 $"Age: {reader.GetString(2)} | " +
-                $"Description: {reader.GetString(3)} | " +
+                $"Genre: {reader.GetString(3)} | " +
+                $"Description: {reader.GetString(4)} | " +
                 $"Time: {reader.GetString(4)}"
             );
 
@@ -164,9 +166,7 @@ public class MovieAcces : IMovieAcces
                 movies.Title,
                 movies.Genre,
                 theater.Description,
-                movie_showings.ShowTime,
-                movie_showings.ExtraPrice,
-                movie_showings.IsCulinary
+                movie_showings.ShowTime
             FROM movie_showings
             JOIN movies ON movie_showings.Movie_Id = movies.Id
             JOIN theater ON movie_showings.Theater_Id = theater.Id
@@ -199,18 +199,18 @@ public class MovieAcces : IMovieAcces
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
-        double extraPrice = isCulinary ? 50 : 0;
+       // double extraPrice = isCulinary ? 50 : 0;
 
         var command = connection.CreateCommand();
         command.CommandText = @"
-            INSERT INTO movie_showings (Movie_Id, Theater_Id, ShowTime, ExtraPrice, IsCulinary)
-            VALUES (@movieId, @theaterId, @showTime, @extraPrice, @isCulinary)";
+            INSERT INTO movie_showings (Movie_Id, Theater_Id, ShowTime)
+            VALUES (@movieId, @theaterId, @showTime)";
 
         command.Parameters.AddWithValue("@movieId", movieId);
         command.Parameters.AddWithValue("@theaterId", theaterId);
         command.Parameters.AddWithValue("@showTime", showTime.ToString("yyyy-MM-dd HH:mm:ss"));
-        command.Parameters.AddWithValue("@extraPrice", extraPrice);
-        command.Parameters.AddWithValue("@isCulinary", isCulinary ? 1 : 0);
+       // command.Parameters.AddWithValue("@extraPrice", extraPrice);
+       // command.Parameters.AddWithValue("@isCulinary", isCulinary ? 1 : 0);
 
         return command.ExecuteNonQuery() > 0;
     }
