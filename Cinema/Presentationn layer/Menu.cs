@@ -97,7 +97,7 @@ public static class Menu
                         }
 
                         break;
-                    }
+                    
 
                 case "2":
                     //implement buy tickets movies

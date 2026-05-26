@@ -141,7 +141,7 @@ public class MovieAcces : IMovieAcces
 
 
     // From here its Showings related methods
-    public void GetShowings(UserModel user)
+    public void GetShowingsByGenre(MoviesGenres genre)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -149,18 +149,19 @@ public class MovieAcces : IMovieAcces
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-        SELECT 
-            movie_showings.Id,
-            movies.Title,
-            movies.Age,
-            theater.Description,
-            movie_showings.ShowTime
-        FROM movie_showings
-        JOIN movies 
-            ON movie_showings.Movie_Id = movies.Id
-        JOIN theater 
-            ON movie_showings.Theater_Id = theater.Id
-        ORDER BY movie_showings.ShowTime;
+            SELECT 
+                movie_showings.Id,
+                movies.Title,
+                movies.Genre,
+                theater.Description,
+                movie_showings.ShowTime,
+                movie_showings.ExtraPrice,
+                movie_showings.IsCulinary
+            FROM movie_showings
+            JOIN movies ON movie_showings.Movie_Id = movies.Id
+            JOIN theater ON movie_showings.Theater_Id = theater.Id
+            WHERE movies.Genre = @genre
+            ORDER BY movie_showings.ShowTime;
         ";
 
         command.Parameters.AddWithValue("@genre", genre.ToString());
@@ -171,19 +172,13 @@ public class MovieAcces : IMovieAcces
 
         while (reader.Read())
         {
-            int requiredAge = reader.GetInt32(2);
-
-            // Skip showing if user is too young
-            if (user != null && user.Age < requiredAge)
-            {
-                continue;
-            }
+            var parsedGenre = Enum.Parse<MoviesGenres>(reader.GetString(2));
 
             Console.WriteLine(
                 $"ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
-                $"Age: {reader.GetString(2)} | " +
-                $"Description: {reader.GetString(3)} | " +
+                $"Genre: {parsedGenre} | " +
+                $"Theater: {reader.GetString(3)} | " +
                 $"Time: {reader.GetString(4)}"
             );
         }
