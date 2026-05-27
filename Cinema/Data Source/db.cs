@@ -1,155 +1,9 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Text;
 
 class db
 {
-    private const string DatabaseLoc = "../../../Data Source/Cinema.db"; // ✅ simple & reliable
-    private void SeedSeats(SqliteConnection connection)
-    {
-        var command = connection.CreateCommand();
-
-        command.CommandText = @"
-        INSERT INTO seats
-        (Id, LocationRow, LocationColumn, IsTaken, PricingType)
-        VALUES
-        (1,1,3,0,'normal'),
-        (2,1,4,0,'normal'),
-        (3,1,5,0,'normal'),
-        (4,1,6,0,'normal'),
-        (5,1,7,0,'normal'),
-        (6,1,8,0,'normal'),
-        (7,1,9,0,'normal'),
-        (8,1,10,0,'normal'),
-        (9,2,3,0,'normal'),
-        (10,2,4,0,'normal'),
-        (11,2,5,0,'normal'),
-        (12,2,6,0,'normal'),
-        (13,2,7,0,'normal'),
-        (14,2,8,0,'normal'),
-        (15,2,9,0,'normal'),
-        (16,2,10,0,'normal'),
-        (17,3,2,0,'normal'),
-        (18,3,3,0,'normal'),
-        (19,3,4,0,'normal'),
-        (20,3,5,0,'normal'),
-        (21,3,6,0,'normal'),
-        (22,3,7,0,'normal'),
-        (23,3,8,0,'normal'),
-        (24,3,9,0,'normal'),
-        (25,3,10,0,'normal'),
-        (26,3,11,0,'normal'),
-        (27,4,1,0,'normal'),
-        (28,4,2,0,'normal'),
-        (29,4,3,0,'normal'),
-        (30,4,4,0,'normal'),
-        (31,4,5,0,'normal'),
-        (32,4,6,0,'luxe'),
-        (33,4,7,0,'luxe'),
-        (34,4,8,0,'normal'),
-        (35,4,9,0,'normal'),
-        (36,4,10,0,'normal'),
-        (37,4,11,0,'normal'),
-        (38,4,12,0,'normal'),
-        (39,5,1,0,'normal'),
-        (40,5,2,0,'normal'),
-        (41,5,3,0,'normal'),
-        (42,5,4,0,'normal'),
-        (43,5,5,0,'luxe'),
-        (44,5,6,0,'luxe'),
-        (45,5,7,0,'luxe'),
-        (46,5,8,0,'luxe'),
-        (47,5,9,0,'normal'),
-        (48,5,10,0,'normal'),
-        (49,5,11,0,'normal'),
-        (50,5,12,0,'normal');
-        ";
-
-        command.ExecuteNonQuery();
-    }
-    private void SeedMovies(SqliteConnection connection)
-    {
-        var command = connection.CreateCommand();
-
-        command.CommandText = @"
-    INSERT INTO movies (Title, Duration, Author, Genre, Premier, Age) VALUES
-    ('Avengers', '02:30:00', 'Marvel', 'Action', '2025-01-01 18:00:00', 12),
-    ('Joker', '02:02:00', 'DC', 'Drama', '2025-01-02 20:00:00', 18),
-    ('Toy Story', '01:30:00', 'Pixar', 'Comedy', '2025-01-03 16:00:00', 6),
-    ('Interstellar', '02:49:00', 'Nolan', 'SciFi', '2025-01-05 19:00:00', 12),
-    ('Titanic', '03:15:00', 'Cameron', 'Drama', '2025-01-06 17:00:00', 12),
-    ('Shrek', '01:35:00', 'DreamWorks', 'Comedy', '2025-01-07 15:00:00', 0),
-    ('John Wick', '01:50:00', 'Stahelski', 'Action', '2025-01-11 22:00:00', 16),
-    ('The Matrix', '02:16:00', 'Wachowski', 'SciFi', '2025-01-09 21:00:00', 16),
-    ('Frozen', '01:42:00', 'Disney', 'Animation', '2025-01-10 14:00:00', 0),
-    ('Inception', '02:28:00', 'Nolan', 'SciFi', '2025-01-16 21:00:00', 12),
-    ('Batman Begins', '02:20:00', 'Nolan', 'Action', '2025-01-17 20:00:00', 12),
-    ('Deadpool', '01:48:00', 'Marvel', 'Comedy', '2025-01-18 22:00:00', 18),
-    ('Cars', '01:57:00', 'Pixar', 'Animation', '2025-01-19 14:00:00', 0),
-    ('The Godfather', '02:55:00', 'Coppola', 'Crime', '2025-01-20 19:00:00', 18),
-    ('Harry Potter', '02:32:00', 'Rowling', 'Fantasy', '2025-01-21 17:00:00', 10),
-    ('Doctor Strange', '01:55:00', 'Marvel', 'Fantasy', '2025-01-22 20:00:00', 12),
-    ('Finding Nemo', '01:40:00', 'Pixar', 'Animation', '2025-01-23 13:00:00', 0),
-    ('Gladiator', '02:35:00', 'Scott', 'Historical', '2025-01-24 21:00:00', 16),
-    ('Venom', '01:52:00', 'Marvel', 'Action', '2025-01-25 22:00:00', 16),
-    ('Moana', '01:47:00', 'Disney', 'Animation', '2025-01-26 15:00:00', 0),
-    ('Black Panther', '02:14:00', 'Marvel', 'Action', '2025-01-27 20:00:00', 12),
-    ('Coco', '01:45:00', 'Pixar', 'Animation', '2025-01-28 14:00:00', 0),
-    ('Spider-Man', '02:10:00', 'Marvel', 'Action', '2025-01-29 18:00:00', 12),
-    ('Up', '01:36:00', 'Pixar', 'Adventure', '2025-01-30 13:00:00', 0),
-    ('The Dark Knight', '02:32:00', 'Nolan', 'Action', '2025-02-01 21:00:00', 16),
-    ('Avatar', '02:42:00', 'Cameron', 'SciFi', '2025-02-02 20:00:00', 12),
-    ('Minions', '01:31:00', 'Illumination', 'Comedy', '2025-02-03 12:00:00', 0),
-    ('Thor Ragnarok', '02:10:00', 'Marvel', 'Action', '2025-02-04 19:00:00', 12),
-    ('Encanto', '01:42:00', 'Disney', 'Animation', '2025-02-05 14:00:00', 0),
-    ('Dune', '02:35:00', 'Villeneuve', 'SciFi', '2025-02-06 21:00:00', 14);
-    ";
-
-        command.ExecuteNonQuery();
-    }
-
-    private void SeedMovieShowings(SqliteConnection connection)
-    {
-        var command = connection.CreateCommand();
-
-        command.CommandText = @"
-    INSERT INTO movie_showings 
-    (Movie_Id, Theater_Id, ShowTime, IsCulinary, ExtraPrice)
-    VALUES
-    (1,1,'2025-06-01 18:00:00',0,0),
-    (2,2,'2025-06-01 20:00:00',1,50),
-    (3,1,'2025-06-01 14:00:00',0,0),
-    (4,1,'2025-06-02 19:00:00',1,50),
-    (5,2,'2025-06-02 17:00:00',0,0),
-    (6,2,'2025-06-02 13:00:00',0,0),
-    (7,1,'2025-06-03 22:00:00',1,50),
-    (8,2,'2025-06-03 20:30:00',0,5),
-    (9,2,'2025-06-03 12:00:00',0,0),
-    (10,1,'2025-06-04 21:00:00',1,50),
-
-    (11,2,'2025-06-04 18:00:00',0,0),
-    (12,2,'2025-06-04 22:00:00',1,50),
-    (13,1,'2025-06-05 14:00:00',0,0),
-    (14,2,'2025-06-05 20:00:00',1,50),
-    (15,1,'2025-06-05 17:00:00',0,0),
-    (16,1,'2025-06-06 19:30:00',1,50),
-    (17,2,'2025-06-06 13:00:00',0,0),
-    (18,1,'2025-06-06 21:00:00',1,50),
-    (19,1,'2025-06-07 22:30:00',0,5),
-    (20,2,'2025-06-07 15:00:00',0,0),
-
-    (21,1,'2025-06-07 20:00:00',1,50),
-    (22,1,'2025-06-08 14:00:00',0,0),
-    (23,2,'2025-06-08 18:30:00',1,50),
-    (24,1,'2025-06-08 12:30:00',0,0),
-    (25,1,'2025-06-09 21:00:00',1,50),
-    (26,2,'2025-06-09 20:00:00',0,5),
-    (27,2,'2025-06-09 11:00:00',0,0),
-    (28,1,'2025-06-10 19:00:00',1,50),
-    (29,2,'2025-06-10 14:00:00',0,0),
-    (30,1,'2025-06-10 21:30:00',1,50);
-    ";
-
-        command.ExecuteNonQuery();
-    }
+    private const string DatabaseLoc = "../../../Data Source/Cinema.db";
 
     public void InitializeDatabase()
     {
@@ -187,7 +41,7 @@ class db
             Age INTEGER NOT NULL
         );";
 
-        // THEATER / AUDITORIUMS
+        // THEATER
         string theaterTable = @"
         CREATE TABLE IF NOT EXISTS theater (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -204,7 +58,6 @@ class db
             IsCulinary INTEGER DEFAULT 0,
             ExtraPrice REAL DEFAULT 0,
 
-
             FOREIGN KEY (Movie_Id) REFERENCES movies(Id),
             FOREIGN KEY (Theater_Id) REFERENCES theater(Id)
         );";
@@ -212,8 +65,8 @@ class db
         // SEATS
         string seatsTable = @"
         CREATE TABLE IF NOT EXISTS seats (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            LocationRow INTEGER, 
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            LocationRow INTEGER,
             LocationColumn INTEGER,
             IsTaken INTEGER DEFAULT 0,
             PricingType TEXT
@@ -244,7 +97,7 @@ class db
             FOREIGN KEY (Showing_Id) REFERENCES movie_showings(Id)
         );";
 
-        // Execute tables
+        // Create tables
         Execute(connection, usersTable);
         Execute(connection, moviesTable);
         Execute(connection, theaterTable);
@@ -253,6 +106,7 @@ class db
         Execute(connection, theaterSeatsTable);
         Execute(connection, reservationTable);
 
+        // Check if already seeded
         using var countCommand = connection.CreateCommand();
         countCommand.CommandText = "SELECT COUNT(*) FROM movies";
 
@@ -262,7 +116,14 @@ class db
         {
             try
             {
+                SeedTheaters(connection);
+
+                SeedSeats(connection);
+
+                SeedTheaterSeats(connection);
+
                 SeedMovies(connection);
+
                 SeedMovieShowings(connection);
 
                 Console.WriteLine("Database seeded.");
@@ -273,12 +134,6 @@ class db
             }
         }
 
-        // Debug: show all tables
-        using var check = connection.CreateCommand();
-        check.CommandText = "SELECT name FROM sqlite_master WHERE type='table';";
-
-        using var reader = check.ExecuteReader();
-
         connection.Close();
     }
 
@@ -286,6 +141,175 @@ class db
     {
         using var command = connection.CreateCommand();
         command.CommandText = sql;
+        command.ExecuteNonQuery();
+    }
+
+    // =========================
+    // SEED THEATERS
+    // =========================
+
+    private void SeedTheaters(SqliteConnection connection)
+    {
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+        INSERT INTO theater (Id, Description)
+        VALUES
+        (1, 'Main Theater'),
+        (2, 'VIP Theater');
+        ";
+
+        command.ExecuteNonQuery();
+    }
+
+    // =========================
+    // SEED SEATS
+    // =========================
+
+    private void SeedSeats(SqliteConnection connection)
+    {
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+        INSERT INTO seats
+        (Id, LocationRow, LocationColumn, IsTaken, PricingType)
+        VALUES
+        (1,1,1,0,'normal'),
+        (2,1,2,0,'normal'),
+        (3,1,3,0,'normal'),
+        (4,1,4,0,'normal'),
+        (5,1,5,0,'normal'),
+
+        (6,2,1,0,'normal'),
+        (7,2,2,0,'normal'),
+        (8,2,3,0,'normal'),
+        (9,2,4,0,'normal'),
+        (10,2,5,0,'normal'),
+
+        (11,3,1,0,'normal'),
+        (12,3,2,0,'normal'),
+        (13,3,3,0,'luxe'),
+        (14,3,4,0,'luxe'),
+        (15,3,5,0,'normal'),
+
+        (16,4,1,0,'normal'),
+        (17,4,2,0,'normal'),
+        (18,4,3,0,'luxe'),
+        (19,4,4,0,'luxe'),
+        (20,4,5,0,'normal'),
+
+        (21,5,1,0,'normal'),
+        (22,5,2,0,'normal'),
+        (23,5,3,0,'normal'),
+        (24,5,4,0,'normal'),
+        (25,5,5,0,'normal'),
+
+        (26,1,1,0,'normal'),
+        (27,1,2,0,'normal'),
+        (28,1,3,0,'normal'),
+        (29,1,4,0,'normal'),
+        (30,1,5,0,'normal'),
+
+        (31,2,1,0,'normal'),
+        (32,2,2,0,'normal'),
+        (33,2,3,0,'normal'),
+        (34,2,4,0,'normal'),
+        (35,2,5,0,'normal'),
+
+        (36,3,1,0,'normal'),
+        (37,3,2,0,'normal'),
+        (38,3,3,0,'VIP'),
+        (39,3,4,0,'VIP'),
+        (40,3,5,0,'normal'),
+
+        (41,4,1,0,'normal'),
+        (42,4,2,0,'normal'),
+        (43,4,3,0,'VIP'),
+        (44,4,4,0,'VIP'),
+        (45,4,5,0,'normal'),
+
+        (46,5,1,0,'normal'),
+        (47,5,2,0,'normal'),
+        (48,5,3,0,'normal'),
+        (49,5,4,0,'normal'),
+        (50,5,5,0,'normal');
+        ";
+
+        command.ExecuteNonQuery();
+    }
+
+    // =========================
+    // BIND SEATS TO THEATERS
+    // =========================
+
+    private void SeedTheaterSeats(SqliteConnection connection)
+    {
+        var command = connection.CreateCommand();
+
+        var sql = new StringBuilder();
+
+        // Seats 1-25 => Theater 1
+        for (int i = 1; i <= 25; i++)
+        {
+            sql.AppendLine(
+                $"INSERT INTO theater_has_seats (Theater_Id, Seats_Id) VALUES (1, {i});"
+            );
+        }
+
+        // Seats 26-50 => Theater 2
+        for (int i = 26; i <= 50; i++)
+        {
+            sql.AppendLine(
+                $"INSERT INTO theater_has_seats (Theater_Id, Seats_Id) VALUES (2, {i});"
+            );
+        }
+
+        command.CommandText = sql.ToString();
+
+        command.ExecuteNonQuery();
+    }
+
+    // =========================
+    // SEED MOVIES
+    // =========================
+
+    private void SeedMovies(SqliteConnection connection)
+    {
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+        INSERT INTO movies 
+        (Title, Duration, Author, Genre, Premier, Age)
+        VALUES
+        ('Avengers', '02:30:00', 'Marvel', 'Action', '2025-01-01', 12),
+        ('Joker', '02:02:00', 'DC', 'Drama', '2025-01-02', 18),
+        ('Toy Story', '01:30:00', 'Pixar', 'Comedy', '2025-01-03', 6),
+        ('Interstellar', '02:49:00', 'Nolan', 'SciFi', '2025-01-05', 12),
+        ('Titanic', '03:15:00', 'Cameron', 'Drama', '2025-01-06', 12);
+        ";
+
+        command.ExecuteNonQuery();
+    }
+
+    // =========================
+    // SEED SHOWINGS
+    // =========================
+
+    private void SeedMovieShowings(SqliteConnection connection)
+    {
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+        INSERT INTO movie_showings 
+        (Movie_Id, Theater_Id, ShowTime, IsCulinary, ExtraPrice)
+        VALUES
+        (1,1,'2025-06-01 18:00:00',0,0),
+        (2,2,'2025-06-01 20:00:00',1,50),
+        (3,1,'2025-06-01 14:00:00',0,0),
+        (4,2,'2025-06-02 19:00:00',1,50),
+        (5,1,'2025-06-02 17:00:00',0,0);
+        ";
+
         command.ExecuteNonQuery();
     }
 }

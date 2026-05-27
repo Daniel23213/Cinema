@@ -27,7 +27,7 @@ public  class SeatAccess
         command.ExecuteNonQuery();
     }
 
-    public int GetId(string seat) 
+    public int GetId(int row , int col) 
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -37,10 +37,11 @@ public  class SeatAccess
         command.CommandText = @"
     SELECT Id
     FROM seats
-    WHERE Seat = @Seat;
+    WHERE LocationRow = @row AND LocationColumn = @col;
     ";
 
-        command.Parameters.AddWithValue("@Seat", seat);
+        command.Parameters.AddWithValue("@row", row);
+        command.Parameters.AddWithValue("@col", col);
 
         var result = command.ExecuteScalar();
         int res = Convert.ToInt32(result);
@@ -49,20 +50,23 @@ public  class SeatAccess
 
     }
 
-    public bool ReserveSeat(string seat)
+    public bool ReserveSeat(int row, int column)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
-        // 1. Check if seat exists and is free
+        // Check if seat exists and is free
         var checkCommand = connection.CreateCommand();
+
         checkCommand.CommandText = @"
-        SELECT IsTaken
-        FROM seats
-        WHERE Seat = @Seat;
+    SELECT IsTaken
+    FROM seats
+    WHERE LocationRow = @row
+    AND LocationColumn = @column;
     ";
 
-        checkCommand.Parameters.AddWithValue("@Seat", seat);
+        checkCommand.Parameters.AddWithValue("@row", row);
+        checkCommand.Parameters.AddWithValue("@column", column);
 
         var result = checkCommand.ExecuteScalar();
 
@@ -80,19 +84,23 @@ public  class SeatAccess
             return false;
         }
 
-        // 2. Update seat to taken
+        // Reserve seat
         var updateCommand = connection.CreateCommand();
+
         updateCommand.CommandText = @"
-        UPDATE seats
-        SET IsTaken = 1
-        WHERE Seat = @Seat;
+    UPDATE seats
+    SET IsTaken = 1
+    WHERE LocationRow = @row
+    AND LocationColumn = @column;
     ";
 
-        updateCommand.Parameters.AddWithValue("@Seat", seat);
+        updateCommand.Parameters.AddWithValue("@row", row);
+        updateCommand.Parameters.AddWithValue("@column", column);
 
         updateCommand.ExecuteNonQuery();
 
-        
+        Console.WriteLine($"Seat ({row}, {column}) reserved.");
+
         return true;
     }
 }

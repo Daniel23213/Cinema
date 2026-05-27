@@ -115,13 +115,14 @@ public static class Menu
                     }
                     movieAccess.PrintSeatsByShowingId(choice);
                     SeatAccess seatAccess = new();
-                    string seat = Console.ReadLine();
+                    int row = Convert.ToInt32(Console.ReadLine());
+                    int col = Convert.ToInt32(Console.ReadLine());
 
-                    if (seatAccess.ReserveSeat(seat))
+                    if (seatAccess.ReserveSeat(row, col))
                     {
                         Console.WriteLine("Seat reserved successfully.");
                         UserAccess user = new();
-                        user.ReserveToUser(isLogged, seatAccess.GetId(seat), choice);
+                        user.ReserveToUser(isLogged, seatAccess.GetId(row, col), choice);
 
 
                     }
