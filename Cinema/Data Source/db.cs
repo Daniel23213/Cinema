@@ -9,17 +9,82 @@ class db
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-        INSERT INTO movies (Title, Duration, Author, Genre, Premier, Age) VALUES
-        ('Avengers', '02:30:00', 'Marvel', 'Action', '2025-01-01 18:00:00', 12),
-        ('Joker', '02:02:00', 'DC', 'Drama', '2025-01-02 20:00:00', 18),
-        ('Toy Story', '01:30:00', 'Pixar', 'Comedy', '2025-01-03 16:00:00', 6),
-        ('Interstellar', '02:49:00', 'Nolan', 'SciFi', '2025-01-05 19:00:00', 12),
-        ('Titanic', '03:15:00', 'Cameron', 'Drama', '2025-01-06 17:00:00', 12),
-        ('Shrek', '01:35:00', 'DreamWorks', 'Comedy', '2025-01-07 15:00:00', 0),
-        ('John Wick', '01:50:00', 'Stahelski', 'Action', '2025-01-11 22:00:00', 16),
-        ('The Matrix', '02:16:00', 'Wachowski', 'SciFi', '2025-01-09 21:00:00', 16),
-        ('Frozen', '01:42:00', 'Disney', 'Animation', '2025-01-10 14:00:00', 0),
-        ('Inception', '02:28:00', 'Nolan', 'SciFi', '2025-01-16 21:00:00', 12);
+    INSERT INTO movies (Title, Duration, Author, Genre, Premier, Age) VALUES
+    ('Avengers', '02:30:00', 'Marvel', 'Action', '2025-01-01 18:00:00', 12),
+    ('Joker', '02:02:00', 'DC', 'Drama', '2025-01-02 20:00:00', 18),
+    ('Toy Story', '01:30:00', 'Pixar', 'Comedy', '2025-01-03 16:00:00', 6),
+    ('Interstellar', '02:49:00', 'Nolan', 'SciFi', '2025-01-05 19:00:00', 12),
+    ('Titanic', '03:15:00', 'Cameron', 'Drama', '2025-01-06 17:00:00', 12),
+    ('Shrek', '01:35:00', 'DreamWorks', 'Comedy', '2025-01-07 15:00:00', 0),
+    ('John Wick', '01:50:00', 'Stahelski', 'Action', '2025-01-11 22:00:00', 16),
+    ('The Matrix', '02:16:00', 'Wachowski', 'SciFi', '2025-01-09 21:00:00', 16),
+    ('Frozen', '01:42:00', 'Disney', 'Animation', '2025-01-10 14:00:00', 0),
+    ('Inception', '02:28:00', 'Nolan', 'SciFi', '2025-01-16 21:00:00', 12),
+    ('Batman Begins', '02:20:00', 'Nolan', 'Action', '2025-01-17 20:00:00', 12),
+    ('Deadpool', '01:48:00', 'Marvel', 'Comedy', '2025-01-18 22:00:00', 18),
+    ('Cars', '01:57:00', 'Pixar', 'Animation', '2025-01-19 14:00:00', 0),
+    ('The Godfather', '02:55:00', 'Coppola', 'Crime', '2025-01-20 19:00:00', 18),
+    ('Harry Potter', '02:32:00', 'Rowling', 'Fantasy', '2025-01-21 17:00:00', 10),
+    ('Doctor Strange', '01:55:00', 'Marvel', 'Fantasy', '2025-01-22 20:00:00', 12),
+    ('Finding Nemo', '01:40:00', 'Pixar', 'Animation', '2025-01-23 13:00:00', 0),
+    ('Gladiator', '02:35:00', 'Scott', 'Historical', '2025-01-24 21:00:00', 16),
+    ('Venom', '01:52:00', 'Marvel', 'Action', '2025-01-25 22:00:00', 16),
+    ('Moana', '01:47:00', 'Disney', 'Animation', '2025-01-26 15:00:00', 0),
+    ('Black Panther', '02:14:00', 'Marvel', 'Action', '2025-01-27 20:00:00', 12),
+    ('Coco', '01:45:00', 'Pixar', 'Animation', '2025-01-28 14:00:00', 0),
+    ('Spider-Man', '02:10:00', 'Marvel', 'Action', '2025-01-29 18:00:00', 12),
+    ('Up', '01:36:00', 'Pixar', 'Adventure', '2025-01-30 13:00:00', 0),
+    ('The Dark Knight', '02:32:00', 'Nolan', 'Action', '2025-02-01 21:00:00', 16),
+    ('Avatar', '02:42:00', 'Cameron', 'SciFi', '2025-02-02 20:00:00', 12),
+    ('Minions', '01:31:00', 'Illumination', 'Comedy', '2025-02-03 12:00:00', 0),
+    ('Thor Ragnarok', '02:10:00', 'Marvel', 'Action', '2025-02-04 19:00:00', 12),
+    ('Encanto', '01:42:00', 'Disney', 'Animation', '2025-02-05 14:00:00', 0),
+    ('Dune', '02:35:00', 'Villeneuve', 'SciFi', '2025-02-06 21:00:00', 14);
+    ";
+
+        command.ExecuteNonQuery();
+    }
+
+    private void SeedMovieShowings(SqliteConnection connection)
+    {
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+    INSERT INTO movie_showings 
+    (Movie_Id, Theater_Id, ShowTime, IsCulinary, ExtraPrice)
+    VALUES
+    (1,1,'2025-06-01 18:00:00',0,0),
+    (2,2,'2025-06-01 20:00:00',1,50),
+    (3,1,'2025-06-01 14:00:00',0,0),
+    (4,1,'2025-06-02 19:00:00',1,50),
+    (5,2,'2025-06-02 17:00:00',0,0),
+    (6,2,'2025-06-02 13:00:00',0,0),
+    (7,1,'2025-06-03 22:00:00',1,50),
+    (8,2,'2025-06-03 20:30:00',0,5),
+    (9,2,'2025-06-03 12:00:00',0,0),
+    (10,1,'2025-06-04 21:00:00',1,50),
+
+    (11,2,'2025-06-04 18:00:00',0,0),
+    (12,2,'2025-06-04 22:00:00',1,50),
+    (13,1,'2025-06-05 14:00:00',0,0),
+    (14,2,'2025-06-05 20:00:00',1,50),
+    (15,1,'2025-06-05 17:00:00',0,0),
+    (16,1,'2025-06-06 19:30:00',1,50),
+    (17,2,'2025-06-06 13:00:00',0,0),
+    (18,1,'2025-06-06 21:00:00',1,50),
+    (19,1,'2025-06-07 22:30:00',0,5),
+    (20,2,'2025-06-07 15:00:00',0,0),
+
+    (21,1,'2025-06-07 20:00:00',1,50),
+    (22,1,'2025-06-08 14:00:00',0,0),
+    (23,2,'2025-06-08 18:30:00',1,50),
+    (24,1,'2025-06-08 12:30:00',0,0),
+    (25,1,'2025-06-09 21:00:00',1,50),
+    (26,2,'2025-06-09 20:00:00',0,5),
+    (27,2,'2025-06-09 11:00:00',0,0),
+    (28,1,'2025-06-10 19:00:00',1,50),
+    (29,2,'2025-06-10 14:00:00',0,0),
+    (30,1,'2025-06-10 21:30:00',1,50);
     ";
 
         command.ExecuteNonQuery();
@@ -127,6 +192,7 @@ class db
         Execute(connection, reservationTable);
 
         SeedMovies(connection);
+        SeedMovieShowings(connection);
 
 
 
