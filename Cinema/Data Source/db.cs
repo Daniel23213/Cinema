@@ -191,10 +191,25 @@ class db
         Execute(connection, theaterSeatsTable);
         Execute(connection, reservationTable);
 
-        SeedMovies(connection);
-        SeedMovieShowings(connection);
+        using var countCommand = connection.CreateCommand();
+        countCommand.CommandText = "SELECT COUNT(*) FROM movies";
 
+        long count = (long)countCommand.ExecuteScalar();
 
+        if (count == 0)
+        {
+            try
+            {
+                SeedMovies(connection);
+                SeedMovieShowings(connection);
+
+                Console.WriteLine("Database seeded.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
         // Debug: show all tables
         using var check = connection.CreateCommand();
