@@ -219,10 +219,7 @@ public class MovieAcces : IMovieAcces
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
-        // Enable FK checking
-        var pragma = connection.CreateCommand();
-        pragma.CommandText = "PRAGMA foreign_keys = ON;";
-        pragma.ExecuteNonQuery();
+        double extraPrice = isCulinary ? 50 : 0;
 
         // Check movie exists
         var movieCheck = connection.CreateCommand();
@@ -247,16 +244,16 @@ public class MovieAcces : IMovieAcces
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-    INSERT INTO movie_showings 
-    (Movie_Id, Theater_Id, ShowTime, IsCulinary, ExtraPrice)
-    VALUES 
-    (@movieId, @theaterId, @showTime, @isCulinary, @extraPrice)";
+        INSERT INTO movie_showings 
+        (Movie_Id, Theater_Id, ShowTime, ExtraPrice, IsCulinary)
+        VALUES 
+        (@movieId, @theaterId, @showTime, @extraPrice, @isCulinary)";
 
         command.Parameters.AddWithValue("@movieId", movieId);
         command.Parameters.AddWithValue("@theaterId", theaterId);
-        command.Parameters.AddWithValue("@showTime", showTime);
-        command.Parameters.AddWithValue("@isCulinary", isCulinary ? 1 : 0);
+        command.Parameters.AddWithValue("@showTime", showTime.ToString("yyyy-MM-dd HH:mm:ss"));
         command.Parameters.AddWithValue("@extraPrice", extraPrice);
+        command.Parameters.AddWithValue("@isCulinary", isCulinary ? 1 : 0);
 
         return command.ExecuteNonQuery() > 0;
     }
