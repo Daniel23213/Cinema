@@ -4,49 +4,49 @@
     the highest discount available so no need to adjust the order of discounts
 */
 
-public enum Prices
-{
-    normal = 12,
-    luxe = 14,
-    luxePlus = 16,
-}
-
-public enum Ages
-{
-    senior = 65,
-    child = 17,
-}
-
-public static class PriceCalculatorLogic
-{
-    private const decimal seniorDiscount = 0.85M;
-    private const decimal childDiscount = 0.75M;
-    private const decimal studentDiscount = 0.80M;
-
-    private static decimal GetBasePrice(string seatType)
+    public enum Prices
     {
-        return seatType.ToLower() switch
-        {
-            "normal" => (int)Prices.normal,
-            "luxe" => (int)Prices.luxe,
-            "luxe plus" => (int)Prices.luxePlus,
-            _ => throw new ArgumentException($"'{seatType}' is not a valid seat type.")
-        };
+        normal = 12,
+        luxe = 14,
+        luxePlus = 16,
     }
 
-    public static decimal GetPrice(string seatType, int age, bool isStudent = false)
+    public enum Ages
     {
-        decimal basePrice = GetBasePrice(seatType);
-        decimal discount = 1.0M;
+        senior = 65,
+        child = 17,
+    }
 
-        if (age >= (int)Ages.senior) { discount = seniorDiscount; }
-        else if (age <= (int)Ages.child) { discount = childDiscount; }
+    public static class PriceCalculatorLogic
+    {
+        private const decimal seniorDiscount = 0.85M;
+        private const decimal childDiscount = 0.75M;
+        private const decimal studentDiscount = 0.80M;
 
-        if (isStudent)
+        private static decimal GetBasePrice(string seatType)
         {
-            if (discount > studentDiscount) { discount = studentDiscount; }
+            return seatType.ToLower() switch
+            {
+                "normal" => (int)Prices.normal,
+                "luxe" => (int)Prices.luxe,
+                "luxe plus" => (int)Prices.luxePlus,
+                _ => throw new ArgumentException($"'{seatType}' is not a valid seat type.")
+            };
         }
 
-        return basePrice * discount;
+        public static decimal GetPrice(string seatType, int age, bool isStudent = false)
+        {
+            decimal basePrice = GetBasePrice(seatType);
+            decimal discount = 1.0M;
+
+            if (age >= (int)Ages.senior) { discount = seniorDiscount; }
+            else if (age <= (int)Ages.child) { discount = childDiscount; }
+
+            if (isStudent)
+            {
+                if (discount > studentDiscount) { discount = studentDiscount; }
+            }
+
+            return basePrice * discount;
+        }
     }
-}

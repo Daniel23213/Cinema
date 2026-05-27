@@ -26,7 +26,7 @@
         Theater = theater;
         SeatType = seatType;
 
-        Price = PriceCalculatorLogic.CalculatePrice(seatType);
+        //Price = PriceCalculatorLogic.GetPrice(seatType);
         ID = id;
     }
 
