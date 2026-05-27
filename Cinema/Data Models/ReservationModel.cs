@@ -1,5 +1,6 @@
 public class ReservationModel
 {
+    public decimal _price { get; private set; }
     public bool _isTaken { get; private set; } = false;
     public int ReservationId { get; set; }
     public string UserName { get; set; }
@@ -17,7 +18,7 @@ public class ReservationModel
 
     }
 
-    public string SeatAvailble(SeatModel selectedSeat, string customerName)
+    public string ReservationAvailable(SeatModel selectedSeat, UserModel user, int showingId)
     {
         if (_isTaken)
         {
@@ -25,10 +26,12 @@ public class ReservationModel
         }
         else
         {
-           int NewId = _db.SeatReserve(UserId, selectedSeat.ID, _isTaken);
+           int NewId = _db.SeatReserve(user.Id, selectedSeat.ID, selectedSeat.SeatType, user.Age, showingId);
+
            ReservationId = NewId;
            MakeSeatTaken();
-           return $"Seat: {selectedSeat.ID} is sucessfully reserved on {customerName} ID: {ReservationId}";
+
+           return $"Seat: {selectedSeat.ID} is sucessfully reserved on {user.FirstName} {user.LastName} ID: {ReservationId}";
         }
     }
     public void MakeSeatTaken()

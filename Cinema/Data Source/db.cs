@@ -90,6 +90,7 @@ class db
             Seats_Id INTEGER NOT NULL,
             Showing_Id INTEGER NOT NULL,
             isTaken INTEGER DEFAULT 0,
+            Price REAL NOT NULL,
 
             FOREIGN KEY (Users_Id) REFERENCES users(Id),
             FOREIGN KEY (Seats_Id) REFERENCES seats(Id),

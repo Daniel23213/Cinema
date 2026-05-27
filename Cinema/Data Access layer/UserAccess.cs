@@ -35,6 +35,11 @@ public class UserAccess
         string sql = $"SELECT * FROM {Table} WHERE email = @Email";
         return _connection.QueryFirstOrDefault<UserModel>(sql, new { Email = email });
     }
+    //public UserModel GetByName(string customerName)
+    //{
+    //    string sql = $"SELECT * FROM {Table} WHERE FirstName = @FirstName AND LastName = @LastName";
+    //    return _connection.QueryFirstOrDefault<UserModel>(sql, new { FirstName = firstName, LastName = lastName });
+    //}
 
     public UserModel Login(string email, string password)
     {
@@ -75,8 +80,20 @@ public class UserAccess
 
     public void ReserveToUser(UserModel user , int seatId, int show_id)
     {
-        string sql = "INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id) VALUES (@UserId, @SeatId, @ShowId)";
-        _connection.Execute(sql, new { UserId = user.Id, SeatId = seatId, ShowId = show_id });
+        SeatAccess seatAccess = new SeatAccess();
+        SeatModel seat = seatAccess.GetById(seatId);
+
+        // if it exists or not
+        if (seat == null)
+        {
+            Console.WriteLine($"Error: Seat with ID {seatId} does not exist.");
+            return;
+        }
+        
+        decimal price = PriceCalculatorLogic.GetPrice(seat.SeatType, user.Age);
+
+        string sql = "INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id, Price) VALUES (@UserId, @SeatId, @ShowId, @Price)";
+        _connection.Execute(sql, new { UserId = user.Id, SeatId = seatId, ShowId = show_id, Price = price });
     }
 
 

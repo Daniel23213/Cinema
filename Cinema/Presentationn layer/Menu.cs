@@ -9,6 +9,7 @@ public static class Menu
     public static void ShowMenu()
     {
         bool running = true;
+        // why is this named like a bool, :c
         UserModel isLogged = null;
 
         while (running)
@@ -79,15 +80,40 @@ public static class Menu
                     SeatAccess seatAccess = new();
                     string seat = Console.ReadLine();
 
-                    if (seatAccess.ReserveSeat(seat))
+                    // seat cant be reserved but Reservation can be
+
+                    //if (seatAccess.ReserveSeat(seat))
+                    //{
+                    //    Console.WriteLine("Seat reserved successfully.");
+
+                    //    int seatId = seatAccess.GetId(seat);
+
+                    //    UserAccess userAccessLayer = new();
+                    //    userAccessLayer.ReserveToUser(isLogged, seatId, choice);
+                    //}
+                    int seatId = seatAccess.GetId(seat);
+                    SeatModel selectedSeat = seatAccess.GetById(seatId);
+
+                    // to make sure database actually has the data there
+                    if (selectedSeat == null)
                     {
-                        Console.WriteLine("Seat reserved successfully.");
-                        UserAccess user = new();
-                        user.ReserveToUser(isLogged, seatAccess.GetId(seat), choice);
-
-
+                        Console.WriteLine("Error: Selected seat data could not be found.");
+                        break;
                     }
-                   
+
+                    ReserveSeatAccess reserveAccess = new ReserveSeatAccess();
+
+                    int newReservationId = reserveAccess.SeatReserve(isLogged.Id, selectedSeat.ID, selectedSeat.SeatType, isLogged.Age, choice);
+
+                    // check if query in former method worked
+                    if (newReservationId > 0)
+                    {
+                        Console.WriteLine($"Seat {seat} reserved successfully! Ticket ID: {newReservationId}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Reservation failed.");
+                    }
                     break;
 
                 case "3":
