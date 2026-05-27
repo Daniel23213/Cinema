@@ -117,7 +117,9 @@ public class MovieAcces : IMovieAcces
             movies.Age,
             movies.Genre,
             theater.Description,
-            movie_showings.ShowTime
+            movie_showings.ShowTime,
+            movie_showings.IsCulinary,
+            movie_showings.ExtraPrice
         FROM movie_showings
         JOIN movies 
             ON movie_showings.Movie_Id = movies.Id
@@ -139,13 +141,21 @@ public class MovieAcces : IMovieAcces
                 continue;
             }
 
+            bool isCulinary = reader.GetInt32(6) == 1;
+            double extraPrice = reader.GetDouble(7);
+
+            string culinaryText = isCulinary
+                ? $" | Culinary Cinema (+{extraPrice})"
+                : "";
+
             Console.WriteLine(
                 $"Showing ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
-                $"Age: {reader.GetString(2)} | " +
+                $"Age: {reader.GetInt32(2)} | " +
                 $"Genre: {reader.GetString(3)} | " +
-                $"Description: {reader.GetString(4)} | " +
-                $"Time: {reader.GetString(4)}"
+                $"Theater: {reader.GetString(4)} | " +
+                $"Time: {reader.GetString(5)}" +
+                culinaryText
             );
 
         }
@@ -161,18 +171,21 @@ public class MovieAcces : IMovieAcces
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-            SELECT 
-                movie_showings.Id,
-                movies.Title,
-                movies.Genre,
-                theater.Description,
-                movie_showings.ShowTime
-            FROM movie_showings
-            JOIN movies ON movie_showings.Movie_Id = movies.Id
-            JOIN theater ON movie_showings.Theater_Id = theater.Id
-            WHERE movies.Genre = @genre
-            ORDER BY movie_showings.ShowTime;
-        ";
+        SELECT 
+            movie_showings.Id,
+            movies.Title,
+            movies.Age,
+            movies.Genre,
+            theater.Description,
+            movie_showings.ShowTime,
+            movie_showings.IsCulinary,
+            movie_showings.ExtraPrice
+        FROM movie_showings
+        JOIN movies ON movie_showings.Movie_Id = movies.Id
+        JOIN theater ON movie_showings.Theater_Id = theater.Id
+        WHERE movies.Genre = @genre
+        ORDER BY movie_showings.ShowTime;
+    ";
 
         command.Parameters.AddWithValue("@genre", genre.ToString());
 
@@ -182,14 +195,21 @@ public class MovieAcces : IMovieAcces
 
         while (reader.Read())
         {
-            var parsedGenre = Enum.Parse<MoviesGenres>(reader.GetString(2));
+            bool isCulinary = reader.GetInt32(6) == 1;
+            double extraPrice = reader.GetDouble(7);
+
+            string culinaryText = isCulinary
+                ? $" | Culinary Cinema (+{extraPrice}e)"
+                : "";
 
             Console.WriteLine(
-                $"ID: {reader.GetInt32(0)} | " +
+                $"Showing ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
-                $"Genre: {parsedGenre} | " +
-                $"Theater: {reader.GetString(3)} | " +
-                $"Time: {reader.GetString(4)}"
+                $"Age: {reader.GetInt32(2)} | " +
+                $"Genre: {genre} | " +
+                $"Theater: {reader.GetString(4)} | " +
+                $"Time: {reader.GetString(5)}" +
+                culinaryText
             );
         }
     }
@@ -199,18 +219,21 @@ public class MovieAcces : IMovieAcces
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
-       // double extraPrice = isCulinary ? 50 : 0;
+        double extraPrice = isCulinary ? 50 : 0;
 
         var command = connection.CreateCommand();
+
         command.CommandText = @"
-            INSERT INTO movie_showings (Movie_Id, Theater_Id, ShowTime)
-            VALUES (@movieId, @theaterId, @showTime)";
+        INSERT INTO movie_showings 
+        (Movie_Id, Theater_Id, ShowTime, ExtraPrice, IsCulinary)
+        VALUES 
+        (@movieId, @theaterId, @showTime, @extraPrice, @isCulinary)";
 
         command.Parameters.AddWithValue("@movieId", movieId);
         command.Parameters.AddWithValue("@theaterId", theaterId);
         command.Parameters.AddWithValue("@showTime", showTime.ToString("yyyy-MM-dd HH:mm:ss"));
-       // command.Parameters.AddWithValue("@extraPrice", extraPrice);
-       // command.Parameters.AddWithValue("@isCulinary", isCulinary ? 1 : 0);
+        command.Parameters.AddWithValue("@extraPrice", extraPrice);
+        command.Parameters.AddWithValue("@isCulinary", isCulinary ? 1 : 0);
 
         return command.ExecuteNonQuery() > 0;
     }
