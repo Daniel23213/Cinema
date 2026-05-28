@@ -26,7 +26,7 @@ public class AuditoriumModel
         {
             for (int j = 0; j < Size.GetLength(1); j++)
             {
-                Size[i, j] = ".";
+                Size[i, j] = " ";
             }
         }
         foreach (SeatModel seat in Seats)
