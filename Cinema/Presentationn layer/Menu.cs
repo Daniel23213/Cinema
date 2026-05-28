@@ -131,7 +131,14 @@ public static class Menu
 
                 case "3":
                     //implement view booked tickets
-                    Console.WriteLine("View booked tickets feature coming soon...");
+                    UserAccess useraccess2 = new();
+
+                    List<ReservationModel> tickets = useraccess2.ShowTickets(isLogged);
+
+                    foreach (var ticket in tickets)
+                    {
+                        Console.WriteLine(ticket);
+                    }
                     break;
 
                 case "4":

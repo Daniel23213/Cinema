@@ -114,8 +114,8 @@ public class MovieAcces : IMovieAcces
         SELECT 
             movie_showings.Id,
             movies.Title,
-            movies.Age,
             movies.Genre,
+            movies.Age,
             theater.Description,
             movie_showings.ShowTime,
             movie_showings.IsCulinary,
@@ -239,7 +239,6 @@ public class MovieAcces : IMovieAcces
 
         Console.WriteLine($"Theater exists: {theaterExists}");
 
-        double extraPrice = isCulinary ? 50 : 0;
 
         var command = connection.CreateCommand();
 
