@@ -12,7 +12,7 @@ public class MovieAcces : IMovieAcces
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id, Title, Author, Genre, Duration, Premier FROM movies";
+        command.CommandText = "SELECT Id, Title, Author, Genre, Duration, Premier, Age FROM movies";
 
         using var reader = command.ExecuteReader();
 
@@ -22,35 +22,40 @@ public class MovieAcces : IMovieAcces
                 reader.GetInt32(0),
                 reader.GetString(1),
                 reader.GetString(2),
-                reader.GetString(3),
+                Enum.Parse<MoviesGenres>(reader.GetString(3)),
                 TimeSpan.Parse(reader.GetString(4)),
                 DateTime.Parse(reader.GetString(5))
+                , reader.GetInt32(6)
+
             ));
         }
 
         return movies;
     }
 
-    public void AddMovie(string title, string author, string genre, TimeSpan duration, DateTime premier)
+    public void AddMovie(string title, string author, MoviesGenres genre, TimeSpan duration, DateTime premier, int age)
     {
+        var movies = new List<MovieModel>();
+
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
         var command = connection.CreateCommand();
         command.CommandText = @"
-            INSERT INTO movies (Title, Duration, Author, Genre, Premier)
-            VALUES (@title, @duration, @author, @genre, @premier)";
+            INSERT INTO movies (Title, Duration, Author, Genre, Premier, Age)
+            VALUES (@title, @duration, @author, @genre, @premier, @age)";
 
         command.Parameters.AddWithValue("@title", title);
         command.Parameters.AddWithValue("@duration", duration.ToString());
         command.Parameters.AddWithValue("@author", author);
-        command.Parameters.AddWithValue("@genre", genre);
+        command.Parameters.AddWithValue("@genre", genre.ToString());
         command.Parameters.AddWithValue("@premier", premier.ToString("yyyy-MM-dd HH:mm:ss"));
+        command.Parameters.AddWithValue("@age", age);
 
         command.ExecuteNonQuery();
     }
 
-    public void UpdateMovie(int id, string title, string author, string genre, TimeSpan duration, DateTime premier)
+    public void UpdateMovie(int id, string title, string author, MoviesGenres genre, TimeSpan duration, DateTime premier, int age)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -58,15 +63,16 @@ public class MovieAcces : IMovieAcces
         var command = connection.CreateCommand();
         command.CommandText = @"
             UPDATE movies
-            SET Title=@title, Author=@author, Genre=@genre, Duration=@duration, Premier=@premier
+            SET Title=@title, Author=@author, Genre=@genre, Duration=@duration, Premier=@premier, Age=@age
             WHERE Id=@id";
 
         command.Parameters.AddWithValue("@id", id);
         command.Parameters.AddWithValue("@title", title);
         command.Parameters.AddWithValue("@author", author);
-        command.Parameters.AddWithValue("@genre", genre);
+        command.Parameters.AddWithValue("@genre", genre.ToString());
         command.Parameters.AddWithValue("@duration", duration.ToString());
         command.Parameters.AddWithValue("@premier", premier.ToString("yyyy-MM-dd HH:mm:ss"));
+        command.Parameters.AddWithValue("@age", age);
 
         command.ExecuteNonQuery();
     }
@@ -89,30 +95,15 @@ public class MovieAcces : IMovieAcces
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id, Title, Author, Genre, Duration, Premier FROM movies WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", id);
+        command.CommandText = "SELECT Id FROM movies WHERE Id = @id";
+        command.Parameters.AddWithValue("@id", id);
 
         using var reader = command.ExecuteReader();
 
         return reader.Read();
     }
-    public bool AddMovieShowing(int id, int theaterId, DateTime showTime)
-    {
-        using var connection = new SqliteConnection(ConnectionString);
-        connection.Open();
-        var command = connection.CreateCommand();
-        command.CommandText = @"
-            INSERT INTO movie_showings (Movie_Id, Theater_Id, ShowTime)
-            VALUES (@movieId, @theaterId, @showTime)";
-        command.Parameters.AddWithValue("@movieId", id);
-        command.Parameters.AddWithValue("@theaterId", theaterId);
-        command.Parameters.AddWithValue("@showTime", showTime.ToString("yyyy-MM-dd HH:mm:ss"));
-        return command.ExecuteNonQuery() > 0;
-    }
 
-
-    // From here its Showings related methods
-    public void GetShowings()
+    public void GetShowings(UserModel user)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -123,8 +114,12 @@ public class MovieAcces : IMovieAcces
         SELECT 
             movie_showings.Id,
             movies.Title,
+            movies.Age,
+            movies.Genre,
             theater.Description,
-            movie_showings.ShowTime
+            movie_showings.ShowTime,
+            movie_showings.IsCulinary,
+            movie_showings.ExtraPrice
         FROM movie_showings
         JOIN movies 
             ON movie_showings.Movie_Id = movies.Id
@@ -138,15 +133,131 @@ public class MovieAcces : IMovieAcces
 
         while (reader.Read())
         {
+            int requiredAge = reader.GetInt32(2);
+
+            // Skip showing if user is too young
+            if (user != null && user.Age < requiredAge)
+            {
+                continue;
+            }
+
+            bool isCulinary = reader.GetInt32(6) == 1;
+            double extraPrice = reader.GetDouble(7);
+
+            string culinaryText = isCulinary
+                ? $" | Culinary Cinema (+{extraPrice})"
+                : "";
+
             Console.WriteLine(
                 $"Showing ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
-                $"Theater: {reader.GetString(2)} | " +
-                $"Time: {reader.GetString(3)}"
+                $"Age: {reader.GetInt32(2)} | " +
+                $"Genre: {reader.GetString(3)} | " +
+                $"Theater: {reader.GetString(4)} | " +
+                $"Time: {reader.GetString(5)}" +
+                culinaryText
             );
 
         }
     }
+
+
+    // From here its Showings related methods
+    public void GetShowingsByGenre(MoviesGenres genre)
+    {
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+        SELECT 
+            movie_showings.Id,
+            movies.Title,
+            movies.Age,
+            movies.Genre,
+            theater.Description,
+            movie_showings.ShowTime,
+            movie_showings.IsCulinary,
+            movie_showings.ExtraPrice
+        FROM movie_showings
+        JOIN movies ON movie_showings.Movie_Id = movies.Id
+        JOIN theater ON movie_showings.Theater_Id = theater.Id
+        WHERE movies.Genre = @genre
+        ORDER BY movie_showings.ShowTime;
+    ";
+
+        command.Parameters.AddWithValue("@genre", genre.ToString());
+
+        using var reader = command.ExecuteReader();
+
+        Console.WriteLine($"\n=== SHOWINGS ({genre}) ===");
+
+        while (reader.Read())
+        {
+            bool isCulinary = reader.GetInt32(6) == 1;
+            double extraPrice = reader.GetDouble(7);
+
+            string culinaryText = isCulinary
+                ? $" | Culinary Cinema (+{extraPrice}e)"
+                : "";
+
+            Console.WriteLine(
+                $"Showing ID: {reader.GetInt32(0)} | " +
+                $"Movie: {reader.GetString(1)} | " +
+                $"Age: {reader.GetInt32(2)} | " +
+                $"Genre: {genre} | " +
+                $"Theater: {reader.GetString(4)} | " +
+                $"Time: {reader.GetString(5)}" +
+                culinaryText
+            );
+        }
+    }
+
+    public bool AddMovieShowing(int movieId, int theaterId, DateTime showTime, bool isCulinary)
+    {
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        double extraPrice = isCulinary ? 50 : 0;
+
+        // Check movie exists
+        var movieCheck = connection.CreateCommand();
+        movieCheck.CommandText = "SELECT COUNT(*) FROM movies WHERE Id = @id";
+        movieCheck.Parameters.AddWithValue("@id", movieId);
+
+        long movieExists = (long)movieCheck.ExecuteScalar();
+
+        Console.WriteLine($"Movie exists: {movieExists}");
+
+        // Check theater exists
+        var theaterCheck = connection.CreateCommand();
+        theaterCheck.CommandText = "SELECT COUNT(*) FROM theater WHERE Id = @id";
+        theaterCheck.Parameters.AddWithValue("@id", theaterId);
+
+        long theaterExists = (long)theaterCheck.ExecuteScalar();
+
+        Console.WriteLine($"Theater exists: {theaterExists}");
+
+        double extraPrice = isCulinary ? 50 : 0;
+
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+        INSERT INTO movie_showings 
+        (Movie_Id, Theater_Id, ShowTime, ExtraPrice, IsCulinary)
+        VALUES 
+        (@movieId, @theaterId, @showTime, @extraPrice, @isCulinary)";
+
+        command.Parameters.AddWithValue("@movieId", movieId);
+        command.Parameters.AddWithValue("@theaterId", theaterId);
+        command.Parameters.AddWithValue("@showTime", showTime.ToString("yyyy-MM-dd HH:mm:ss"));
+        command.Parameters.AddWithValue("@extraPrice", extraPrice);
+        command.Parameters.AddWithValue("@isCulinary", isCulinary ? 1 : 0);
+
+        return command.ExecuteNonQuery() > 0;
+    }
+
 
     public void PrintSeatsByShowingId(int showingId)
     {
@@ -156,16 +267,21 @@ public class MovieAcces : IMovieAcces
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-    SELECT seats.Seat, seats.IsTaken, seats.PricingType
-    FROM movie_showings
-    JOIN theater_has_seats 
-        ON movie_showings.Theater_Id = theater_has_seats.Theater_Id
-    JOIN seats 
-        ON theater_has_seats.Seats_Id = seats.Id
-    WHERE movie_showings.Id = @Id;
+        SELECT 
+            seats.LocationRow,
+            seats.LocationColumn,
+            seats.IsTaken,
+            seats.PricingType
+        FROM movie_showings
+        JOIN theater_has_seats 
+            ON movie_showings.Theater_Id = theater_has_seats.Theater_Id
+        JOIN seats 
+            ON theater_has_seats.Seats_Id = seats.Id
+        WHERE movie_showings.Id = @id
+        ORDER BY seats.LocationRow, seats.LocationColumn;
     ";
 
-        command.Parameters.AddWithValue("@Id", showingId);
+        command.Parameters.AddWithValue("@id", showingId);
 
         using var reader = command.ExecuteReader();
 
@@ -173,13 +289,20 @@ public class MovieAcces : IMovieAcces
 
         while (reader.Read())
         {
-            string seat = reader.GetString(0);
-            bool isTaken = reader.GetInt32(1) == 1;
-            string priceType = reader.GetString(2);
+            int row = reader.GetInt32(0);
+            int column = reader.GetInt32(1);
 
-            Console.WriteLine($"Seat: {seat} | Taken: {isTaken} | Type: {priceType}");
+            bool taken = reader.GetInt32(2) == 1;
+
+            string type = reader.IsDBNull(3)
+                ? "Normal"
+                : reader.GetString(3);
+
+            Console.WriteLine(
+                $"Seat: Row {row}, Column {column} | " +
+                $"Taken: {taken} | " +
+                $"Type: {type}"
+            );
         }
     }
-
-
 }

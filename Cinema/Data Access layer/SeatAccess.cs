@@ -28,7 +28,7 @@ public  class SeatAccess
         command.ExecuteNonQuery();
     }
 
-    public int GetId(string seat) 
+    public int GetId(int row , int col) 
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -36,12 +36,13 @@ public  class SeatAccess
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-        SELECT Id
-        FROM seats
-        WHERE Seat = @Seat;
+    SELECT Id
+    FROM seats
+    WHERE LocationRow = @row AND LocationColumn = @col;
     ";
 
-        command.Parameters.AddWithValue("@Seat", seat);
+        command.Parameters.AddWithValue("@row", row);
+        command.Parameters.AddWithValue("@col", col);
 
         var result = command.ExecuteScalar();
         int res = Convert.ToInt32(result);
@@ -109,7 +110,8 @@ public  class SeatAccess
         FROM seats
         WHERE Id = @Id;";
 
-        command.Parameters.AddWithValue("@Id", id);
+        checkCommand.Parameters.AddWithValue("@row", row);
+        checkCommand.Parameters.AddWithValue("@column", column);
 
         using var reader = command.ExecuteReader();
 
