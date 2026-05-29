@@ -114,8 +114,8 @@ public class MovieAcces : IMovieAcces
         SELECT 
             movie_showings.Id,
             movies.Title,
-            movies.Age,
             movies.Genre,
+            movies.Age,
             theater.Description,
             movie_showings.ShowTime,
             movie_showings.IsCulinary,
@@ -221,6 +221,25 @@ public class MovieAcces : IMovieAcces
 
         double extraPrice = isCulinary ? 50 : 0;
 
+        // Check movie exists
+        var movieCheck = connection.CreateCommand();
+        movieCheck.CommandText = "SELECT COUNT(*) FROM movies WHERE Id = @id";
+        movieCheck.Parameters.AddWithValue("@id", movieId);
+
+        long movieExists = (long)movieCheck.ExecuteScalar();
+
+        Console.WriteLine($"Movie exists: {movieExists}");
+
+        // Check theater exists
+        var theaterCheck = connection.CreateCommand();
+        theaterCheck.CommandText = "SELECT COUNT(*) FROM theater WHERE Id = @id";
+        theaterCheck.Parameters.AddWithValue("@id", theaterId);
+
+        long theaterExists = (long)theaterCheck.ExecuteScalar();
+
+        Console.WriteLine($"Theater exists: {theaterExists}");
+
+
         var command = connection.CreateCommand();
 
         command.CommandText = @"
@@ -238,6 +257,7 @@ public class MovieAcces : IMovieAcces
         return command.ExecuteNonQuery() > 0;
     }
 
+
     public void PrintSeatsByShowingId(int showingId)
     {
         using var connection = new SqliteConnection(ConnectionString);
@@ -246,14 +266,19 @@ public class MovieAcces : IMovieAcces
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-            SELECT seats.Seat, seats.IsTaken, seats.PricingType
-            FROM movie_showings
-            JOIN theater_has_seats 
-                ON movie_showings.Theater_Id = theater_has_seats.Theater_Id
-            JOIN seats 
-                ON theater_has_seats.Seats_Id = seats.Id
-            WHERE movie_showings.Id = @id;
-        ";
+        SELECT 
+            seats.LocationRow,
+            seats.LocationColumn,
+            seats.IsTaken,
+            seats.PricingType
+        FROM movie_showings
+        JOIN theater_has_seats 
+            ON movie_showings.Theater_Id = theater_has_seats.Theater_Id
+        JOIN seats 
+            ON theater_has_seats.Seats_Id = seats.Id
+        WHERE movie_showings.Id = @id
+        ORDER BY seats.LocationRow, seats.LocationColumn;
+    ";
 
         command.Parameters.AddWithValue("@id", showingId);
 
@@ -263,11 +288,20 @@ public class MovieAcces : IMovieAcces
 
         while (reader.Read())
         {
-            string seat = reader.GetString(0);
-            bool taken = reader.GetInt32(1) == 1;
-            string type = reader.GetString(2);
+            int row = reader.GetInt32(0);
+            int column = reader.GetInt32(1);
 
-            Console.WriteLine($"Seat: {seat} | Taken: {taken} | Type: {type}");
+            bool taken = reader.GetInt32(2) == 1;
+
+            string type = reader.IsDBNull(3)
+                ? "Normal"
+                : reader.GetString(3);
+
+            Console.WriteLine(
+                $"Seat: Row {row}, Column {column} | " +
+                $"Taken: {taken} | " +
+                $"Type: {type}"
+            );
         }
     }
 }
