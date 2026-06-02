@@ -1,24 +1,19 @@
 public class ReservationModel
 {
-    private int _id;
     public bool _isTaken { get; private set; } = false;
     public int ReservationId { get; set; }
     public string UserName { get; set; }
     public int UserId { get; set; }
-    public int Seats_id { get; set; }
-    public int Showing_id { get; set; }
-
-
     public SeatModel ReservedSeat { get; set; }
 
     private ReserveSeatAccess _db = new();
 
-    public ReservationModel(int userId, int seats_id, int showing_id)
+    public ReservationModel(int reservtionid, string username, SeatModel reserveSeat, int userId)
     {
-
+        ReservationId = reservtionid;
         UserId = userId;
-        Seats_id = seats_id;
-        Showing_id = showing_id;
+        UserName = username;
+        ReservedSeat = reserveSeat;
 
     }
 
@@ -92,14 +87,8 @@ public class ReservationModel
 
         return UserAnswers;
     }
-    public override string ToString()
-    {
-        return $"{_id} {Showing_id}";
-    }
 
-} 
-
-
+}   
 
 // As a customer, I want to specify allergies and dietary requirements so suitable food alternatives can be prepared.
 
