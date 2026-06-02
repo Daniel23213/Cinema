@@ -48,5 +48,5 @@ public class AuditoriumModel
         return Diagram;
     }
 
-    public override string ToString() => $"Auditorium ID: {ID}, Total Seats {Seats.Count}, Length: {Length}, Width: {Width}, Description: {Discription}";
+    public override string ToString() => $"Auditorium ID: {ID}, Length: {Length}, Width: {Width}, Description: {Discription}";
 }
