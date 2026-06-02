@@ -3,9 +3,6 @@ public class AuditoriumModel
     public int ID { get; }
     public int Length { get; }
     public int Width { get; }
-    public List<SeatModel> Seats { get; set; }
-    public MovieModel CurrentMovie { get; set; }
-    
     public string Discription { get; set; }
     
     public AuditoriumModel(int id, int length, int width, string discription)
