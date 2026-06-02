@@ -1,4 +1,6 @@
-﻿public static class RegisterMenu
+﻿using System.Text;
+
+public static class RegisterMenu
 {
     public static UserModel ShowRegisterMenu()
     {
@@ -6,7 +8,7 @@
         Console.Write("Enter your email: ");
         string email = Console.ReadLine();
         Console.Write("Enter your password: ");
-        string password = Console.ReadLine();
+        string password = CreateMyPasswordTextBox();
         Console.Write("Enter your first name: ");
         string firstName = Console.ReadLine();
         Console.Write("Enter your last name: ");
@@ -27,7 +29,29 @@
         {
             Console.WriteLine("Email is taken!");
             return null;
+        }   
+    }
+
+    //Vivesh code here hashing input field when making a password
+    public static string CreateMyPasswordTextBox()
+    {
+        {
+            StringBuilder Password = new StringBuilder();
+            ConsoleKeyInfo cki;
+            // Prevent example from ending if CTL+C is pressed.
+            Console.TreatControlCAsInput = true;
+
+            Console.WriteLine("Enter your password: \n");
+            do {
+                cki = Console.ReadKey(true);
+                if(cki.Key == ConsoleKey.Enter)
+                {
+                    break; // if user input a Enter break the loop
+                }
+                Password.Append(cki.KeyChar);
+                Console.WriteLine("*");
+            } while (cki.Key != ConsoleKey.Enter);
+            return Password.ToString();
         }
-        
     }
 }

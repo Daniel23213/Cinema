@@ -66,9 +66,15 @@ class db
         string seatsTable = @"
         CREATE TABLE IF NOT EXISTS seats (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
+<<<<<<< HEAD
             LocationRow INTEGER,
             LocationColumn INTEGER,
             IsTaken INTEGER DEFAULT 0,
+=======
+            Seat TEXT NOT NULL,
+            Width INTEGER,
+            Height INTEGER,
+>>>>>>> 83f3e70ded665f3c594361388a117c413a1db3fc
             PricingType TEXT
         );";
 
