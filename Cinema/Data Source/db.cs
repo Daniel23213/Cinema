@@ -438,7 +438,6 @@ class db
 
         command.ExecuteNonQuery();
     }
-
     // =========================
     // SEED SHOWINGS
     // =========================

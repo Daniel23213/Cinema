@@ -51,54 +51,6 @@ public  class SeatAccess
 
     }
 
-    // sits can no longer be reserved
-    //public bool ReserveSeat(string seat)
-    //{
-    //    using var connection = new SqliteConnection(ConnectionString);
-    //    connection.Open();
-
-    //    // 1. Check if seat exists and is free
-    //    var checkCommand = connection.CreateCommand();
-    //    checkCommand.CommandText = @"
-    //    SELECT IsTaken
-    //    FROM seats
-    //    WHERE Seat = @Seat;
-    //";
-
-    //    checkCommand.Parameters.AddWithValue("@Seat", seat);
-
-    //    var result = checkCommand.ExecuteScalar();
-
-    //    if (result == null)
-    //    {
-    //        Console.WriteLine("Seat does not exist.");
-    //        return false;
-    //    }
-
-    //    int isTaken = Convert.ToInt32(result);
-
-    //    if (isTaken == 1)
-    //    {
-    //        Console.WriteLine("Seat is already taken.");
-    //        return false;
-    //    }
-
-    //    // 2. Update seat to taken
-    //    var updateCommand = connection.CreateCommand();
-    //    updateCommand.CommandText = @"
-    //    UPDATE seats
-    //    SET IsTaken = 1
-    //    WHERE Seat = @Seat;
-    //";
-
-    //    updateCommand.Parameters.AddWithValue("@Seat", seat);
-
-    //    updateCommand.ExecuteNonQuery();
-
-        
-    //    return true;
-    //}
-
     public SeatModel? GetById(int id)
     {
         using var connection = new SqliteConnection(ConnectionString);
@@ -106,12 +58,11 @@ public  class SeatAccess
 
         var command = connection.CreateCommand();
         command.CommandText = @"
-        SELECT Id, Width, Height, PricingType
+        SELECT Id, LocationRow, LocationColumn, PricingType
         FROM seats
         WHERE Id = @Id;";
 
-        checkCommand.Parameters.AddWithValue("@row", row);
-        checkCommand.Parameters.AddWithValue("@column", column);
+        command.Parameters.AddWithValue("@Id", id);
 
         using var reader = command.ExecuteReader();
 
@@ -119,8 +70,8 @@ public  class SeatAccess
         {
             int seatId = Convert.ToInt32(reader["Id"]);
 
-            int x = Convert.ToInt32(reader["Width"]);
-            int y = Convert.ToInt32(reader["Height"]);
+            int x = Convert.ToInt32(reader["LocationRow"]);
+            int y = Convert.ToInt32(reader["LocationColumn"]);
 
             string pricingType = reader["PricingType"].ToString() ?? "";
 
