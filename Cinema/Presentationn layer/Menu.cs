@@ -57,14 +57,52 @@ public static class Menu
             {
                 case "1":
                     MovieAcces movieAcces = new();
-                    movieAcces.GetShowings();
+                    movieAcces.GetShowings(isLogged);
 
-                    break;
+                        Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
+                        Console.WriteLine("1 - Show all showings");
+                        Console.WriteLine("2 - Filter by genre");
+                        Console.Write("\nChoose option: ");
+
+                        string option = Console.ReadLine();
+
+                        if (option == "1")
+                        {
+                            movieAcces.GetShowings(isLogged);
+                        }
+                        else if (option == "2")
+                        {
+                            Console.WriteLine("\nAvailable genres:");
+
+                            foreach (MoviesGenres g in Enum.GetValues(typeof(MoviesGenres)))
+                            {
+                                Console.WriteLine($"- {g}");
+                            }
+
+                            Console.Write("\nEnter genre: ");
+                            string genreInput = Console.ReadLine();
+
+                            if (Enum.TryParse<MoviesGenres>(genreInput, true, out var genre))
+                            {
+                                movieAcces.GetShowingsByGenre(genre);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid genre.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid option.");
+                        }
+
+                        break;
+                    
 
                 case "2":
                     //implement buy tickets movies
                     MovieAcces movieAccess = new();
-                    movieAccess.GetShowings();
+                    movieAccess.GetShowings(isLogged);
                     Console.Write("Enter showing ID: ");
                     string choiceInput = Console.ReadLine();
 
@@ -77,22 +115,30 @@ public static class Menu
                     }
                     movieAccess.PrintSeatsByShowingId(choice);
                     SeatAccess seatAccess = new();
-                    string seat = Console.ReadLine();
+                    int row = Convert.ToInt32(Console.ReadLine());
+                    int col = Convert.ToInt32(Console.ReadLine());
 
-                    if (seatAccess.ReserveSeat(seat))
+                    if (seatAccess.ReserveSeat(row, col))
                     {
                         Console.WriteLine("Seat reserved successfully.");
                         UserAccess user = new();
-                        user.ReserveToUser(isLogged, seatAccess.GetId(seat), choice);
+                        user.ReserveToUser(isLogged, seatAccess.GetId(row, col), choice);
 
 
                     }
-                   
+
                     break;
 
                 case "3":
                     //implement view booked tickets
-                    Console.WriteLine("View booked tickets feature coming soon...");
+                    UserAccess useraccess2 = new();
+
+                    List<ReservationModel> tickets = useraccess2.ShowTickets(isLogged);
+
+                    foreach (var ticket in tickets)
+                    {
+                        Console.WriteLine(ticket);
+                    }
                     break;
 
                 case "4":
