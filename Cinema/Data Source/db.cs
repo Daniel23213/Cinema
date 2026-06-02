@@ -279,7 +279,7 @@ class db
         using var check = connection.CreateCommand();
         check.CommandText = "SELECT name FROM sqlite_master WHERE type='table';";
 
-        long count = (long)countCommand.ExecuteScalar();
+        count = (long)countCommand.ExecuteScalar();
 
         connection.Close();
     }
@@ -313,81 +313,81 @@ class db
     // SEED SEATS
     // =========================
 
-    private void SeedSeats(SqliteConnection connection)
-    {
-        var command = connection.CreateCommand();
+    //private void SeedSeats(SqliteConnection connection)
+    //{
+    //    var command = connection.CreateCommand();
 
-        command.CommandText = @"
-        INSERT INTO seats
-        (Id, LocationRow, LocationColumn, IsTaken, PricingType)
-        VALUES
-        (1,1,1,0,'normal'),
-        (2,1,2,0,'normal'),
-        (3,1,3,0,'normal'),
-        (4,1,4,0,'normal'),
-        (5,1,5,0,'normal'),
+    //    command.CommandText = @"
+    //    INSERT INTO seats
+    //    (Id, LocationRow, LocationColumn, IsTaken, PricingType)
+    //    VALUES
+    //    (1,1,1,0,'normal'),
+    //    (2,1,2,0,'normal'),
+    //    (3,1,3,0,'normal'),
+    //    (4,1,4,0,'normal'),
+    //    (5,1,5,0,'normal'),
 
-        (6,2,1,0,'normal'),
-        (7,2,2,0,'normal'),
-        (8,2,3,0,'normal'),
-        (9,2,4,0,'normal'),
-        (10,2,5,0,'normal'),
+    //    (6,2,1,0,'normal'),
+    //    (7,2,2,0,'normal'),
+    //    (8,2,3,0,'normal'),
+    //    (9,2,4,0,'normal'),
+    //    (10,2,5,0,'normal'),
 
-        (11,3,1,0,'normal'),
-        (12,3,2,0,'normal'),
-        (13,3,3,0,'luxe'),
-        (14,3,4,0,'luxe'),
-        (15,3,5,0,'normal'),
+    //    (11,3,1,0,'normal'),
+    //    (12,3,2,0,'normal'),
+    //    (13,3,3,0,'luxe'),
+    //    (14,3,4,0,'luxe'),
+    //    (15,3,5,0,'normal'),
 
-        (16,4,1,0,'normal'),
-        (17,4,2,0,'normal'),
-        (18,4,3,0,'luxe'),
-        (19,4,4,0,'luxe'),
-        (20,4,5,0,'normal'),
+    //    (16,4,1,0,'normal'),
+    //    (17,4,2,0,'normal'),
+    //    (18,4,3,0,'luxe'),
+    //    (19,4,4,0,'luxe'),
+    //    (20,4,5,0,'normal'),
 
-        (21,5,1,0,'normal'),
-        (22,5,2,0,'normal'),
-        (23,5,3,0,'normal'),
-        (24,5,4,0,'normal'),
-        (25,5,5,0,'normal'),
+    //    (21,5,1,0,'normal'),
+    //    (22,5,2,0,'normal'),
+    //    (23,5,3,0,'normal'),
+    //    (24,5,4,0,'normal'),
+    //    (25,5,5,0,'normal'),
 
-        (26,1,1,0,'normal'),
-        (27,1,2,0,'normal'),
-        (28,1,3,0,'normal'),
-        (29,1,4,0,'normal'),
-        (30,1,5,0,'normal'),
+    //    (26,1,1,0,'normal'),
+    //    (27,1,2,0,'normal'),
+    //    (28,1,3,0,'normal'),
+    //    (29,1,4,0,'normal'),
+    //    (30,1,5,0,'normal'),
 
-        (31,2,1,0,'normal'),
-        (32,2,2,0,'normal'),
-        (33,2,3,0,'normal'),
-        (34,2,4,0,'normal'),
-        (35,2,5,0,'normal'),
+    //    (31,2,1,0,'normal'),
+    //    (32,2,2,0,'normal'),
+    //    (33,2,3,0,'normal'),
+    //    (34,2,4,0,'normal'),
+    //    (35,2,5,0,'normal'),
 
-        (36,3,1,0,'normal'),
-        (37,3,2,0,'normal'),
-        (38,3,3,0,'VIP'),
-        (39,3,4,0,'VIP'),
-        (40,3,5,0,'normal'),
+    //    (36,3,1,0,'normal'),
+    //    (37,3,2,0,'normal'),
+    //    (38,3,3,0,'VIP'),
+    //    (39,3,4,0,'VIP'),
+    //    (40,3,5,0,'normal'),
 
-        (41,4,1,0,'normal'),
-        (42,4,2,0,'normal'),
-        (43,4,3,0,'VIP'),
-        (44,4,4,0,'VIP'),
-        (45,4,5,0,'normal'),
+    //    (41,4,1,0,'normal'),
+    //    (42,4,2,0,'normal'),
+    //    (43,4,3,0,'VIP'),
+    //    (44,4,4,0,'VIP'),
+    //    (45,4,5,0,'normal'),
 
-        (46,5,1,0,'normal'),
-        (47,5,2,0,'normal'),
-        (48,5,3,0,'normal'),
-        (49,5,4,0,'normal'),
-        (50,5,5,0,'normal');
-        ";
+    //    (46,5,1,0,'normal'),
+    //    (47,5,2,0,'normal'),
+    //    (48,5,3,0,'normal'),
+    //    (49,5,4,0,'normal'),
+    //    (50,5,5,0,'normal');
+    //    ";
 
-        command.ExecuteNonQuery();
-    }
+    //    command.ExecuteNonQuery();
+    //}
 
-    // =========================
-    // BIND SEATS TO THEATERS
-    // =========================
+    //// =========================
+    //// BIND SEATS TO THEATERS
+    //// =========================
 
     private void SeedTheaterSeats(SqliteConnection connection)
     {
@@ -420,43 +420,43 @@ class db
     // SEED MOVIES
     // =========================
 
-    private void SeedMovies(SqliteConnection connection)
-    {
-        var command = connection.CreateCommand();
+    //private void SeedMovies(SqliteConnection connection)
+    //{
+    //    var command = connection.CreateCommand();
 
-        command.CommandText = @"
-        INSERT INTO movies 
-        (Title, Duration, Author, Genre, Premier, Age)
-        VALUES
-        ('Avengers', '02:30:00', 'Marvel', 'Action', '2025-01-01', 12),
-        ('Joker', '02:02:00', 'DC', 'Drama', '2025-01-02', 18),
-        ('Toy Story', '01:30:00', 'Pixar', 'Comedy', '2025-01-03', 6),
-        ('Interstellar', '02:49:00', 'Nolan', 'SciFi', '2025-01-05', 12),
-        ('Titanic', '03:15:00', 'Cameron', 'Drama', '2025-01-06', 12);
-        ";
+    //    command.CommandText = @"
+    //    INSERT INTO movies 
+    //    (Title, Duration, Author, Genre, Premier, Age)
+    //    VALUES
+    //    ('Avengers', '02:30:00', 'Marvel', 'Action', '2025-01-01', 12),
+    //    ('Joker', '02:02:00', 'DC', 'Drama', '2025-01-02', 18),
+    //    ('Toy Story', '01:30:00', 'Pixar', 'Comedy', '2025-01-03', 6),
+    //    ('Interstellar', '02:49:00', 'Nolan', 'SciFi', '2025-01-05', 12),
+    //    ('Titanic', '03:15:00', 'Cameron', 'Drama', '2025-01-06', 12);
+    //    ";
 
-        command.ExecuteNonQuery();
-    }
+    //    command.ExecuteNonQuery();
+    //}
 
-    // =========================
-    // SEED SHOWINGS
-    // =========================
+    //// =========================
+    //// SEED SHOWINGS
+    //// =========================
 
-    private void SeedMovieShowings(SqliteConnection connection)
-    {
-        var command = connection.CreateCommand();
+    //private void SeedMovieShowings(SqliteConnection connection)
+    //{
+    //    var command = connection.CreateCommand();
 
-        command.CommandText = @"
-        INSERT INTO movie_showings 
-        (Movie_Id, Theater_Id, ShowTime, IsCulinary, ExtraPrice)
-        VALUES
-        (1,1,'2025-06-01 18:00:00',0,0),
-        (2,2,'2025-06-01 20:00:00',1,50),
-        (3,1,'2025-06-01 14:00:00',0,0),
-        (4,2,'2025-06-02 19:00:00',1,50),
-        (5,1,'2025-06-02 17:00:00',0,0);
-        ";
+    //    command.CommandText = @"
+    //    INSERT INTO movie_showings 
+    //    (Movie_Id, Theater_Id, ShowTime, IsCulinary, ExtraPrice)
+    //    VALUES
+    //    (1,1,'2025-06-01 18:00:00',0,0),
+    //    (2,2,'2025-06-01 20:00:00',1,50),
+    //    (3,1,'2025-06-01 14:00:00',0,0),
+    //    (4,2,'2025-06-02 19:00:00',1,50),
+    //    (5,1,'2025-06-02 17:00:00',0,0);
+    //    ";
 
-        command.ExecuteNonQuery();
-    }
+    //    command.ExecuteNonQuery();
+    //}
 }

@@ -239,7 +239,7 @@ public class MovieAcces : IMovieAcces
 
         Console.WriteLine($"Theater exists: {theaterExists}");
 
-        double extraPrice = isCulinary ? 50 : 0;
+        extraPrice = isCulinary ? 50 : 0;
 
         var command = connection.CreateCommand();
 

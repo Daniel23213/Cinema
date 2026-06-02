@@ -26,7 +26,9 @@
         Theater = theater;
         SeatType = seatType;
 
-        Price = PriceCalculatorLogic.CalculatePrice(seatType);
+        // have to adjust db and methods for now remove the price
+        //Price = PriceCalculatorLogic.GetPrice(seatType);
+        Price = 1;
         ID = id;
     }
 
