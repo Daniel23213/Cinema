@@ -8,13 +8,11 @@ public class AuditoriumModel
     
     public string Discription { get; set; }
     
-    public AuditoriumModel(int id, int length, int width, List<SeatModel> seats, MovieModel currentMovie, string discription)
+    public AuditoriumModel(int id, int length, int width, string discription)
     {
         ID = id;
         Length = length;
         Width = width;
-        Seats = seats;
-        CurrentMovie = currentMovie;
         Discription = discription;
     }
 
@@ -29,6 +27,7 @@ public class AuditoriumModel
                 Size[i, j] = " ";
             }
         }
+        /*
         foreach (SeatModel seat in Seats)
         {
             string type = seat.SeatType switch
@@ -40,6 +39,7 @@ public class AuditoriumModel
             };
             Size[seat.Coordinates.x, seat.Coordinates.y] = type;
         }
+        */
         for (int i = 0; i < Size.GetLength(0); i++)
         {
             for (int j = 0; j < Size.GetLength(1); j++)
@@ -51,5 +51,5 @@ public class AuditoriumModel
         return Diagram;
     }
 
-    public override string ToString() => $"Auditorium {ID} has {Seats.Count} seats and the movie thats airing is {CurrentMovie}";
+    public override string ToString() => $"Auditorium ID: {ID}, Total Seats {Seats.Count}, Length: {Length}, Width: {Width}, Description: {Discription}";
 }
