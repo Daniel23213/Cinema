@@ -3,7 +3,7 @@ public class AuditoriumModel
     public int ID { get; }
     public int Length { get; }
     public int Width { get; }
-    public string Discription { get; set; }
+    public string Discription { get; }
     
     public AuditoriumModel(int id, int length, int width, string discription)
     {
@@ -24,14 +24,13 @@ public class AuditoriumModel
                 Size[i, j] = " ";
             }
         }
-        /*
-        foreach (SeatModel seat in Seats)
+        List<SeatModel> seats = SeatAccess.GetSeatsByTheater(ID);
+        foreach (SeatModel seat in seats)
         {
             string type = seat.SeatType switch
             {
-                "Standard" => "$",
+                "VIP" => "$",
                 "Premium" => "&",
-                "VIP" => "%",
                 _ => "#"
             };
             Size[seat.Coordinates.x, seat.Coordinates.y] = type;
