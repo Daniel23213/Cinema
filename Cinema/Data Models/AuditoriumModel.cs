@@ -35,7 +35,6 @@ public class AuditoriumModel
             };
             Size[seat.Coordinates.x, seat.Coordinates.y] = type;
         }
-        */
         for (int i = 0; i < Size.GetLength(0); i++)
         {
             for (int j = 0; j < Size.GetLength(1); j++)
