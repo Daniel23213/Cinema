@@ -1,4 +1,4 @@
-﻿//using Cinema.Presentationn_layer;
+//using Cinema.Presentationn_layer;
 
 using System.Threading.Channels;
 
@@ -56,8 +56,8 @@ public static class Menu
             switch (input)
             {
                 case "1":
-                    {
-                        MovieAcces movieAcces = new();
+                    MovieAcces movieAcces = new();
+                    movieAcces.GetShowings(isLogged);
 
                         Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
                         Console.WriteLine("1 - Show all showings");
@@ -68,7 +68,7 @@ public static class Menu
 
                         if (option == "1")
                         {
-                            movieAcces.GetShowings();
+                            movieAcces.GetShowings(isLogged);
                         }
                         else if (option == "2")
                         {
@@ -97,12 +97,12 @@ public static class Menu
                         }
 
                         break;
-                    }
+                    
 
                 case "2":
                     //implement buy tickets movies
                     MovieAcces movieAccess = new();
-                    movieAccess.GetShowings();
+                    movieAccess.GetShowings(isLogged);
                     Console.Write("Enter showing ID: ");
                     string choiceInput = Console.ReadLine();
 
@@ -115,13 +115,14 @@ public static class Menu
                     }
                     movieAccess.PrintSeatsByShowingId(choice);
                     SeatAccess seatAccess = new();
-                    string seat = Console.ReadLine();
+                    int row = Convert.ToInt32(Console.ReadLine());
+                    int col = Convert.ToInt32(Console.ReadLine());
 
-                    if (seatAccess.ReserveSeat(seat))
+                    if (seatAccess.ReserveSeat(row, col))
                     {
                         Console.WriteLine("Seat reserved successfully.");
                         UserAccess user = new();
-                        user.ReserveToUser(isLogged, seatAccess.GetId(seat), choice);
+                        user.ReserveToUser(isLogged, seatAccess.GetId(row, col), choice);
 
 
                     }

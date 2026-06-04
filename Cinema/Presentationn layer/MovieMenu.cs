@@ -61,7 +61,7 @@ public class MovieMenu
     public void GetAiringMovies()
     {
         Console.Clear();
-        Console.WriteLine("\n🎬 Airing Movies:\n");
+        Console.WriteLine("\nAiring Movies:\n");
 
         var movies = _service.GetAiringMovies();
 
@@ -108,11 +108,23 @@ public class MovieMenu
             Pause();
             return;
         }
+
+        Console.WriteLine("Is this Culinary Cinema? (y/n): ");
+        bool isCulinary = Console.ReadLine()?.ToLower() == "y";
+
         MovieAcces movieAcces = new();
-        if (movieAcces.AddMovieShowing(id, theaterId, showTime))
+
+        if (movieAcces.AddMovieShowing(id, theaterId ,showTime, isCulinary))
         {
-            Console.WriteLine("✅ Movie showing added!");
+            Console.WriteLine("Movie showing added!");
+
+            if (isCulinary)
+            {
+                Console.WriteLine("Culinary Cinema enabled (+€50)");
+            }
         }
+
+        Pause();
     }
 
     private void AddMovie()
@@ -123,13 +135,27 @@ public class MovieMenu
         Console.Write("Enter author: ");
         string author = Console.ReadLine();
 
-        Console.Write("Enter genre (Action, Comedy, Drama...): ");
-        if (!Enum.TryParse<MoviesGenres>(Console.ReadLine(), true, out MoviesGenres genre))
+        Console.WriteLine("Select genre:");
+
+        var genres = Enum.GetValues(typeof(MoviesGenres));
+
+        int index = 1;
+        foreach (var g in genres)
+        {
+            Console.WriteLine($"[{index}] {g}");
+            index++;
+        }
+
+        Console.Write("Choose: ");
+        if (!int.TryParse(Console.ReadLine(), out int choice) ||
+            choice < 1 || choice > genres.Length)
         {
             Console.WriteLine("Invalid genre!");
             Pause();
             return;
         }
+
+        MoviesGenres genre = (MoviesGenres)genres.GetValue(choice - 1);
 
         Console.Write("Enter duration in minutes: ");
         if (!int.TryParse(Console.ReadLine(), out int minutes))
@@ -148,11 +174,13 @@ public class MovieMenu
             Pause();
             return;
         }
+        Console.Write("Enter Age: ");
+        int age = Convert.ToInt32(Console.ReadLine());
 
-        _service.AddMovie(title, author, genre, duration, premier);
+        _service.AddMovie(title, author, genre, duration, premier, age);
 
-        Console.WriteLine("✅ Movie added!");
-        Console.WriteLine("🎬 Do you want to add to auditorium and time:\n");
+        Console.WriteLine("Movie added!");
+        Console.WriteLine("Do you want to add to auditorium and time(y/n):\n");
         string input = Console.ReadLine();
         if (input.ToLower() == "yes" || input.ToLower() == "y")
         {
@@ -177,13 +205,20 @@ public class MovieMenu
                 Pause();
                 return;
             }
+            Console.WriteLine("Is this Culinary Cinema? (y/n): ");
+            bool isCulinary = Console.ReadLine()?.ToLower() == "y";
+
             MovieAcces movieAcces = new();
-            if (movieAcces.AddMovieShowing(id, theaterId, showTime))
+
+            if (movieAcces.AddMovieShowing(id, theaterId, showTime, isCulinary))
             {
-                Console.WriteLine("✅ Movie showing added!");
+                Console.WriteLine("Movie showing added!");
+
+                if (isCulinary)
+                {
+                    Console.WriteLine("Culinary Cinema enabled (+€50)");
+                }
             }
-
-
         }
         Pause();
     }
@@ -229,8 +264,10 @@ public class MovieMenu
             Pause();
             return;
         }
+        Console.Write("Enter Age: ");
+        int age = Convert.ToInt32(Console.ReadLine());
 
-        _service.UpdateMovie(id, title, author, genre, duration, premier);
+        _service.UpdateMovie(id, title, author, genre, duration, premier, age);
 
         Console.WriteLine("✏️ Movie updated!");
         Pause();
@@ -256,6 +293,7 @@ public class MovieMenu
     {
         Console.WriteLine("\nPress any key to continue...");
         Console.ReadKey();
+        Console.Clear();
     }
 
 }
