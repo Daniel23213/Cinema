@@ -128,6 +128,7 @@ public class MovieAcces : IMovieAcces
             ON movie_showings.Theater_Id = theater.Id
         ORDER BY movie_showings.ShowTime;
         ";
+
         using var reader = command.ExecuteReader();
 
         Console.WriteLine("\n=== Movie Showings ===");
@@ -149,16 +150,19 @@ public class MovieAcces : IMovieAcces
                 ? $" | Culinary Cinema (+{extraPrice})"
                 : "";
 
+            string ageText = requiredAge > 0
+                ? $" | Age: {requiredAge}+"
+                : "";
+
             Console.WriteLine(
                 $"Showing ID: {reader.GetInt32(0)} | " +
-                $"Movie: {reader.GetString(1)} | " +
-                $"Age: {reader.GetInt32(2)} | " +
-                $"Genre: {reader.GetString(3)} | " +
+                $"Movie: {reader.GetString(1)}" +
+                ageText +
+                $" | Genre: {reader.GetString(3)} | " +
                 $"Theater: {reader.GetString(4)} | " +
                 $"Time: {reader.GetString(5)}" +
                 culinaryText
             );
-
         }
     }
 
@@ -203,11 +207,15 @@ public class MovieAcces : IMovieAcces
                 ? $" | Culinary Cinema (+{extraPrice}e)"
                 : "";
 
+            string ageText = reader.GetInt32(2) > 0
+                ? $" | Age: {reader.GetInt32(2)}+"
+                : "";
+
             Console.WriteLine(
                 $"Showing ID: {reader.GetInt32(0)} | " +
-                $"Movie: {reader.GetString(1)} | " +
-                $"Age: {reader.GetInt32(2)} | " +
-                $"Genre: {genre} | " +
+                $"Movie: {reader.GetString(1)}" +
+                ageText +
+                $" | Genre: {genre} | " +
                 $"Theater: {reader.GetString(4)} | " +
                 $"Time: {reader.GetString(5)}" +
                 culinaryText
