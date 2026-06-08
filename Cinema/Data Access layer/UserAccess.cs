@@ -78,6 +78,11 @@ public class UserAccess
         string sql = "INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id) VALUES (@UserId, @SeatId, @ShowId)";
         _connection.Execute(sql, new { UserId = user.Id, SeatId = seatId, ShowId = show_id });
     }
+    public List<dynamic> ShowTickets(int userId)
+    {
+        string sql = "SELECT * FROM reservation WHERE Users_Id = @userId";
+        return _connection.Query(sql, new { userId }).ToList();
+    }
 
 
 

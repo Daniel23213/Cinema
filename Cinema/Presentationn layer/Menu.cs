@@ -113,25 +113,29 @@ public static class Menu
 
                         break;
                     }
-                    movieAccess.PrintSeatsByShowingId(choice);
                     SeatAccess seatAccess = new();
-                    int row = Convert.ToInt32(Console.ReadLine());
-                    int col = Convert.ToInt32(Console.ReadLine());
+                    seatAccess.PrintSeatsByShowingId(choice);
+                    
+                    int seatid = Convert.ToInt32(Console.ReadLine());
+                    
 
-                    if (seatAccess.ReserveSeat(row, col))
+                    if (seatAccess.IsSeatTaken(choice, seatid))
                     {
                         Console.WriteLine("Seat reserved successfully.");
                         UserService user = new();
-                        user.ReserveTicket(isLogged, seatAccess.GetId(row, col), choice);
-
-
+                        user.ReserveTicket(isLogged,seatid, choice);
                     }
 
                     break;
 
                 case "3":
                     //implement view booked tickets
-                    Console.WriteLine("View booked tickets feature coming soon...");
+                    UserAccess user3 = new();
+                    foreach (dynamic ticket in user3.ShowTickets(isLogged.Id)) 
+                    {
+                        Console.WriteLine(ticket);
+                    }
+
                     break;
 
                 case "4":

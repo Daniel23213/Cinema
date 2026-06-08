@@ -50,57 +50,95 @@ public  class SeatAccess
 
     }
 
-    public bool ReserveSeat(int row, int column)
+    public bool ReserveSeat(UserModel user, int seatId, int showingId)
+    {
+        if (IsSeatTaken(showingId, seatId))
+        {
+            Console.WriteLine("Seat already taken!");
+            return false;
+        }
+
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+        INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id)
+        VALUES (@userId, @seatId, @showingId);
+    ";
+
+        cmd.Parameters.AddWithValue("@userId", user.Id);
+        cmd.Parameters.AddWithValue("@seatId", seatId);
+        cmd.Parameters.AddWithValue("@showingId", showingId);
+
+        cmd.ExecuteNonQuery();
+
+        Console.WriteLine("Ticket reserved successfully!");
+        return true;
+    }
+
+    public void PrintSeatsByShowingId(int showingId)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
-        // Check if seat exists and is free
-        var checkCommand = connection.CreateCommand();
-
-        checkCommand.CommandText = @"
-    SELECT IsTaken
-    FROM seats
-    WHERE LocationRow = @row
-    AND LocationColumn = @column;
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+        SELECT 
+            seats.Id,
+            seats.Seat,
+            seats.Width,
+            seats.Height,
+            seats.PricingType
+        FROM movie_showings
+        JOIN theater_has_seats 
+            ON movie_showings.Theater_Id = theater_has_seats.Theater_Id
+        JOIN seats 
+            ON theater_has_seats.Seats_Id = seats.Id
+        WHERE movie_showings.Id = @id
+        ORDER BY seats.Width, seats.Height;
     ";
 
-        checkCommand.Parameters.AddWithValue("@row", row);
-        checkCommand.Parameters.AddWithValue("@column", column);
+        cmd.Parameters.AddWithValue("@id", showingId);
 
-        var result = checkCommand.ExecuteScalar();
+        using var reader = cmd.ExecuteReader();
 
-        if (result == null)
+        Console.WriteLine($"\n=== Seats for Showing {showingId} ===");
+
+        while (reader.Read())
         {
-            Console.WriteLine("Seat does not exist.");
-            return false;
+            int seatId = reader.GetInt32(0);
+            string seatName = reader.GetString(1);
+            int row = reader.GetInt32(2);
+            int col = reader.GetInt32(3);
+            string type = reader.GetString(4);
+
+            bool taken = IsSeatTaken(showingId, seatId);
+
+            Console.WriteLine(
+                $"Seat {seatName} (Row {row}, Col {col}) | " +
+                $"{(taken ? "✅ Available" : "❌ Taken")} | " +
+                $"{type}"
+            );
         }
+    }
+    public bool IsSeatTaken(int showingId, int seatId)
+    {
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
 
-        int isTaken = Convert.ToInt32(result);
-
-        if (isTaken == 1)
-        {
-            Console.WriteLine("Seat is already taken.");
-            return false;
-        }
-
-        // Reserve seat
-        var updateCommand = connection.CreateCommand();
-
-        updateCommand.CommandText = @"
-    UPDATE seats
-    SET IsTaken = 1
-    WHERE LocationRow = @row
-    AND LocationColumn = @column;
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+        SELECT COUNT(*)
+        FROM reservation
+        WHERE Showing_Id = @showingId
+        AND Seats_Id = @seatId;
     ";
 
-        updateCommand.Parameters.AddWithValue("@row", row);
-        updateCommand.Parameters.AddWithValue("@column", column);
+        cmd.Parameters.AddWithValue("@showingId", showingId);
+        cmd.Parameters.AddWithValue("@seatId", seatId);
 
-        updateCommand.ExecuteNonQuery();
-
-        Console.WriteLine($"Seat ({row}, {column}) reserved.");
-
-        return true;
+        long count = (long)cmd.ExecuteScalar();
+        return count == 0;
     }
 }
