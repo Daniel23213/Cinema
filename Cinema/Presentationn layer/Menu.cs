@@ -121,8 +121,8 @@ public static class Menu
                     if (seatAccess.ReserveSeat(row, col))
                     {
                         Console.WriteLine("Seat reserved successfully.");
-                        UserAccess user = new();
-                        user.ReserveToUser(isLogged, seatAccess.GetId(row, col), choice);
+                        UserService user = new();
+                        user.ReserveTicket(isLogged, seatAccess.GetId(row, col), choice);
 
 
                     }
@@ -149,12 +149,12 @@ public static class Menu
                     Console.WriteLine("Manage account feature coming soon...");
                     Console.WriteLine("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
                     string manageInput = Console.ReadLine();
-                    UserAccess userAccess = new();
+                    UserService userAccess = new();
                     if (manageInput == "D" || manageInput == "d")
                     {
                         // Implement delete account
 
-                        userAccess.Delete(isLogged);
+                        userAccess.DeleteUser(isLogged);
                         Console.WriteLine("Your account has been deleted!");
                         isLogged = null;
                         continue;
@@ -165,7 +165,7 @@ public static class Menu
                     {
                         // Implement change password
                         string newpassword = Console.ReadLine();
-                        userAccess.UpdatePassword(isLogged.Id, newpassword);
+                        userAccess.ChangePassword(isLogged.Id, newpassword);
                     }
                     break;
                 case "R" or "r":

@@ -2,8 +2,7 @@ using Microsoft.Data.Sqlite;
 
 public class MovieAcces : IMovieAcces
 {
-    private const string ConnectionString =
-        @"Data Source=C:\Users\Plewka\Desktop\game\Cinema\Cinema\Data Source\Cinema.db";
+    private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
 
     public List<MovieModel> GetAiringMovies()
     {
