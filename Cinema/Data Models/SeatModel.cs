@@ -1,7 +1,6 @@
 ﻿public class SeatModel : IEquatable<SeatModel>
 {
     private (int x, int y) _coordinates;
-    private static int counter = 0;
 
     public int ID { get; }
     public decimal Price { get; set; }
@@ -21,14 +20,16 @@
     }
     public string Theater { get; set; }
 
-    public SeatModel(int x, int y, string theater, string seatType)
+    public SeatModel(int x, int y, string theater, string seatType, int id)
     {
         Coordinates = (x, y);
         Theater = theater;
         SeatType = seatType;
 
-        Price = PriceCalculatorLogic.CalculatePrice(seatType);
-        ID = counter++;
+        // have to adjust db and methods for now remove the price
+        //Price = PriceCalculatorLogic.GetPrice(seatType);
+        Price = 1;
+        ID = id;
     }
 
     public override string ToString()

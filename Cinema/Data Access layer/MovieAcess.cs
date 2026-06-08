@@ -2,7 +2,8 @@ using Microsoft.Data.Sqlite;
 
 public class MovieAcces : IMovieAcces
 {
-    private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
+    private const string ConnectionString =
+        @"Data Source=C:\Users\Plewka\Desktop\game\Cinema\Cinema\Data Source\Cinema.db";
 
     public List<MovieModel> GetAiringMovies()
     {
@@ -114,8 +115,8 @@ public class MovieAcces : IMovieAcces
         SELECT 
             movie_showings.Id,
             movies.Title,
-            movies.Genre,
             movies.Age,
+            movies.Genre,
             theater.Description,
             movie_showings.ShowTime,
             movie_showings.IsCulinary,
@@ -239,6 +240,7 @@ public class MovieAcces : IMovieAcces
 
         Console.WriteLine($"Theater exists: {theaterExists}");
 
+        extraPrice = isCulinary ? 50 : 0;
 
         var command = connection.CreateCommand();
 
