@@ -6,7 +6,7 @@
         Console.Write("Enter your email: ");
         string email = Console.ReadLine();
         Console.Write("Enter your password: ");
-        string password = Console.ReadLine();
+        string password = RegisterMenu.CreateMyPasswordTextBox();
         UserAccess accountsAccess = new();
         if (accountsAccess.Login(email, password) != null)
         {
