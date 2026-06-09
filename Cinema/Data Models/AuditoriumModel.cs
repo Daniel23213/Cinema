@@ -15,6 +15,7 @@ public class AuditoriumModel
 
     public string ShowAuditoriumDiagram()
     {
+        SeatAccess access = new();
         string Diagram = "";
         string[,] Size = new string[Length, Width];
         for (int i = 0; i < Size.GetLength(0); i++)
@@ -24,7 +25,7 @@ public class AuditoriumModel
                 Size[i, j] = " ";
             }
         }
-        List<SeatModel> seats = SeatAccess.GetSeatsByTheater(ID);
+        List<SeatModel> seats = access.GetSeatsByTheater(ID);
         foreach (SeatModel seat in seats)
         {
             string type = seat.SeatType switch
