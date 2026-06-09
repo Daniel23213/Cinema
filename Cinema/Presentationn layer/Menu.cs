@@ -113,25 +113,29 @@ public static class Menu
 
                         break;
                     }
-                    movieAccess.PrintSeatsByShowingId(choice);
                     SeatAccess seatAccess = new();
-                    int row = Convert.ToInt32(Console.ReadLine());
-                    int col = Convert.ToInt32(Console.ReadLine());
+                    seatAccess.PrintSeatsByShowingId(choice);
+                    
+                    int seatid = Convert.ToInt32(Console.ReadLine());
+                    
 
-                    if (seatAccess.ReserveSeat(row, col))
+                    if (seatAccess.IsSeatTaken(choice, seatid))
                     {
                         Console.WriteLine("Seat reserved successfully.");
-                        UserAccess user = new();
-                        user.ReserveToUser(isLogged, seatAccess.GetId(row, col), choice);
-
-
+                        UserService user = new();
+                        user.ReserveTicket(isLogged,seatid, choice);
                     }
 
                     break;
 
                 case "3":
                     //implement view booked tickets
-                    Console.WriteLine("View booked tickets feature coming soon...");
+                    UserAccess user3 = new();
+                    foreach (dynamic ticket in user3.ShowTickets(isLogged.Id)) 
+                    {
+                        Console.WriteLine(ticket);
+                    }
+
                     break;
 
                 case "4":
@@ -149,12 +153,12 @@ public static class Menu
                     Console.WriteLine("Manage account feature coming soon...");
                     Console.WriteLine("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
                     string manageInput = Console.ReadLine();
-                    UserAccess userAccess = new();
+                    UserService userAccess = new();
                     if (manageInput == "D" || manageInput == "d")
                     {
                         // Implement delete account
 
-                        userAccess.Delete(isLogged);
+                        userAccess.DeleteUser(isLogged);
                         Console.WriteLine("Your account has been deleted!");
                         isLogged = null;
                         continue;
@@ -165,7 +169,7 @@ public static class Menu
                     {
                         // Implement change password
                         string newpassword = Console.ReadLine();
-                        userAccess.UpdatePassword(isLogged.Id, newpassword);
+                        userAccess.ChangePassword(isLogged.Id, newpassword);
                     }
                     break;
                 case "R" or "r":

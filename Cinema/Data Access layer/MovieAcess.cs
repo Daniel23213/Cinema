@@ -2,7 +2,8 @@ using Microsoft.Data.Sqlite;
 
 public class MovieAcces : IMovieAcces
 {
-    private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
+    private const string ConnectionString =
+        "Data Source=../../../Data Source/Cinema.db";
 
     public List<MovieModel> GetAiringMovies()
     {
@@ -259,50 +260,4 @@ public class MovieAcces : IMovieAcces
     }
 
 
-    public void PrintSeatsByShowingId(int showingId)
-    {
-        using var connection = new SqliteConnection(ConnectionString);
-        connection.Open();
-
-        var command = connection.CreateCommand();
-
-        command.CommandText = @"
-        SELECT 
-            seats.LocationRow,
-            seats.LocationColumn,
-            seats.IsTaken,
-            seats.PricingType
-        FROM movie_showings
-        JOIN theater_has_seats 
-            ON movie_showings.Theater_Id = theater_has_seats.Theater_Id
-        JOIN seats 
-            ON theater_has_seats.Seats_Id = seats.Id
-        WHERE movie_showings.Id = @id
-        ORDER BY seats.LocationRow, seats.LocationColumn;
-    ";
-
-        command.Parameters.AddWithValue("@id", showingId);
-
-        using var reader = command.ExecuteReader();
-
-        Console.WriteLine($"\n=== Seats for Showing {showingId} ===");
-
-        while (reader.Read())
-        {
-            int row = reader.GetInt32(0);
-            int column = reader.GetInt32(1);
-
-            bool taken = reader.GetInt32(2) == 1;
-
-            string type = reader.IsDBNull(3)
-                ? "Normal"
-                : reader.GetString(3);
-
-            Console.WriteLine(
-                $"Seat: Row {row}, Column {column} | " +
-                $"Taken: {taken} | " +
-                $"Type: {type}"
-            );
-        }
-    }
 }

@@ -78,6 +78,27 @@ public class UserAccess
         string sql = "INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id) VALUES (@UserId, @SeatId, @ShowId)";
         _connection.Execute(sql, new { UserId = user.Id, SeatId = seatId, ShowId = show_id });
     }
+    public List<dynamic> ShowTickets(int userId)
+    {
+        string sql = @"
+    SELECT 
+        r.Id AS ReservationId,
+        u.Firstname,
+        u.Lastname,
+        m.Title AS MovieTitle,
+        ms.ShowTime,
+        s.Seat,
+        s.PricingType,
+        r.isTaken
+    FROM reservation r
+    JOIN users u ON u.Id = r.Users_Id
+    JOIN movie_showings ms ON ms.Id = r.Showing_Id
+    JOIN movies m ON m.Id = ms.Movie_Id
+    JOIN seats s ON s.Id = r.Seats_Id
+    WHERE r.Users_Id = @userId;
+    ";
+        return _connection.Query(sql, new { userId }).ToList();
+    }
 
 
 

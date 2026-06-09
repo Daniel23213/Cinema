@@ -1,4 +1,4 @@
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using System.Text;
 
 class db
@@ -8,60 +8,68 @@ class db
     {
         var command = connection.CreateCommand();
 
-        command.CommandText = @"
-        INSERT INTO seats
-        (Id, LocationRow, LocationColumn, IsTaken, PricingType)
+                command.CommandText = @"
+        INSERT INTO seats (Id, Seat, Width, Height, PricingType)
         VALUES
-        (1,1,3,0,'normal'),
-        (2,1,4,0,'normal'),
-        (3,1,5,0,'normal'),
-        (4,1,6,0,'normal'),
-        (5,1,7,0,'normal'),
-        (6,1,8,0,'normal'),
-        (7,1,9,0,'normal'),
-        (8,1,10,0,'normal'),
-        (9,2,3,0,'normal'),
-        (10,2,4,0,'normal'),
-        (11,2,5,0,'normal'),
-        (12,2,6,0,'normal'),
-        (13,2,7,0,'normal'),
-        (14,2,8,0,'normal'),
-        (15,2,9,0,'normal'),
-        (16,2,10,0,'normal'),
-        (17,3,2,0,'normal'),
-        (18,3,3,0,'normal'),
-        (19,3,4,0,'normal'),
-        (20,3,5,0,'normal'),
-        (21,3,6,0,'normal'),
-        (22,3,7,0,'normal'),
-        (23,3,8,0,'normal'),
-        (24,3,9,0,'normal'),
-        (25,3,10,0,'normal'),
-        (26,3,11,0,'normal'),
-        (27,4,1,0,'normal'),
-        (28,4,2,0,'normal'),
-        (29,4,3,0,'normal'),
-        (30,4,4,0,'normal'),
-        (31,4,5,0,'normal'),
-        (32,4,6,0,'luxe'),
-        (33,4,7,0,'luxe'),
-        (34,4,8,0,'normal'),
-        (35,4,9,0,'normal'),
-        (36,4,10,0,'normal'),
-        (37,4,11,0,'normal'),
-        (38,4,12,0,'normal'),
-        (39,5,1,0,'normal'),
-        (40,5,2,0,'normal'),
-        (41,5,3,0,'normal'),
-        (42,5,4,0,'normal'),
-        (43,5,5,0,'luxe'),
-        (44,5,6,0,'luxe'),
-        (45,5,7,0,'luxe'),
-        (46,5,8,0,'luxe'),
-        (47,5,9,0,'normal'),
-        (48,5,10,0,'normal'),
-        (49,5,11,0,'normal'),
-        (50,5,12,0,'normal');
+        (1,'A1',1,1,'normal'),
+        (2,'A2',1,2,'normal'),
+        (3,'A3',1,1,'normal'),
+        (4,'A4',1,1,'normal'),
+        (5,'A5',1,1,'normal'),
+
+        (6,'B1',1,1,'normal'),
+        (7,'B2',1,2,'normal'),
+        (8,'B3',1,1,'normal'),
+        (9,'B4',1,1,'normal'),
+        (10,'B5',1,1,'normal'),
+
+        (11,'C1',1,1,'normal'),
+        (12,'C2',1,2,'normal'),
+        (13,'C3',1,1,'normal'),
+        (14,'C4',1,1,'normal'),
+        (15,'C5',1,1,'normal'),
+
+        (16,'D1',1,1,'normal'),
+        (17,'D2',1,2,'normal'),
+        (18,'D3',1,1,'luxe'),
+        (19,'D4',1,1,'luxe'),
+        (20,'D5',1,1,'normal'),
+
+        (21,'E1',1,1,'normal'),
+        (22,'E2',1,2,'normal'),
+        (23,'E3',1,1,'normal'),
+        (24,'E4',1,1,'normal'),
+        (25,'E5',1,1,'normal'),
+
+        (26,'F1',1,1,'normal'),
+        (27,'F2',1,2,'normal'),
+        (28,'F3',1,1,'normal'),
+        (29,'F4',1,2,'normal'),
+        (30,'F5',1,1,'normal'),
+
+        (31,'G1',1,1,'normal'),
+        (32,'G2',1,2,'normal'),
+        (33,'G3',1,1,'luxe'),
+        (34,'G4',1,1,'luxe'),
+        (35,'G5',1,1,'normal'),
+
+        (36,'H1',1,1,'normal'),
+        (37,'H2',1,1,'normal'),
+        (38,'H3',1,2,'luxe'),
+        (39,'H4',1,3,'luxe'),
+        (40,'H5',1,4,'normal'),
+
+        (41,'I1',1,1,'normal'),
+        (42,'I2',1,1,'normal'),
+        (43,'I3',1,1,'normal'),
+        (44,'I4',1,1,'normal'),
+        (45,'I5',1,1,'normal'),
+
+        (46,'J1',1,1,'normal'),
+        (47,'J2',1,1,'normal'),
+        (48,'J3',1,1,'normal'),
+        (49,'J4',1,1,'normal'),
+        (50,'J5',1,1,'normal');
         ";
 
         command.ExecuteNonQuery();
@@ -264,8 +272,11 @@ class db
         {
             try
             {
+                SeedTheaters(connection);
                 SeedMovies(connection);
                 SeedMovieShowings(connection);
+                SeedSeats(connection);
+                SeedTheaterSeats(connection);
 
                 Console.WriteLine("Database seeded.");
             }

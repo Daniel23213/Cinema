@@ -1,0 +1,951 @@
+﻿Id,LocationRow,LocationColumn,IsTaken,PricingType
+1,1,3,0,normal
+2,1,4,0,normal
+3,1,5,0,normal
+4,1,6,0,normal
+5,1,7,0,normal
+6,1,8,0,normal
+7,1,9,0,normal
+8,1,10,0,normal
+9,2,3,0,normal
+10,2,4,0,normal
+11,2,5,0,normal
+12,2,6,0,normal
+13,2,7,0,normal
+14,2,8,0,normal
+15,2,9,0,normal
+16,2,10,0,normal
+17,3,2,0,normal
+18,3,3,0,normal
+19,3,4,0,normal
+20,3,5,0,normal
+21,3,6,0,normal
+22,3,7,0,normal
+23,3,8,0,normal
+24,3,9,0,normal
+25,3,10,0,normal
+26,3,11,0,normal
+27,4,1,0,normal
+28,4,2,0,normal
+29,4,3,0,normal
+30,4,4,0,normal
+31,4,5,0,normal
+32,4,6,0,luxe
+33,4,7,0,luxe
+34,4,8,0,normal
+35,4,9,0,normal
+36,4,10,0,normal
+37,4,11,0,normal
+38,4,12,0,normal
+39,5,1,0,normal
+40,5,2,0,normal
+41,5,3,0,normal
+42,5,4,0,normal
+43,5,5,0,luxe
+44,5,6,0,luxe
+45,5,7,0,luxe
+46,5,8,0,luxe
+47,5,9,0,normal
+48,5,10,0,normal
+49,5,11,0,normal
+50,5,12,0,normal
+51,6,1,0,normal
+52,6,2,0,normal
+53,6,3,0,normal
+54,6,4,0,luxe
+55,6,5,0,luxe
+56,6,6,0,luxe plus
+57,6,7,0,luxe plus
+58,6,8,0,luxe
+59,6,9,0,luxe
+60,6,10,0,normal
+61,6,11,0,normal
+62,6,12,0,normal
+63,7,1,0,normal
+64,7,2,0,normal
+65,7,3,0,normal
+66,7,4,0,luxe
+67,7,5,0,luxe
+68,7,6,0,luxe plus
+69,7,7,0,luxe plus
+70,7,8,0,luxe
+71,7,9,0,luxe
+72,7,10,0,normal
+73,7,11,0,normal
+74,7,12,0,normal
+75,8,1,0,normal
+76,8,2,0,normal
+77,8,3,0,normal
+78,8,4,0,luxe
+79,8,5,0,luxe
+80,8,6,0,luxe plus
+81,8,7,0,luxe plus
+82,8,8,0,luxe
+83,8,9,0,luxe
+84,8,10,0,normal
+85,8,11,0,normal
+86,8,12,0,normal
+87,9,1,0,normal
+88,9,2,0,normal
+89,9,3,0,normal
+90,9,4,0,luxe
+91,9,5,0,luxe
+92,9,6,0,luxe plus
+93,9,7,0,luxe plus
+94,9,8,0,luxe
+95,9,9,0,luxe
+96,9,10,0,normal
+97,9,11,0,normal
+98,9,12,0,normal
+99,10,1,0,normal
+100,10,2,0,normal
+101,10,3,0,normal
+102,10,4,0,normal
+103,10,5,0,luxe
+104,10,6,0,luxe
+105,10,7,0,luxe
+106,10,8,0,luxe
+107,10,9,0,normal
+108,10,10,0,normal
+109,10,11,0,normal
+110,10,12,0,normal
+111,11,1,0,normal
+112,11,2,0,normal
+113,11,3,0,normal
+114,11,4,0,normal
+115,11,5,0,normal
+116,11,6,0,luxe
+117,11,7,0,luxe
+118,11,8,0,normal
+119,11,9,0,normal
+120,11,10,0,normal
+121,11,11,0,normal
+122,11,12,0,normal
+123,12,2,0,normal
+124,12,3,0,normal
+125,12,4,0,normal
+126,12,5,0,normal
+127,12,6,0,normal
+128,12,7,0,normal
+129,12,8,0,normal
+130,12,9,0,normal
+131,12,10,0,normal
+132,12,11,0,normal
+133,13,2,0,normal
+134,13,3,0,normal
+135,13,4,0,normal
+136,13,5,0,normal
+137,13,6,0,normal
+138,13,7,0,normal
+139,13,8,0,normal
+140,13,9,0,normal
+141,13,10,0,normal
+142,13,11,0,normal
+143,14,3,0,normal
+144,14,4,0,normal
+145,14,5,0,normal
+146,14,6,0,normal
+147,14,7,0,normal
+148,14,8,0,normal
+149,14,9,0,normal
+150,14,10,0,normal
+151,1,4,0,normal
+152,1,5,0,normal
+153,1,6,0,normal
+154,1,7,0,normal
+155,1,8,0,normal
+156,1,9,0,normal
+157,1,10,0,normal
+158,1,11,0,normal
+159,1,12,0,normal
+160,1,13,0,normal
+161,1,14,0,normal
+162,1,15,0,normal
+163,2,4,0,normal
+164,2,5,0,normal
+165,2,6,0,normal
+166,2,7,0,normal
+167,2,8,0,normal
+168,2,9,0,normal
+169,2,10,0,normal
+170,2,11,0,normal
+171,2,12,0,normal
+172,2,13,0,normal
+173,2,14,0,normal
+174,2,15,0,normal
+175,3,3,0,normal
+176,3,4,0,normal
+177,3,5,0,normal
+178,3,6,0,normal
+179,3,7,0,normal
+180,3,8,0,normal
+181,3,9,0,normal
+182,3,10,0,normal
+183,3,11,0,normal
+184,3,12,0,normal
+185,3,13,0,normal
+186,3,14,0,normal
+187,3,15,0,normal
+188,3,16,0,normal
+189,4,3,0,normal
+190,4,4,0,normal
+191,4,5,0,normal
+192,4,6,0,normal
+193,4,7,0,luxe
+194,4,8,0,luxe
+195,4,9,0,luxe
+196,4,10,0,luxe
+197,4,11,0,luxe
+198,4,12,0,luxe
+199,4,13,0,normal
+200,4,14,0,normal
+201,4,15,0,normal
+202,4,16,0,normal
+203,5,3,0,normal
+204,5,4,0,normal
+205,5,5,0,normal
+206,5,6,0,normal
+207,5,7,0,luxe
+208,5,8,0,luxe
+209,5,9,0,luxe
+210,5,10,0,luxe
+211,5,11,0,luxe
+212,5,12,0,luxe
+213,5,13,0,normal
+214,5,14,0,normal
+215,5,15,0,normal
+216,5,16,0,normal
+217,6,2,0,normal
+218,6,3,0,normal
+219,6,4,0,normal
+220,6,5,0,normal
+221,6,6,0,luxe
+222,6,7,0,luxe
+223,6,8,0,luxe
+224,6,9,0,luxe
+225,6,10,0,luxe
+226,6,11,0,luxe
+227,6,12,0,luxe
+228,6,13,0,luxe
+229,6,14,0,normal
+230,6,15,0,normal
+231,6,16,0,normal
+232,6,17,0,normal
+233,7,2,0,normal
+234,7,3,0,normal
+235,7,4,0,normal
+236,7,5,0,luxe
+237,7,6,0,luxe
+238,7,7,0,luxe
+239,7,8,0,luxe
+240,7,9,0,luxe plus
+241,7,10,0,luxe plus
+242,7,11,0,luxe
+243,7,12,0,luxe
+244,7,13,0,luxe
+245,7,14,0,luxe
+246,7,15,0,normal
+247,7,16,0,normal
+248,7,17,0,normal
+249,8,2,0,normal
+250,8,3,0,normal
+251,8,4,0,luxe
+252,8,5,0,luxe
+253,8,6,0,luxe
+254,8,7,0,luxe
+255,8,8,0,luxe plus
+256,8,9,0,luxe plus
+257,8,10,0,luxe plus
+258,8,11,0,luxe plus
+259,8,12,0,luxe
+260,8,13,0,luxe
+261,8,14,0,luxe
+262,8,15,0,luxe
+263,8,16,0,normal
+264,8,17,0,normal
+265,9,1,0,normal
+266,9,2,0,normal
+267,9,3,0,luxe
+268,9,4,0,luxe
+269,9,5,0,luxe
+270,9,6,0,luxe
+271,9,7,0,luxe plus
+272,9,8,0,luxe plus
+273,9,9,0,luxe plus
+274,9,10,0,luxe plus
+275,9,11,0,luxe plus
+276,9,12,0,luxe plus
+277,9,13,0,luxe
+278,9,14,0,luxe
+279,9,15,0,luxe
+280,9,16,0,luxe
+281,9,17,0,normal
+282,9,18,0,normal
+283,10,1,0,normal
+284,10,2,0,normal
+285,10,3,0,luxe
+286,10,4,0,luxe
+287,10,5,0,luxe
+288,10,6,0,luxe
+289,10,7,0,luxe plus
+290,10,8,0,luxe plus
+291,10,9,0,luxe plus
+292,10,10,0,luxe plus
+293,10,11,0,luxe plus
+294,10,12,0,luxe plus
+295,10,13,0,luxe
+296,10,14,0,luxe
+297,10,15,0,luxe
+298,10,16,0,luxe
+299,10,17,0,normal
+300,10,18,0,normal
+301,11,1,0,normal
+302,11,2,0,normal
+303,11,3,0,luxe
+304,11,4,0,luxe
+305,11,5,0,luxe
+306,11,6,0,luxe
+307,11,7,0,luxe plus
+308,11,8,0,luxe plus
+309,11,9,0,luxe plus
+310,11,10,0,luxe plus
+311,11,11,0,luxe plus
+312,11,12,0,luxe plus
+313,11,13,0,luxe
+314,11,14,0,luxe
+315,11,15,0,luxe
+316,11,16,0,luxe
+317,11,17,0,normal
+318,11,18,0,normal
+319,12,1,0,normal
+320,12,2,0,normal
+321,12,3,0,normal
+322,12,4,0,luxe
+323,12,5,0,luxe
+324,12,6,0,luxe
+325,12,7,0,luxe plus
+326,12,8,0,luxe plus
+327,12,9,0,luxe plus
+328,12,10,0,luxe plus
+329,12,11,0,luxe plus
+330,12,12,0,luxe plus
+331,12,13,0,luxe
+332,12,14,0,luxe
+333,12,15,0,luxe
+334,12,16,0,normal
+335,12,17,0,normal
+336,12,18,0,normal
+337,13,1,0,normal
+338,13,2,0,normal
+339,13,3,0,normal
+340,13,4,0,luxe
+341,13,5,0,luxe
+342,13,6,0,luxe
+343,13,7,0,luxe
+344,13,8,0,luxe plus
+345,13,9,0,luxe plus
+346,13,10,0,luxe plus
+347,13,11,0,luxe plus
+348,13,12,0,luxe
+349,13,13,0,luxe
+350,13,14,0,luxe
+351,13,15,0,luxe
+352,13,16,0,normal
+353,13,17,0,normal
+354,13,18,0,normal
+355,14,2,0,normal
+356,14,3,0,normal
+357,14,4,0,normal
+358,14,5,0,luxe
+359,14,6,0,luxe
+360,14,7,0,luxe
+361,14,8,0,luxe
+362,14,9,0,luxe plus
+363,14,10,0,luxe plus
+364,14,11,0,luxe
+365,14,12,0,luxe
+366,14,13,0,luxe
+367,14,14,0,luxe
+368,14,15,0,normal
+369,14,16,0,normal
+370,14,17,0,normal
+371,15,2,0,normal
+372,15,3,0,normal
+373,15,4,0,normal
+374,15,5,0,luxe
+375,15,6,0,luxe
+376,15,7,0,luxe
+377,15,8,0,luxe
+378,15,9,0,luxe
+379,15,10,0,luxe
+380,15,11,0,luxe
+381,15,12,0,luxe
+382,15,13,0,luxe
+383,15,14,0,luxe
+384,15,15,0,normal
+385,15,16,0,normal
+386,15,17,0,normal
+387,16,2,0,normal
+388,16,3,0,normal
+389,16,4,0,normal
+390,16,5,0,normal
+391,16,6,0,luxe
+392,16,7,0,luxe
+393,16,8,0,luxe
+394,16,9,0,luxe
+395,16,10,0,luxe
+396,16,11,0,luxe
+397,16,12,0,luxe
+398,16,13,0,luxe
+399,16,14,0,normal
+400,16,15,0,normal
+401,16,16,0,normal
+402,16,17,0,normal
+403,17,2,0,normal
+404,17,3,0,normal
+405,17,4,0,normal
+406,17,5,0,normal
+407,17,6,0,luxe
+408,17,7,0,luxe
+409,17,8,0,luxe
+410,17,9,0,luxe
+411,17,10,0,luxe
+412,17,11,0,luxe
+413,17,12,0,luxe
+414,17,13,0,luxe
+415,17,14,0,normal
+416,17,15,0,normal
+417,17,16,0,normal
+418,17,17,0,normal
+419,18,2,0,normal
+420,18,3,0,normal
+421,18,4,0,normal
+422,18,5,0,normal
+423,18,6,0,normal
+424,18,7,0,luxe
+425,18,8,0,luxe
+426,18,9,0,luxe
+427,18,10,0,luxe
+428,18,11,0,luxe
+429,18,12,0,luxe
+430,18,13,0,normal
+431,18,14,0,normal
+432,18,15,0,normal
+433,18,16,0,normal
+434,18,17,0,normal
+435,19,2,0,normal
+436,19,3,0,normal
+437,19,4,0,normal
+438,19,5,0,normal
+439,19,6,0,normal
+440,19,7,0,normal
+441,19,8,0,normal
+442,19,9,0,normal
+443,19,10,0,normal
+444,19,11,0,normal
+445,19,12,0,normal
+446,19,13,0,normal
+447,19,14,0,normal
+448,19,15,0,normal
+449,19,16,0,normal
+450,19,17,0,normal
+451,1,9,0,normal
+452,1,10,0,normal
+453,1,11,0,normal
+454,1,12,0,normal
+455,1,13,0,normal
+456,1,14,0,normal
+457,1,15,0,normal
+458,1,16,0,normal
+459,1,17,0,normal
+460,1,18,0,normal
+461,1,19,0,normal
+462,1,20,0,normal
+463,1,21,0,normal
+464,1,22,0,normal
+465,2,8,0,normal
+466,2,9,0,normal
+467,2,10,0,normal
+468,2,11,0,normal
+469,2,12,0,normal
+470,2,13,0,normal
+471,2,14,0,normal
+472,2,15,0,normal
+473,2,16,0,normal
+474,2,17,0,normal
+475,2,18,0,normal
+476,2,19,0,normal
+477,2,20,0,normal
+478,2,21,0,normal
+479,2,22,0,normal
+480,2,23,0,normal
+481,3,6,0,normal
+482,3,7,0,normal
+483,3,8,0,normal
+484,3,9,0,normal
+485,3,10,0,normal
+486,3,11,0,normal
+487,3,12,0,normal
+488,3,13,0,normal
+489,3,14,0,normal
+490,3,15,0,normal
+491,3,16,0,normal
+492,3,17,0,normal
+493,3,18,0,normal
+494,3,19,0,normal
+495,3,20,0,normal
+496,3,21,0,normal
+497,3,22,0,normal
+498,3,23,0,normal
+499,3,24,0,normal
+500,3,25,0,normal
+501,4,4,0,normal
+502,4,5,0,normal
+503,4,6,0,normal
+504,4,7,0,normal
+505,4,8,0,normal
+506,4,9,0,normal
+507,4,10,0,normal
+508,4,11,0,normal
+509,4,12,0,normal
+510,4,13,0,luxe
+511,4,14,0,luxe
+512,4,15,0,luxe
+513,4,16,0,luxe
+514,4,17,0,luxe
+515,4,18,0,luxe
+516,4,19,0,normal
+517,4,20,0,normal
+518,4,21,0,normal
+519,4,22,0,normal
+520,4,23,0,normal
+521,4,24,0,normal
+522,4,25,0,normal
+523,4,26,0,normal
+524,4,27,0,normal
+525,5,4,0,normal
+526,5,5,0,normal
+527,5,6,0,normal
+528,5,7,0,normal
+529,5,8,0,normal
+530,5,9,0,normal
+531,5,10,0,normal
+532,5,11,0,luxe
+533,5,12,0,luxe
+534,5,13,0,luxe
+535,5,14,0,luxe
+536,5,15,0,luxe
+537,5,16,0,luxe
+538,5,17,0,luxe
+539,5,18,0,luxe
+540,5,19,0,luxe
+541,5,20,0,luxe
+542,5,21,0,normal
+543,5,22,0,normal
+544,5,23,0,normal
+545,5,24,0,normal
+546,5,25,0,normal
+547,5,26,0,normal
+548,5,27,0,normal
+549,6,3,0,normal
+550,6,4,0,normal
+551,6,5,0,normal
+552,6,6,0,normal
+553,6,7,0,normal
+554,6,8,0,normal
+555,6,9,0,normal
+556,6,10,0,luxe
+557,6,11,0,luxe
+558,6,12,0,luxe
+559,6,13,0,luxe
+560,6,14,0,luxe
+561,6,15,0,luxe
+562,6,16,0,luxe
+563,6,17,0,luxe
+564,6,18,0,luxe
+565,6,19,0,luxe
+566,6,20,0,luxe
+567,6,21,0,luxe
+568,6,22,0,normal
+569,6,23,0,normal
+570,6,24,0,normal
+571,6,25,0,normal
+572,6,26,0,normal
+573,6,27,0,normal
+574,6,28,0,normal
+575,7,3,0,normal
+576,7,4,0,normal
+577,7,5,0,normal
+578,7,6,0,normal
+579,7,7,0,normal
+580,7,8,0,normal
+581,7,9,0,luxe
+582,7,10,0,luxe
+583,7,11,0,luxe
+584,7,12,0,luxe
+585,7,13,0,luxe
+586,7,14,0,luxe
+587,7,15,0,luxe
+588,7,16,0,luxe
+589,7,17,0,luxe
+590,7,18,0,luxe
+591,7,19,0,luxe
+592,7,20,0,luxe
+593,7,21,0,luxe
+594,7,22,0,luxe
+595,7,23,0,normal
+596,7,24,0,normal
+597,7,25,0,normal
+598,7,26,0,normal
+599,7,27,0,normal
+600,7,28,0,normal
+601,8,2,0,normal
+602,8,3,0,normal
+603,8,4,0,normal
+604,8,5,0,normal
+605,8,6,0,normal
+606,8,7,0,normal
+607,8,8,0,normal
+608,8,9,0,luxe
+609,8,10,0,luxe
+610,8,11,0,luxe
+611,8,12,0,luxe
+612,8,13,0,luxe
+613,8,14,0,luxe plus
+614,8,15,0,luxe plus
+615,8,16,0,luxe plus
+616,8,17,0,luxe plus
+617,8,18,0,luxe
+618,8,19,0,luxe
+619,8,20,0,luxe
+620,8,21,0,luxe
+621,8,22,0,luxe
+622,8,23,0,normal
+623,8,24,0,normal
+624,8,25,0,normal
+625,8,26,0,normal
+626,8,27,0,normal
+627,8,28,0,normal
+628,8,29,0,normal
+629,9,1,0,normal
+630,9,2,0,normal
+631,9,3,0,normal
+632,9,4,0,normal
+633,9,5,0,normal
+634,9,6,0,normal
+635,9,7,0,normal
+636,9,8,0,luxe
+637,9,9,0,luxe
+638,9,10,0,luxe
+639,9,11,0,luxe
+640,9,12,0,luxe plus
+641,9,13,0,luxe plus
+642,9,14,0,luxe plus
+643,9,15,0,luxe plus
+644,9,16,0,luxe plus
+645,9,17,0,luxe plus
+646,9,18,0,luxe plus
+647,9,19,0,luxe plus
+648,9,20,0,luxe
+649,9,21,0,luxe
+650,9,22,0,luxe
+651,9,23,0,luxe
+652,9,24,0,normal
+653,9,25,0,normal
+654,9,26,0,normal
+655,9,27,0,normal
+656,9,28,0,normal
+657,9,29,0,normal
+658,9,30,0,normal
+659,10,1,0,normal
+660,10,2,0,normal
+661,10,3,0,normal
+662,10,4,0,normal
+663,10,5,0,normal
+664,10,6,0,normal
+665,10,7,0,luxe
+666,10,8,0,luxe
+667,10,9,0,luxe
+668,10,10,0,luxe
+669,10,11,0,luxe
+670,10,12,0,luxe plus
+671,10,13,0,luxe plus
+672,10,14,0,luxe plus
+673,10,15,0,luxe plus
+674,10,16,0,luxe plus
+675,10,17,0,luxe plus
+676,10,18,0,luxe plus
+677,10,19,0,luxe plus
+678,10,20,0,luxe
+679,10,21,0,luxe
+680,10,22,0,luxe
+681,10,23,0,luxe
+682,10,24,0,luxe
+683,10,25,0,normal
+684,10,26,0,normal
+685,10,27,0,normal
+686,10,28,0,normal
+687,10,29,0,normal
+688,10,30,0,normal
+689,11,1,0,normal
+690,11,2,0,normal
+691,11,3,0,normal
+692,11,4,0,normal
+693,11,5,0,normal
+694,11,6,0,luxe
+695,11,7,0,luxe
+696,11,8,0,luxe
+697,11,9,0,luxe
+698,11,10,0,luxe
+699,11,11,0,luxe
+700,11,12,0,luxe plus
+701,11,13,0,luxe plus
+702,11,14,0,luxe plus
+703,11,15,0,luxe plus
+704,11,16,0,luxe plus
+705,11,17,0,luxe plus
+706,11,18,0,luxe plus
+707,11,19,0,luxe plus
+708,11,20,0,luxe
+709,11,21,0,luxe
+710,11,22,0,luxe
+711,11,23,0,luxe
+712,11,24,0,luxe
+713,11,25,0,luxe
+714,11,26,0,normal
+715,11,27,0,normal
+716,11,28,0,normal
+717,11,29,0,normal
+718,11,30,0,normal
+719,12,1,0,normal
+720,12,2,0,normal
+721,12,3,0,normal
+722,12,4,0,normal
+723,12,5,0,normal
+724,12,6,0,luxe
+725,12,7,0,luxe
+726,12,8,0,luxe
+727,12,9,0,luxe
+728,12,10,0,luxe
+729,12,11,0,luxe
+730,12,12,0,luxe plus
+731,12,13,0,luxe plus
+732,12,14,0,luxe plus
+733,12,15,0,luxe plus
+734,12,16,0,luxe plus
+735,12,17,0,luxe plus
+736,12,18,0,luxe plus
+737,12,19,0,luxe plus
+738,12,20,0,luxe
+739,12,21,0,luxe
+740,12,22,0,luxe
+741,12,23,0,luxe
+742,12,24,0,luxe
+743,12,25,0,luxe
+744,12,26,0,normal
+745,12,27,0,normal
+746,12,28,0,normal
+747,12,29,0,normal
+748,12,30,0,normal
+749,13,1,0,normal
+750,13,2,0,normal
+751,13,3,0,normal
+752,13,4,0,normal
+753,13,5,0,normal
+754,13,6,0,normal
+755,13,7,0,luxe
+756,13,8,0,luxe
+757,13,9,0,luxe
+758,13,10,0,luxe
+759,13,11,0,luxe
+760,13,12,0,luxe plus
+761,13,13,0,luxe plus
+762,13,14,0,luxe plus
+763,13,15,0,luxe plus
+764,13,16,0,luxe plus
+765,13,17,0,luxe plus
+766,13,18,0,luxe plus
+767,13,19,0,luxe plus
+768,13,20,0,luxe
+769,13,21,0,luxe
+770,13,22,0,luxe
+771,13,23,0,luxe
+772,13,24,0,luxe
+773,13,25,0,normal
+774,13,26,0,normal
+775,13,27,0,normal
+776,13,28,0,normal
+777,13,29,0,normal
+778,13,30,0,normal
+779,14,2,0,normal
+780,14,3,0,normal
+781,14,4,0,normal
+782,14,5,0,normal
+783,14,6,0,normal
+784,14,7,0,luxe
+785,14,8,0,luxe
+786,14,9,0,luxe
+787,14,10,0,luxe
+788,14,11,0,luxe
+789,14,12,0,luxe plus
+790,14,13,0,luxe plus
+791,14,14,0,luxe plus
+792,14,15,0,luxe plus
+793,14,16,0,luxe plus
+794,14,17,0,luxe plus
+795,14,18,0,luxe plus
+796,14,19,0,luxe plus
+797,14,20,0,luxe
+798,14,21,0,luxe
+799,14,22,0,luxe
+800,14,23,0,luxe
+801,14,24,0,luxe
+802,14,25,0,normal
+803,14,26,0,normal
+804,14,27,0,normal
+805,14,28,0,normal
+806,14,29,0,normal
+807,15,3,0,normal
+808,15,4,0,normal
+809,15,5,0,normal
+810,15,6,0,normal
+811,15,7,0,normal
+812,15,8,0,luxe
+813,15,9,0,luxe
+814,15,10,0,luxe
+815,15,11,0,luxe
+816,15,12,0,luxe
+817,15,13,0,luxe plus
+818,15,14,0,luxe plus
+819,15,15,0,luxe plus
+820,15,16,0,luxe plus
+821,15,17,0,luxe plus
+822,15,18,0,luxe plus
+823,15,19,0,luxe
+824,15,20,0,luxe
+825,15,21,0,luxe
+826,15,22,0,luxe
+827,15,23,0,luxe
+828,15,24,0,normal
+829,15,25,0,normal
+830,15,26,0,normal
+831,15,27,0,normal
+832,15,28,0,normal
+833,16,4,0,normal
+834,16,5,0,normal
+835,16,6,0,normal
+836,16,7,0,normal
+837,16,8,0,luxe
+838,16,9,0,luxe
+839,16,10,0,luxe
+840,16,11,0,luxe
+841,16,12,0,luxe
+842,16,13,0,luxe
+843,16,14,0,luxe plus
+844,16,15,0,luxe plus
+845,16,16,0,luxe plus
+846,16,17,0,luxe plus
+847,16,18,0,luxe
+848,16,19,0,luxe
+849,16,20,0,luxe
+850,16,21,0,luxe
+851,16,22,0,luxe
+852,16,23,0,luxe
+853,16,24,0,normal
+854,16,25,0,normal
+855,16,26,0,normal
+856,16,27,0,normal
+857,17,4,0,normal
+858,17,5,0,normal
+859,17,6,0,normal
+860,17,7,0,normal
+861,17,8,0,normal
+862,17,9,0,luxe
+863,17,10,0,luxe
+864,17,11,0,luxe
+865,17,12,0,luxe
+866,17,13,0,luxe
+867,17,14,0,luxe
+868,17,15,0,luxe
+869,17,16,0,luxe
+870,17,17,0,luxe
+871,17,18,0,luxe
+872,17,19,0,luxe
+873,17,20,0,luxe
+874,17,21,0,luxe
+875,17,22,0,luxe
+876,17,23,0,normal
+877,17,24,0,normal
+878,17,25,0,normal
+879,17,26,0,normal
+880,17,27,0,normal
+881,18,4,0,normal
+882,18,5,0,normal
+883,18,6,0,normal
+884,18,7,0,normal
+885,18,8,0,normal
+886,18,9,0,luxe
+887,18,10,0,luxe
+888,18,11,0,luxe
+889,18,12,0,luxe
+890,18,13,0,luxe
+891,18,14,0,luxe
+892,18,15,0,luxe
+893,18,16,0,luxe
+894,18,17,0,luxe
+895,18,18,0,luxe
+896,18,19,0,luxe
+897,18,20,0,luxe
+898,18,21,0,luxe
+899,18,22,0,luxe
+900,18,23,0,normal
+901,18,24,0,normal
+902,18,25,0,normal
+903,18,26,0,normal
+904,18,27,0,normal
+905,19,4,0,normal
+906,19,5,0,normal
+907,19,6,0,normal
+908,19,7,0,normal
+909,19,8,0,normal
+910,19,9,0,normal
+911,19,10,0,luxe
+912,19,11,0,luxe
+913,19,12,0,luxe
+914,19,13,0,luxe
+915,19,14,0,luxe
+916,19,15,0,luxe
+917,19,16,0,luxe
+918,19,17,0,luxe
+919,19,18,0,luxe
+920,19,19,0,luxe
+921,19,20,0,luxe
+922,19,21,0,luxe
+923,19,22,0,normal
+924,19,23,0,normal
+925,19,24,0,normal
+926,19,25,0,normal
+927,19,26,0,normal
+928,19,27,0,normal
+929,20,5,0,normal
+930,20,6,0,normal
+931,20,7,0,normal
+932,20,8,0,normal
+933,20,9,0,normal
+934,20,10,0,normal
+935,20,11,0,normal
+936,20,12,0,normal
+937,20,13,0,normal
+938,20,14,0,normal
+939,20,15,0,normal
+940,20,16,0,normal
+941,20,17,0,normal
+942,20,18,0,normal
+943,20,19,0,normal
+944,20,20,0,normal
+945,20,21,0,normal
+946,20,22,0,normal
+947,20,23,0,normal
+948,20,24,0,normal
+949,20,25,0,normal
+950,20,26,0,normal
