@@ -3,7 +3,7 @@ using System.Text;
 
 class db
 {
-    private const string DatabaseLoc = "../../../Data Source/Cinema.db";
+    private static readonly string DatabaseLoc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cinema.db");
 
     public void InitializeDatabase()
     {
