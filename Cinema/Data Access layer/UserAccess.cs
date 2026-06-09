@@ -80,7 +80,23 @@ public class UserAccess
     }
     public List<dynamic> ShowTickets(int userId)
     {
-        string sql = "SELECT * FROM reservation WHERE Users_Id = @userId";
+        string sql = @"
+    SELECT 
+        r.Id AS ReservationId,
+        u.Firstname,
+        u.Lastname,
+        m.Title AS MovieTitle,
+        ms.ShowTime,
+        s.Seat,
+        s.PricingType,
+        r.isTaken
+    FROM reservation r
+    JOIN users u ON u.Id = r.Users_Id
+    JOIN movie_showings ms ON ms.Id = r.Showing_Id
+    JOIN movies m ON m.Id = ms.Movie_Id
+    JOIN seats s ON s.Id = r.Seats_Id
+    WHERE r.Users_Id = @userId;
+    ";
         return _connection.Query(sql, new { userId }).ToList();
     }
 
