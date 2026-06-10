@@ -149,10 +149,16 @@ public class MovieAcces : IMovieAcces
                 ? $" | Culinary Cinema (+{extraPrice})"
                 : "";
 
+            int age = reader.GetInt32(2);
+
+            string ageText = age > 0
+                ? $"Age: {age} | "
+                : "";
+
             Console.WriteLine(
                 $"Showing ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
-                $"Age: {reader.GetInt32(2)} | " +
+                ageText +
                 $"Genre: {reader.GetString(3)} | " +
                 $"Theater: {reader.GetString(4)} | " +
                 $"Time: {reader.GetString(5)}" +
@@ -203,10 +209,16 @@ public class MovieAcces : IMovieAcces
                 ? $" | Culinary Cinema (+{extraPrice}e)"
                 : "";
 
+            int age = reader.GetInt32(2);
+
+            string ageText = age > 0
+                ? $"Age: {age} | "
+                : "";
+
             Console.WriteLine(
                 $"Showing ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
-                $"Age: {reader.GetInt32(2)} | " +
+                ageText +
                 $"Genre: {genre} | " +
                 $"Theater: {reader.GetString(4)} | " +
                 $"Time: {reader.GetString(5)}" +
