@@ -113,23 +113,11 @@ public class MovieMenu
             return;
         }
 
-        foreach (var movie in movies)
-        {
-            string ageText = movie.Age > 0
-                ? movie.Age.ToString() + "+"
-                : "All Ages";
-
-            Console.WriteLine(
-                $"ID: {movie.Id} | " +
-                $"Title: {movie.Title} | " +
-                $"Genre: {movie.Genre} | " +
-                $"Age: {ageText}"
-            );
-        }
+        PrintMovies();
 
         Console.WriteLine();
 
-        Console.Write("Enter movie ID");
+        Console.Write("Enter movie ID: ");
         string movieInput = Console.ReadLine();
 
         if (movieInput?.ToLower() == "b")
@@ -193,15 +181,9 @@ public class MovieMenu
             return;
         }
 
-        MovieAcces movieAcces = new();
-
-        if (movieAcces.AddMovieShowing(id, theaterId, showTime, isCulinary))
+        if (_service.AddMovieShowing(id, theaterId, showTime, isCulinary))
         {
             Console.WriteLine("Movie showing added successfully!");
-            if (isCulinary)
-            {
-                theaterId = 1;
-            }
 
             if (isCulinary)
             {
@@ -327,15 +309,29 @@ public class MovieMenu
 
             Console.WriteLine($"\nMovie '{title}' selected automatically (ID: {id})");
 
-            Console.WriteLine("Enter theater ID: ");
-            if (!int.TryParse(Console.ReadLine(), out int theaterId))
+            Console.WriteLine("Is this Culinary Cinema? (y/n): ");
+            bool isCulinary = Console.ReadLine()?.ToLower() == "y";
+
+            int theaterId;
+
+            if (isCulinary)
             {
-                Console.WriteLine("Invalid theater ID!");
-                Pause();
-                return;
+                theaterId = 1;
+            }
+            else
+            {
+                Console.WriteLine("Enter theater ID: ");
+
+                if (!int.TryParse(Console.ReadLine(), out theaterId))
+                {
+                    Console.WriteLine("Invalid theater ID!");
+                    Pause();
+                    return;
+                }
             }
 
             Console.WriteLine("Enter show time (yyyy-MM-dd HH:mm): ");
+
             if (!DateTime.TryParse(Console.ReadLine(), out DateTime showTime))
             {
                 Console.WriteLine("Invalid show time!");
@@ -343,18 +339,8 @@ public class MovieMenu
                 return;
             }
 
-            Console.WriteLine("Is this Culinary Cinema? (y/n): ");
-            bool isCulinary = Console.ReadLine()?.ToLower() == "y";
 
-            if (isCulinary)
-            {
-                theaterId = 1;
-                Console.WriteLine("Culinary Cinema automatically assigned to Auditorium 1.");
-            }
-
-            MovieAcces movieAcces = new();
-
-            if (movieAcces.AddMovieShowing(id, theaterId, showTime, isCulinary))
+            if (_service.AddMovieShowing(id, theaterId, showTime, isCulinary))
             {
                 Console.WriteLine("Movie showing added!");
 
@@ -377,19 +363,7 @@ public class MovieMenu
 
         Console.WriteLine("=== AVAILABLE MOVIES ===\n");
 
-        foreach (var movie in _service.GetAiringMovies())
-        {
-            string ageText = movie.Age > 0
-                ? $" | Age: {movie.Age}+"
-                : "";
-
-            Console.WriteLine(
-                $"ID: {movie.Id} | " +
-                $"Title: {movie.Title} | " +
-                $"Genre: {movie.Genre}" +
-                ageText
-            );
-        }
+        PrintMovies();
 
         Console.WriteLine();
         Console.WriteLine("Enter B at any time to go back.\n");
@@ -510,19 +484,7 @@ public class MovieMenu
 
         Console.WriteLine("=== AVAILABLE MOVIES ===\n");
 
-        foreach (var movie in _service.GetAiringMovies())
-        {
-            string ageText = movie.Age > 0
-                ? $" | Age: {movie.Age}+"
-                : "";
-
-            Console.WriteLine(
-                $"ID: {movie.Id} | " +
-                $"Title: {movie.Title} | " +
-                $"Genre: {movie.Genre}" +
-                ageText
-            );
-        }
+        PrintMovies();
 
         Console.WriteLine();
 
@@ -562,5 +524,22 @@ public class MovieMenu
         Console.WriteLine("\nPress any key to continue...");
         Console.ReadKey();
         Console.Clear();
+    }
+
+    private void PrintMovies()
+    {
+        foreach (var movie in _service.GetAiringMovies())
+        {
+            string ageText = movie.Age > 0
+                ? $" | Age: {movie.Age}+"
+                : "";
+
+            Console.WriteLine(
+                $"ID: {movie.Id} | " +
+                $"Title: {movie.Title} | " +
+                $"Genre: {movie.Genre}" +
+                ageText
+            );
+        }
     }
 }

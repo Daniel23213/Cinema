@@ -4,7 +4,8 @@ using System.Threading.Channels;
 
 public static class Menu
 {
-    private static MovieMenu movieMenu = new();
+    private static readonly MovieMenu movieMenu = new();
+    private static readonly MovieServiceLogic movieService = new();
 
     public static void ShowMenu()
     {
@@ -62,61 +63,82 @@ public static class Menu
             {
                 case "1":
                     Console.Clear();
-                    MovieAcces movieAcces = new();
-                        
-                        Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
-                        Console.WriteLine("1 - Show all showings");
-                        Console.WriteLine("2 - Filter by genre");
-                        Console.Write("\nChoose option: ");
 
-                        string option = Console.ReadLine();
+                    Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
+                    Console.WriteLine("1 - Show all showings");
+                    Console.WriteLine("2 - Filter by genre");
+                    Console.Write("\nChoose option: ");
 
-                        if (option == "1")
+                    string option = Console.ReadLine();
+
+                    if (option == "1")
+                    {
+                        Console.Clear();
+
+                        var allShowings = movieService.GetShowings(isLogged);
+
+                        Console.WriteLine("\n=== MOVIE SHOWINGS ===\n");
+
+                        foreach (var showing in allShowings)
                         {
-                            Console.Clear();
-                            movieAcces.GetShowings(isLogged);
+                            Console.WriteLine(showing);
                         }
-                        else if (option == "2")
+                    }
+                    else if (option == "2")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("\nAvailable genres:");
+
+                        var genres = Enum.GetValues(typeof(MoviesGenres));
+
+                        for (int i = 0; i < genres.Length; i++)
                         {
+                            Console.WriteLine($"[{i + 1}] {genres.GetValue(i)}");
+                        }
+
+                        Console.Write("\nChoose genre: ");
+
+                        if (int.TryParse(Console.ReadLine(), out int genreChoice)
+                            && genreChoice >= 1
+                            && genreChoice <= genres.Length)
+                        {
+                            MoviesGenres genre =
+                                (MoviesGenres)genres.GetValue(genreChoice - 1);
+
                             Console.Clear();
-                            Console.WriteLine("\nAvailable genres:");
 
-                            var genres = Enum.GetValues(typeof(MoviesGenres));
+                            var genreShowings = movieService.GetShowingsByGenre(genre);
 
-                            for (int i = 0; i < genres.Length; i++)
+                            Console.WriteLine($"\n=== SHOWINGS ({genre}) ===\n");
+
+                            foreach (var showing in genreShowings)
                             {
-                                Console.WriteLine($"[{i + 1}] {genres.GetValue(i)}");
-                            }
-
-                            Console.Write("\nChoose genre: ");
-
-                            if (int.TryParse(Console.ReadLine(), out int genreChoice)
-                                && genreChoice >= 1
-                                && genreChoice <= genres.Length)
-                            {
-                                MoviesGenres genre =
-                                    (MoviesGenres)genres.GetValue(genreChoice - 1);
-                                Console.Clear();
-                                movieAcces.GetShowingsByGenre(genre);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Invalid genre.");
+                                Console.WriteLine(showing);
                             }
                         }
+                        else
+                        {
+                            Console.WriteLine("Invalid genre.");
+                        }
+                    }
 
                     Pause();
-
                     break;
-                    
+
 
                 case "2":
-                    //implement buy tickets movies
-                    MovieAcces movieAccess = new();
-                    movieAccess.GetShowings(isLogged);
+
+                    var showings = movieService.GetShowings(isLogged);
+
+                    Console.WriteLine("\n=== MOVIE SHOWINGS ===\n");
+
+                    foreach (var showing in showings)
+                    {
+                        Console.WriteLine(showing);
+                    }
+
                     Console.Write("Enter showing ID: ");
                     string choiceInput = Console.ReadLine();
-
 
                     if (!int.TryParse(choiceInput, out int choice))
                     {
@@ -124,17 +146,19 @@ public static class Menu
                         Pause();
                         break;
                     }
+
                     SeatAccess seatAccess = new();
+
                     seatAccess.PrintSeatsByShowingId(choice);
-                    
+
                     int seatid = Convert.ToInt32(Console.ReadLine());
-                    
 
                     if (seatAccess.IsSeatTaken(choice, seatid))
                     {
                         Console.WriteLine("Seat reserved successfully.");
+
                         UserService user = new();
-                        user.ReserveTicket(isLogged,seatid, choice);
+                        user.ReserveTicket(isLogged, seatid, choice);
                     }
 
                     Pause();

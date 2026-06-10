@@ -110,8 +110,10 @@ public class MovieAcces : IMovieAcces
         return reader.Read();
     }
 
-    public void GetShowings(UserModel user)
+    public List<string> GetShowings(UserModel user)
     {
+        var showings = new List<string>();
+
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
@@ -128,21 +130,16 @@ public class MovieAcces : IMovieAcces
             movie_showings.IsCulinary,
             movie_showings.ExtraPrice
         FROM movie_showings
-        JOIN movies 
-            ON movie_showings.Movie_Id = movies.Id
-        JOIN theater 
-            ON movie_showings.Theater_Id = theater.Id
-        ORDER BY movie_showings.ShowTime;
-        ";
-        using var reader = command.ExecuteReader();
+        JOIN movies ON movie_showings.Movie_Id = movies.Id
+        JOIN theater ON movie_showings.Theater_Id = theater.Id
+        ORDER BY movie_showings.ShowTime;";
 
-        Console.WriteLine("\n=== Movie Showings ===");
+        using var reader = command.ExecuteReader();
 
         while (reader.Read())
         {
             int requiredAge = reader.GetInt32(2);
 
-            // Skip showing if user is too young
             if (user != null && user.Age < requiredAge)
             {
                 continue;
@@ -152,7 +149,7 @@ public class MovieAcces : IMovieAcces
             double extraPrice = reader.GetDouble(7);
 
             string culinaryText = isCulinary
-                ? $" | Culinary Cinema (+{extraPrice})"
+                ? $" | Culinary Cinema (+€{extraPrice})"
                 : "";
 
             int age = reader.GetInt32(2);
@@ -161,7 +158,7 @@ public class MovieAcces : IMovieAcces
                 ? $"Age: {age}+ | "
                 : "";
 
-            Console.WriteLine(
+            showings.Add(
                 $"Showing ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
                 ageText +
@@ -170,14 +167,17 @@ public class MovieAcces : IMovieAcces
                 $"Time: {reader.GetString(5)}" +
                 culinaryText
             );
-
         }
+
+        return showings;
     }
 
 
     // From here its Showings related methods
-    public void GetShowingsByGenre(MoviesGenres genre)
+    public List<string> GetShowingsByGenre(MoviesGenres genre)
     {
+        var showings = new List<string>();
+
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
@@ -197,14 +197,11 @@ public class MovieAcces : IMovieAcces
         JOIN movies ON movie_showings.Movie_Id = movies.Id
         JOIN theater ON movie_showings.Theater_Id = theater.Id
         WHERE movies.Genre = @genre
-        ORDER BY movie_showings.ShowTime;
-    ";
+        ORDER BY movie_showings.ShowTime;";
 
         command.Parameters.AddWithValue("@genre", genre.ToString());
 
         using var reader = command.ExecuteReader();
-
-        Console.WriteLine($"\n=== SHOWINGS ({genre}) ===");
 
         while (reader.Read())
         {
@@ -212,7 +209,7 @@ public class MovieAcces : IMovieAcces
             double extraPrice = reader.GetDouble(7);
 
             string culinaryText = isCulinary
-                ? $" | Culinary Cinema (+{extraPrice}e)"
+                ? $" | Culinary Cinema (+€{extraPrice})"
                 : "";
 
             int age = reader.GetInt32(2);
@@ -221,7 +218,7 @@ public class MovieAcces : IMovieAcces
                 ? $"Age: {age}+ | "
                 : "";
 
-            Console.WriteLine(
+            showings.Add(
                 $"Showing ID: {reader.GetInt32(0)} | " +
                 $"Movie: {reader.GetString(1)} | " +
                 ageText +
@@ -231,6 +228,8 @@ public class MovieAcces : IMovieAcces
                 culinaryText
             );
         }
+
+        return showings;
     }
 
     public bool AddMovieShowing(int movieId, int theaterId, DateTime showTime, bool isCulinary)
