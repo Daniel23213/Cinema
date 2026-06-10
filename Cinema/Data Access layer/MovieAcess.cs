@@ -83,11 +83,17 @@ public class MovieAcces : IMovieAcces
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
-        var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM movies WHERE Id=@id";
-        command.Parameters.AddWithValue("@id", id);
+        var deleteShowings = connection.CreateCommand();
+        deleteShowings.CommandText =
+            "DELETE FROM movie_showings WHERE Movie_Id = @id";
+        deleteShowings.Parameters.AddWithValue("@id", id);
+        deleteShowings.ExecuteNonQuery();
 
-        command.ExecuteNonQuery();
+        var deleteMovie = connection.CreateCommand();
+        deleteMovie.CommandText =
+            "DELETE FROM movies WHERE Id = @id";
+        deleteMovie.Parameters.AddWithValue("@id", id);
+        deleteMovie.ExecuteNonQuery();
     }
 
     public bool SelectMovie(int id)
@@ -152,7 +158,7 @@ public class MovieAcces : IMovieAcces
             int age = reader.GetInt32(2);
 
             string ageText = age > 0
-                ? $"Age: {age} | "
+                ? $"Age: {age}+ | "
                 : "";
 
             Console.WriteLine(
@@ -212,7 +218,7 @@ public class MovieAcces : IMovieAcces
             int age = reader.GetInt32(2);
 
             string ageText = age > 0
-                ? $"Age: {age} | "
+                ? $"Age: {age}+ | "
                 : "";
 
             Console.WriteLine(
@@ -241,7 +247,6 @@ public class MovieAcces : IMovieAcces
 
         long movieExists = (long)movieCheck.ExecuteScalar();
 
-        Console.WriteLine($"Movie exists: {movieExists}");
 
         // Check theater exists
         var theaterCheck = connection.CreateCommand();
@@ -250,7 +255,6 @@ public class MovieAcces : IMovieAcces
 
         long theaterExists = (long)theaterCheck.ExecuteScalar();
 
-        Console.WriteLine($"Theater exists: {theaterExists}");
 
         extraPrice = isCulinary ? 50 : 0;
 

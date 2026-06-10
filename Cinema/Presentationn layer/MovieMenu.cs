@@ -14,7 +14,7 @@ public class MovieMenu
         while (managing)
         {
             Console.Clear();
-            Console.WriteLine("\n🎬 Manage Movies\n");
+            Console.WriteLine("\nManage Movies\n");
             Console.WriteLine("[1] Show Movies");
             Console.WriteLine("[2] Add Movie");
             Console.WriteLine("[3] Update Movie");
@@ -61,7 +61,7 @@ public class MovieMenu
     public void GetAiringMovies()
     {
         Console.Clear();
-        Console.WriteLine("\nAiring Movies:\n");
+        Console.WriteLine("\n=== AIRING MOVIES ===\n");
 
         var movies = _service.GetAiringMovies();
 
@@ -73,7 +73,19 @@ public class MovieMenu
         {
             foreach (var movie in movies)
             {
-                Console.WriteLine(movie);
+                string ageText = movie.Age > 0
+                    ? $" | Age: {movie.Age}+"
+                    : "";
+
+                Console.WriteLine(
+                    $"ID: {movie.Id} | " +
+                    $"Title: {movie.Title} | " +
+                    $"Author: {movie.Author} | " +
+                    $"Genre: {movie.Genre} | " +
+                    $"Duration: {(int)movie.Duration.TotalMinutes} min | " +
+                    $"Premier: {movie.Premier:yyyy-MM-dd}" +
+                    ageText
+                );
             }
         }
 
@@ -88,6 +100,7 @@ public class MovieMenu
     private void AssignMovie()
     {
         Console.Clear();
+        Console.WriteLine("Enter B at any time to go back.\n");
 
         var movies = _service.GetAiringMovies();
 
@@ -103,7 +116,7 @@ public class MovieMenu
         foreach (var movie in movies)
         {
             string ageText = movie.Age > 0
-                ? movie.Age.ToString()
+                ? movie.Age.ToString() + "+"
                 : "All Ages";
 
             Console.WriteLine(
@@ -116,8 +129,15 @@ public class MovieMenu
 
         Console.WriteLine();
 
-        Console.Write("Enter movie ID: ");
-        if (!int.TryParse(Console.ReadLine(), out int id))
+        Console.Write("Enter movie ID");
+        string movieInput = Console.ReadLine();
+
+        if (movieInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!int.TryParse(movieInput, out int id))
         {
             Console.WriteLine("Invalid ID!");
             Pause();
@@ -125,19 +145,32 @@ public class MovieMenu
         }
 
         Console.Write("Is this Culinary Cinema? (y/n): ");
-        bool isCulinary = Console.ReadLine()?.Trim().ToLower() == "y";
+        string culinaryInput = Console.ReadLine();
+
+        if (culinaryInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        bool isCulinary = culinaryInput?.ToLower() == "y";
 
         int theaterId;
 
         if (isCulinary)
         {
             theaterId = 1;
-            Console.WriteLine("Culinary Cinema automatically assigned to Auditorium 1.");
         }
         else
         {
             Console.Write("Enter theater ID: ");
-            if (!int.TryParse(Console.ReadLine(), out theaterId))
+            string theaterInput = Console.ReadLine();
+
+            if (theaterInput?.ToLower() == "b")
+            {
+                return;
+            }
+
+            if (!int.TryParse(theaterInput, out theaterId))
             {
                 Console.WriteLine("Invalid theater ID!");
                 Pause();
@@ -146,7 +179,14 @@ public class MovieMenu
         }
 
         Console.Write("Enter show time (yyyy-MM-dd HH:mm): ");
-        if (!DateTime.TryParse(Console.ReadLine(), out DateTime showTime))
+        string showTimeInput = Console.ReadLine();
+
+        if (showTimeInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!DateTime.TryParse(showTimeInput, out DateTime showTime))
         {
             Console.WriteLine("Invalid show time!");
             Pause();
@@ -178,11 +218,22 @@ public class MovieMenu
 
     private void AddMovie()
     {
+        Console.Clear();
+        Console.WriteLine("Enter B at any time to return to the previous menu.\n");
         Console.Write("Enter title: ");
         string title = Console.ReadLine();
+        if (title?.ToLower() == "b")
+        {
+            return;
+        }
 
         Console.Write("Enter author: ");
+
         string author = Console.ReadLine();
+        if (author?.ToLower() == "b")
+        {
+            return;
+        }
 
         Console.WriteLine("Select genre:");
 
@@ -196,7 +247,14 @@ public class MovieMenu
         }
 
         Console.Write("Choose: ");
-        if (!int.TryParse(Console.ReadLine(), out int choice) ||
+        string genreInput = Console.ReadLine();
+
+        if (genreInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!int.TryParse(genreInput, out int choice) ||
             choice < 1 || choice > genres.Length)
         {
             Console.WriteLine("Invalid genre!");
@@ -207,7 +265,14 @@ public class MovieMenu
         MoviesGenres genre = (MoviesGenres)genres.GetValue(choice - 1);
 
         Console.Write("Enter duration in minutes: ");
-        if (!int.TryParse(Console.ReadLine(), out int minutes))
+        string durationInput = Console.ReadLine();
+
+        if (durationInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!int.TryParse(durationInput, out int minutes))
         {
             Console.WriteLine("Invalid duration!");
             Pause();
@@ -217,29 +282,51 @@ public class MovieMenu
         TimeSpan duration = TimeSpan.FromMinutes(minutes);
 
         Console.Write("Enter premiere date (yyyy-MM-dd): ");
-        if (!DateTime.TryParse(Console.ReadLine(), out DateTime premier))
+        string dateInput = Console.ReadLine();
+
+        if (dateInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!DateTime.TryParse(dateInput, out DateTime premier))
         {
             Console.WriteLine("Invalid date!");
             Pause();
             return;
         }
+
         Console.Write("Enter Age: ");
-        int age = Convert.ToInt32(Console.ReadLine());
+        string ageInput = Console.ReadLine();
+
+        if (ageInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!int.TryParse(ageInput, out int age))
+        {
+            Console.WriteLine("Invalid age!");
+            Pause();
+            return;
+        }
+
 
         _service.AddMovie(title, author, genre, duration, premier, age);
 
+        Console.Clear();
         Console.WriteLine("Movie added!");
         Console.WriteLine("Do you want to add to auditorium and time(y/n):\n");
         string input = Console.ReadLine();
         if (input.ToLower() == "yes" || input.ToLower() == "y")
         {
-            Console.WriteLine("Enter movie ID: ");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("Invalid ID!");
-                Pause();
-                return;
-            }
+            Console.Clear();
+            var movies = _service.GetAiringMovies();
+
+            int id = movies.Max(m => m.Id);
+
+            Console.WriteLine($"\nMovie '{title}' selected automatically (ID: {id})");
+
             Console.WriteLine("Enter theater ID: ");
             if (!int.TryParse(Console.ReadLine(), out int theaterId))
             {
@@ -247,6 +334,7 @@ public class MovieMenu
                 Pause();
                 return;
             }
+
             Console.WriteLine("Enter show time (yyyy-MM-dd HH:mm): ");
             if (!DateTime.TryParse(Console.ReadLine(), out DateTime showTime))
             {
@@ -254,8 +342,15 @@ public class MovieMenu
                 Pause();
                 return;
             }
+
             Console.WriteLine("Is this Culinary Cinema? (y/n): ");
             bool isCulinary = Console.ReadLine()?.ToLower() == "y";
+
+            if (isCulinary)
+            {
+                theaterId = 1;
+                Console.WriteLine("Culinary Cinema automatically assigned to Auditorium 1.");
+            }
 
             MovieAcces movieAcces = new();
 
@@ -268,14 +363,45 @@ public class MovieMenu
                     Console.WriteLine("Culinary Cinema enabled (+€50)");
                 }
             }
+            else
+            {
+                Console.WriteLine("Failed to add movie showing.");
+            }
         }
         Pause();
     }
 
     private void UpdateMovie()
     {
-        Console.Write("Enter movie ID: ");
-        if (!int.TryParse(Console.ReadLine(), out int id))
+        Console.Clear();
+
+        Console.WriteLine("=== AVAILABLE MOVIES ===\n");
+
+        foreach (var movie in _service.GetAiringMovies())
+        {
+            string ageText = movie.Age > 0
+                ? $" | Age: {movie.Age}+"
+                : "";
+
+            Console.WriteLine(
+                $"ID: {movie.Id} | " +
+                $"Title: {movie.Title} | " +
+                $"Genre: {movie.Genre}" +
+                ageText
+            );
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Enter B at any time to go back.\n");
+        Console.Write("Enter movie ID:");
+        string movieInput = Console.ReadLine();
+
+        if (movieInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!int.TryParse(movieInput, out int id))
         {
             Console.WriteLine("Invalid ID!");
             Pause();
@@ -284,20 +410,57 @@ public class MovieMenu
 
         Console.Write("New title: ");
         string title = Console.ReadLine();
+        if (title?.ToLower() == "b")
+        {
+            return;
+        }
 
         Console.Write("New author: ");
         string author = Console.ReadLine();
+        if (author?.ToLower() == "b")
+        {
+            return;
+        }
 
-        Console.Write("Enter genre (Action, Comedy, Drama...): ");
-        if (!Enum.TryParse<MoviesGenres>(Console.ReadLine(), true, out MoviesGenres genre))
+        Console.WriteLine("\nSelect genre:");
+        var genres = Enum.GetValues(typeof(MoviesGenres));
+
+        for (int i = 0; i < genres.Length; i++)
+        {
+            Console.WriteLine($"[{i + 1}] {genres.GetValue(i)}");
+        }
+
+        Console.WriteLine("[B] Back");
+        Console.Write("Choose: ");
+
+        string genreInput = Console.ReadLine();
+
+        if (genreInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!int.TryParse(genreInput, out int genreChoice) ||
+            genreChoice < 1 ||
+            genreChoice > genres.Length)
         {
             Console.WriteLine("Invalid genre!");
             Pause();
             return;
         }
 
+        MoviesGenres genre =
+            (MoviesGenres)genres.GetValue(genreChoice - 1);
+
         Console.Write("New duration (minutes): ");
-        if (!int.TryParse(Console.ReadLine(), out int minutes))
+        string durationInput = Console.ReadLine();
+
+        if (durationInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!int.TryParse(durationInput, out int minutes))
         {
             Console.WriteLine("Invalid duration!");
             Pause();
@@ -306,43 +469,98 @@ public class MovieMenu
 
         TimeSpan duration = TimeSpan.FromMinutes(minutes);
 
-        Console.Write("New premiere date: ");
-        if (!DateTime.TryParse(Console.ReadLine(), out DateTime premier))
+        Console.Write("New premiere date (yyyy-MM-dd): ");
+        string dateInput = Console.ReadLine();
+
+        if (dateInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!DateTime.TryParse(dateInput, out DateTime premier))
         {
             Console.WriteLine("Invalid date!");
             Pause();
             return;
         }
         Console.Write("Enter Age: ");
-        int age = Convert.ToInt32(Console.ReadLine());
+        string ageInput = Console.ReadLine();
+
+        if (ageInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!int.TryParse(ageInput, out int age))
+        {
+            Console.WriteLine("Invalid age!");
+            Pause();
+            return;
+        }
 
         _service.UpdateMovie(id, title, author, genre, duration, premier, age);
 
-        Console.WriteLine("✏️ Movie updated!");
+        Console.WriteLine("Movie updated!");
         Pause();
     }
 
     private void DeleteMovie()
     {
-        Console.Write("Enter movie ID: ");
-        if (!int.TryParse(Console.ReadLine(), out int id))
+        Console.Clear();
+
+        Console.WriteLine("=== AVAILABLE MOVIES ===\n");
+
+        foreach (var movie in _service.GetAiringMovies())
+        {
+            string ageText = movie.Age > 0
+                ? $" | Age: {movie.Age}+"
+                : "";
+
+            Console.WriteLine(
+                $"ID: {movie.Id} | " +
+                $"Title: {movie.Title} | " +
+                $"Genre: {movie.Genre}" +
+                ageText
+            );
+        }
+
+        Console.WriteLine();
+
+        Console.Write("Enter movie ID (or B to go back): ");
+        string movieInput = Console.ReadLine();
+
+        if (movieInput?.ToLower() == "b")
+        {
+            return;
+        }
+
+        if (!int.TryParse(movieInput, out int id))
         {
             Console.WriteLine("Invalid ID!");
             Pause();
             return;
         }
 
+        Console.Write("Are you sure? (y/n): ");
+        string confirm = Console.ReadLine();
+
+        if (confirm?.ToLower() != "y")
+        {
+            Console.WriteLine("Delete cancelled.");
+            Pause();
+            return;
+        }
+
         _service.DeleteMovie(id);
 
-        Console.WriteLine("🗑️ Movie deleted!");
+        Console.WriteLine("Movie deleted!");
         Pause();
     }
 
-    private void Pause()
+    private static void Pause()
     {
         Console.WriteLine("\nPress any key to continue...");
         Console.ReadKey();
         Console.Clear();
     }
-
 }

@@ -13,6 +13,11 @@ public static class Menu
 
         while (running)
         {
+            Console.Clear();
+            if (isLogged == null)
+            {
+                Console.WriteLine("To Book a ticket make account first!");
+            }
             // User first Name and Last Name print put up in another if not to confuse the user
             if (isLogged != null)
             {
@@ -56,9 +61,9 @@ public static class Menu
             switch (input)
             {
                 case "1":
+                    Console.Clear();
                     MovieAcces movieAcces = new();
-                    movieAcces.GetShowings(isLogged);
-
+                        
                         Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
                         Console.WriteLine("1 - Show all showings");
                         Console.WriteLine("2 - Filter by genre");
@@ -68,22 +73,30 @@ public static class Menu
 
                         if (option == "1")
                         {
+                            Console.Clear();
                             movieAcces.GetShowings(isLogged);
                         }
                         else if (option == "2")
                         {
+                            Console.Clear();
                             Console.WriteLine("\nAvailable genres:");
 
-                            foreach (MoviesGenres g in Enum.GetValues(typeof(MoviesGenres)))
+                            var genres = Enum.GetValues(typeof(MoviesGenres));
+
+                            for (int i = 0; i < genres.Length; i++)
                             {
-                                Console.WriteLine($"- {g}");
+                                Console.WriteLine($"[{i + 1}] {genres.GetValue(i)}");
                             }
 
-                            Console.Write("\nEnter genre: ");
-                            string genreInput = Console.ReadLine();
+                            Console.Write("\nChoose genre: ");
 
-                            if (Enum.TryParse<MoviesGenres>(genreInput, true, out var genre))
+                            if (int.TryParse(Console.ReadLine(), out int genreChoice)
+                                && genreChoice >= 1
+                                && genreChoice <= genres.Length)
                             {
+                                MoviesGenres genre =
+                                    (MoviesGenres)genres.GetValue(genreChoice - 1);
+                                Console.Clear();
                                 movieAcces.GetShowingsByGenre(genre);
                             }
                             else
@@ -91,12 +104,10 @@ public static class Menu
                                 Console.WriteLine("Invalid genre.");
                             }
                         }
-                        else
-                        {
-                            Console.WriteLine("Invalid option.");
-                        }
 
-                        break;
+                    Pause();
+
+                    break;
                     
 
                 case "2":
@@ -110,7 +121,7 @@ public static class Menu
                     if (!int.TryParse(choiceInput, out int choice))
                     {
                         Console.WriteLine("Please enter a valid number.");
-
+                        Pause();
                         break;
                     }
                     SeatAccess seatAccess = new();
@@ -126,6 +137,7 @@ public static class Menu
                         user.ReserveTicket(isLogged,seatid, choice);
                     }
 
+                    Pause();
                     break;
 
                 case "3":
@@ -136,16 +148,19 @@ public static class Menu
                         Console.WriteLine(ticket);
                     }
 
+                    Pause();
                     break;
 
                 case "4":
                     //implement cancel ticket
                     Console.WriteLine("Cancel ticket feature coming soon...");
+                    Pause();
                     break;
 
                 case "5":
                     //implement food menu
                     Console.WriteLine("Food menu feature coming soon...");
+                    Pause();
                     break;
 
                 case "6":
@@ -188,7 +203,7 @@ public static class Menu
                 case "U" or "u":
 
                     ManageUsers.Show();
-
+                    Pause();
                     break;
                 case "M" or "m":
                     if (isLogged != null &&
@@ -199,6 +214,7 @@ public static class Menu
                     else
                     {
                         Console.WriteLine("Access denied.");
+                        Pause();
                     }
                     break;
                 case "E" or "e":
@@ -208,8 +224,15 @@ public static class Menu
 
                 default:
                     Console.WriteLine("Invalid option, please try again.");
+                    Pause();
                     break;
             }
         }
+    }
+    private static void Pause()
+    {
+        Console.WriteLine("\nPress any key to continue...");
+        Console.ReadKey();
+        Console.Clear();
     }
 }
