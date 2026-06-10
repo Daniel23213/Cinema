@@ -87,21 +87,65 @@ public class MovieMenu
 
     private void AssignMovie()
     {
-        Console.WriteLine("Enter movie ID: ");
+        Console.Clear();
+
+        var movies = _service.GetAiringMovies();
+
+        Console.WriteLine("=== Available Movies ===\n");
+
+        if (movies.Count == 0)
+        {
+            Console.WriteLine("No movies available.");
+            Pause();
+            return;
+        }
+
+        foreach (var movie in movies)
+        {
+            string ageText = movie.Age > 0
+                ? movie.Age.ToString()
+                : "All Ages";
+
+            Console.WriteLine(
+                $"ID: {movie.Id} | " +
+                $"Title: {movie.Title} | " +
+                $"Genre: {movie.Genre} | " +
+                $"Age: {ageText}"
+            );
+        }
+
+        Console.WriteLine();
+
+        Console.Write("Enter movie ID: ");
         if (!int.TryParse(Console.ReadLine(), out int id))
         {
             Console.WriteLine("Invalid ID!");
             Pause();
             return;
         }
-        Console.WriteLine("Enter theater ID: ");
-        if (!int.TryParse(Console.ReadLine(), out int theaterId))
+
+        Console.Write("Is this Culinary Cinema? (y/n): ");
+        bool isCulinary = Console.ReadLine()?.Trim().ToLower() == "y";
+
+        int theaterId;
+
+        if (isCulinary)
         {
-            Console.WriteLine("Invalid theater ID!");
-            Pause();
-            return;
+            theaterId = 1;
+            Console.WriteLine("Culinary Cinema automatically assigned to Auditorium 1.");
         }
-        Console.WriteLine("Enter show time (yyyy-MM-dd HH:mm): ");
+        else
+        {
+            Console.Write("Enter theater ID: ");
+            if (!int.TryParse(Console.ReadLine(), out theaterId))
+            {
+                Console.WriteLine("Invalid theater ID!");
+                Pause();
+                return;
+            }
+        }
+
+        Console.Write("Enter show time (yyyy-MM-dd HH:mm): ");
         if (!DateTime.TryParse(Console.ReadLine(), out DateTime showTime))
         {
             Console.WriteLine("Invalid show time!");
@@ -109,19 +153,24 @@ public class MovieMenu
             return;
         }
 
-        Console.WriteLine("Is this Culinary Cinema? (y/n): ");
-        bool isCulinary = Console.ReadLine()?.ToLower() == "y";
-
         MovieAcces movieAcces = new();
 
-        if (movieAcces.AddMovieShowing(id, theaterId ,showTime, isCulinary))
+        if (movieAcces.AddMovieShowing(id, theaterId, showTime, isCulinary))
         {
-            Console.WriteLine("Movie showing added!");
+            Console.WriteLine("Movie showing added successfully!");
+            if (isCulinary)
+            {
+                theaterId = 1;
+            }
 
             if (isCulinary)
             {
-                Console.WriteLine("Culinary Cinema enabled (+€50)");
+                Console.WriteLine("Culinary Cinema enabled (+€50).");
             }
+        }
+        else
+        {
+            Console.WriteLine("Failed to add movie showing.");
         }
 
         Pause();
