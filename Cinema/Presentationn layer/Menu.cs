@@ -187,7 +187,20 @@ public static class Menu
                     }
                     Console.WriteLine("Which ticket would you like to cancel? (enter ReservationId)");
                     int reservationId = int.Parse(Console.ReadLine());
-                    { }
+                    {
+                        Console.WriteLine("Do you really want to cancel ur ticket?");
+                        string answer = Console.ReadLine();
+                        if(answer == "yes" || answer == "y") 
+                        {
+                            usercancelticket.CancelTicket(reservationId, isLogged.Id);
+                        }
+                        else 
+                        {
+                            Pause();
+                        }
+                        
+
+                    }
                     Pause();
                     break;
 

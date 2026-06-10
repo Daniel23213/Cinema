@@ -187,7 +187,7 @@ public class SeatAccess
 
             Console.WriteLine(
                 $"Seat {seatName} (Row {row}, Col {col}) | " +
-                $"{(taken ? "❌ Taken" : "✅ Available")} | " +
+                $"{(taken ? "X Taken" : " Available")} | " +
                 $"{type}"
             );
         }

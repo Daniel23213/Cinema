@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
 
-public class UserAccess
+public class UserAccess : IUserAccess
 {
     private readonly string _connectionString =
         "Data Source=../../../Data Source/Cinema.db";
