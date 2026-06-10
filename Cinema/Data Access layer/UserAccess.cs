@@ -5,7 +5,7 @@ using System.Security.Principal;
 
 
 
-public class UserAccess
+public class UserAccess : IUserAccess
 {
     private SqliteConnection _connection =
     new("Data Source=../../../Data Source/Cinema.db");

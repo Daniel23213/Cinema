@@ -1,11 +1,17 @@
 ﻿public class UserService
 {
-    private readonly UserAccess _userAccess;
+    private readonly IUserAccess _userAccess;
+
+    public UserService(UserAccess userAccess)
+    {
+        _userAccess = userAccess;
+    }
 
     public UserService()
     {
-        _userAccess = new UserAccess();
+        _userAccess = new UserAccess(); // optional fallback
     }
+
 
     public bool Register(UserModel user)
     {

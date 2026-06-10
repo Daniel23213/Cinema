@@ -90,10 +90,39 @@ public class SeatAccess
        
 
     }
-
-    public bool ReserveSeat(UserModel user, int seatId, int showingId)
+    public int GetId(string seatName)
     {
-        if (IsSeatTaken(showingId, seatId))
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+    SELECT Id
+    FROM seats
+    WHERE Seat = @seatName;
+    ";
+
+        command.Parameters.AddWithValue("@seatName", seatName);
+
+        var result = command.ExecuteScalar();
+        int res = Convert.ToInt32(result);
+        return res;
+
+
+    }
+
+    public bool ReserveSeat(UserModel user, string seatName, int showingId)
+    {
+        int seatId = GetId(seatName);
+
+        if (seatId == 0)
+        {
+            Console.WriteLine("Seat not found!");
+            return false;
+        }
+
+        if (IsSeatTaken(showingId, seatName))
         {
             Console.WriteLine("Seat already taken!");
             return false;
@@ -154,16 +183,16 @@ public class SeatAccess
             int col = reader.GetInt32(3);
             string type = reader.GetString(4);
 
-            bool taken = IsSeatTaken(showingId, seatId);
+            bool taken = IsSeatTaken(showingId, seatName);
 
             Console.WriteLine(
                 $"Seat {seatName} (Row {row}, Col {col}) | " +
-                $"{(taken ? "✅ Available" : "❌ Taken")} | " +
+                $"{(taken ? "❌ Taken" : "✅ Available")} | " +
                 $"{type}"
             );
         }
     }
-    public bool IsSeatTaken(int showingId, int seatId)
+    public bool IsSeatTaken(int showingId, string seat)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -171,15 +200,17 @@ public class SeatAccess
         var cmd = connection.CreateCommand();
         cmd.CommandText = @"
         SELECT COUNT(*)
-        FROM reservation
-        WHERE Showing_Id = @showingId
-        AND Seats_Id = @seatId;
+        FROM reservation r
+        JOIN seats s ON s.Id = r.Seats_Id
+        WHERE r.Showing_Id = @showingId
+        AND s.Seat = @seat;
     ";
 
         cmd.Parameters.AddWithValue("@showingId", showingId);
-        cmd.Parameters.AddWithValue("@seatId", seatId);
+        cmd.Parameters.AddWithValue("@seat", seat);
 
         long count = (long)cmd.ExecuteScalar();
-        return count == 0;
+
+        return count > 0;
     }
 }

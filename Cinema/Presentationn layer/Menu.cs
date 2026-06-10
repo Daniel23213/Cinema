@@ -151,9 +151,10 @@ public static class Menu
 
                     seatAccess.PrintSeatsByShowingId(choice);
 
-                    int seatid = Convert.ToInt32(Console.ReadLine());
+                    string seat = Console.ReadLine();
+                    int seatid = seatAccess.GetId(seat);
 
-                    if (seatAccess.IsSeatTaken(choice, seatid))
+                    if (!seatAccess.IsSeatTaken(choice, seat))
                     {
                         Console.WriteLine("Seat reserved successfully.");
 
