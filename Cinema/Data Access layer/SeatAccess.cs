@@ -2,13 +2,54 @@
 using Microsoft.Data.Sqlite;
 using System.Reflection.Emit;
 
-public  class SeatAccess
+public class SeatAccess
 {
     private SqliteConnection _connection =
     new("Data Source=../../../Data Source/Cinema.db");
 
     private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
 
+    public List<SeatModel> GetSeatsByTheater(int theater)
+    {
+        var seatsList = new List<SeatModel>();
+
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+        SELECT 
+            s.Id,
+            s.Seat,
+            s.Width,
+            s.Height,
+            s.PricingType
+        FROM 
+            seats s
+        JOIN 
+            theater_has_seats ths ON s.Id = ths.Seats_Id
+        JOIN 
+            theater t ON ths.Theater_Id = t.Id
+        WHERE 
+            t.Description = @TheaterDescription";
+
+        cmd.Parameters.AddWithValue("@TheaterDescription", theater);
+
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            int id = reader.GetInt32(0);
+            int x = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
+            int y = reader.IsDBNull(3) ? 0 : reader.GetInt32(3);
+            string seatType = reader.IsDBNull(4) ? "Standard" : reader.GetString(4);
+
+            var seat = new SeatModel(x, y, seatType, id);
+
+            seatsList.Add(seat);
+        }
+
+        return seatsList;
+    }
 
     public void AddSeat(string seatName, bool isTaken, string pricingType)
     {
