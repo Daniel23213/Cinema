@@ -1,16 +1,51 @@
 public class AuditoriumModel
 {
     public int ID { get; }
-    public List<SeatModel> Seats { get; set; }
-    public MovieModel CurrentMovie { get; set; }
+    public int Length { get; }
+    public int Width { get; }
+    public string Discription { get; }
     
-    
-    public AuditoriumModel(int id, List<SeatModel> seats, MovieModel currentMovie)
+    public AuditoriumModel(int id, int length, int width, string discription)
     {
         ID = id;
-        Seats = seats;
-        CurrentMovie = currentMovie;
+        Length = length;
+        Width = width;
+        Discription = discription;
     }
 
-    public override string ToString() => $"Auditorium {ID} has {Seats.Count} seats and the movie thats airing is {CurrentMovie}";
+    public string ShowAuditoriumDiagram()
+    {
+        SeatAccess access = new();
+        string Diagram = "";
+        string[,] Size = new string[Length, Width];
+        for (int i = 0; i < Size.GetLength(0); i++)
+        {
+            for (int j = 0; j < Size.GetLength(1); j++)
+            {
+                Size[i, j] = " ";
+            }
+        }
+        List<SeatModel> seats = access.GetSeatsByTheater(ID);
+        foreach (SeatModel seat in seats)
+        {
+            string type = seat.SeatType switch
+            {
+                "VIP" => "$",
+                "Premium" => "&",
+                _ => "#"
+            };
+            Size[seat.Coordinates.x, seat.Coordinates.y] = type;
+        }
+        for (int i = 0; i < Size.GetLength(0); i++)
+        {
+            for (int j = 0; j < Size.GetLength(1); j++)
+            {
+                Diagram += Size[i, j];
+            }
+            Diagram += "\n";
+        }
+        return Diagram;
+    }
+
+    public override string ToString() => $"Auditorium ID: {ID}, Length: {Length}, Width: {Width}, Description: {Discription}";
 }

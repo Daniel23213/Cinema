@@ -57,57 +57,49 @@ public class UserAccess
     }
     public IEnumerable<UserModel> ShowUsers()
     {
-
+     
         string sql = $"SELECT * FROM {Table}";
         return _connection.Query<UserModel>(sql).ToList();
     }
 
-    public void Delete(int id)
+    public void Delete(int  id)
     {
         string sql = $"DELETE FROM {Table} WHERE id = @Id";
         _connection.Execute(sql, new { Id = id });
     }
-    public void UpdatePassword(int id, string password)
+    public void UpdatePassword(int id ,string password)
     {
         string sql = $"UPDATE {Table} SET  Password = @Password  WHERE id = @Id";
         _connection.Execute(sql, new { Id = id, Password = UserModel.HashPassword(password) });
     }
 
-    public void ReserveToUser(UserModel user, int seatId, int show_id)
+    public void ReserveToUser(UserModel user , int seatId, int show_id)
     {
         string sql = "INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id) VALUES (@UserId, @SeatId, @ShowId)";
         _connection.Execute(sql, new { UserId = user.Id, SeatId = seatId, ShowId = show_id });
     }
-    public List<ReservationModel> ShowTickets(UserModel user)
+    public List<dynamic> ShowTickets(int userId)
     {
-        List<ReservationModel> reservations = new();
-
-
-        _connection.Open();
-
-        var command = _connection.CreateCommand();
-
-        command.CommandText = @"
-        SELECT Id, Users_Id, Seats_Id, Showing_Id
-        FROM reservation
-        WHERE Users_Id = @userId;
+        string sql = @"
+    SELECT 
+        r.Id AS ReservationId,
+        u.Firstname,
+        u.Lastname,
+        m.Title AS MovieTitle,
+        ms.ShowTime,
+        s.Seat,
+        s.PricingType,
+        r.isTaken
+    FROM reservation r
+    JOIN users u ON u.Id = r.Users_Id
+    JOIN movie_showings ms ON ms.Id = r.Showing_Id
+    JOIN movies m ON m.Id = ms.Movie_Id
+    JOIN seats s ON s.Id = r.Seats_Id
+    WHERE r.Users_Id = @userId;
     ";
-
-        command.Parameters.AddWithValue("@userId", user.Id);
-
-        using var reader = command.ExecuteReader();
-
-        while (reader.Read())
-        {
-            ReservationModel reservation = new ReservationModel( // Id
-                reader.GetInt32(1), // UserId
-                reader.GetInt32(2), // SeatId
-                reader.GetInt32(3)  // ShowingId
-            );
-
-            reservations.Add(reservation);
-        }
-
-        return reservations;
+        return _connection.Query(sql, new { userId }).ToList();
     }
+
+
+
 }
