@@ -8,10 +8,10 @@ public static class RegisterMenu
         string email = Console.ReadLine();
         Console.Write("Enter your password: ");
         string password = CreateMyPasswordTextBox();
-
+ 
         // going to the next line becuase of the method is didnt happen
         Console.WriteLine();
-
+ 
         Console.Write("Enter your first name: ");
         string firstName = Console.ReadLine();
         Console.Write("Enter your last name: ");
@@ -33,9 +33,7 @@ public static class RegisterMenu
             Console.WriteLine("Email is taken!");
             return null;
         }
-        
     }
- 
     // Vivesh code hashing input field when typing the password
     public static string CreateMyPasswordTextBox()
     {
@@ -44,7 +42,6 @@ public static class RegisterMenu
             ConsoleKeyInfo cki;
             // Prevent example from ending if CTL+C is pressed.
             Console.TreatControlCAsInput = true;
- 
             while (true)
             {
                 cki = Console.ReadKey(true);
@@ -67,12 +64,12 @@ public static class RegisterMenu
                     Console.Write("*"); // console.write whitout line otherwise it will be going down
                 }
             }
-
+ 
             // turning stuff out
             Console.TreatControlCAsInput = false;
-
+ 
             return Password.ToString();
         }
     }
-
+ 
 }

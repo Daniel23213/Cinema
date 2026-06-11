@@ -5,10 +5,17 @@
     {
         Console.Write("Email: ");
         string email = Console.ReadLine();
+        Console.Write("Enter your password: ");
+        string password = RegisterMenu.CreateMyPasswordTextBox();
 
-        Console.Write("Password: ");
-        string password = Console.ReadLine();
+        Console.WriteLine();
 
+        UserAccess accountsAccess = new();
+        if (accountsAccess.Login(email, password) != null)
+        {
+            Console.WriteLine("Login sucessfull.");
+
+        }
         UserService service =
             new UserService();
 
