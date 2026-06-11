@@ -10,12 +10,7 @@
 
         Console.WriteLine();
 
-        UserAccess accountsAccess = new();
-        if (accountsAccess.Login(email, password) != null)
-        {
-            Console.WriteLine("Login sucessfull.");
-
-        }
+       
         UserService service =
             new UserService();
 
