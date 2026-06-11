@@ -1,9 +1,9 @@
 using Microsoft.Data.Sqlite;
 using System.Text;
 
-class db
+public class db
 {
-    private const string DatabaseLoc = "/Data Source/Cinema.db"; // ✅ simple & reliable
+    private const string DatabaseLoc = "Cinema.db";
     private const string SeatCSV = "../../../Data Source/auditroiums.csv";
 
     private void SeedSeats(SqliteConnection connection)
