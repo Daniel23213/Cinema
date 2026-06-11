@@ -1,11 +1,13 @@
 //using Cinema.Presentationn_layer;
 
+using System.Net.Sockets;
 using System.Threading.Channels;
 
 public static class Menu
 {
     private static readonly MovieMenu movieMenu = new();
     private static readonly MovieServiceLogic movieService = new();
+    
 
     public static void ShowMenu()
     {
@@ -151,9 +153,10 @@ public static class Menu
 
                     seatAccess.PrintSeatsByShowingId(choice);
 
-                    int seatid = Convert.ToInt32(Console.ReadLine());
+                    string seat = Console.ReadLine();
+                    int seatid = seatAccess.GetId(seat);
 
-                    if (seatAccess.IsSeatTaken(choice, seatid))
+                    if (!seatAccess.IsSeatTaken(choice, seat))
                     {
                         Console.WriteLine("Seat reserved successfully.");
 
@@ -166,7 +169,7 @@ public static class Menu
 
                 case "3":
                     //implement view booked tickets
-                    UserAccess user3 = new();
+                    UserService user3 = new();
                     foreach (dynamic ticket in user3.ShowTickets(isLogged.Id)) 
                     {
                         Console.WriteLine(ticket);
@@ -177,7 +180,27 @@ public static class Menu
 
                 case "4":
                     //implement cancel ticket
-                    Console.WriteLine("Cancel ticket feature coming soon...");
+                    UserService usercancelticket = new();
+                    foreach (dynamic ticket in usercancelticket.ShowTickets(isLogged.Id))
+                    {
+                        Console.WriteLine(ticket);
+                    }
+                    Console.WriteLine("Which ticket would you like to cancel? (enter ReservationId)");
+                    int reservationId = int.Parse(Console.ReadLine());
+                    {
+                        Console.WriteLine("Do you really want to cancel ur ticket?");
+                        string answer = Console.ReadLine();
+                        if(answer == "yes" || answer == "y") 
+                        {
+                            usercancelticket.CancelTicket(reservationId, isLogged.Id);
+                        }
+                        else 
+                        {
+                            Pause();
+                        }
+                        
+
+                    }
                     Pause();
                     break;
 
@@ -197,7 +220,7 @@ public static class Menu
                     {
                         // Implement delete account
 
-                        userAccess.DeleteUser(isLogged);
+                        userAccess.DeleteUser(isLogged.Id);
                         Console.WriteLine("Your account has been deleted!");
                         isLogged = null;
                         continue;
