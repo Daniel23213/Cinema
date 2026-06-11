@@ -3,68 +3,31 @@ using System.Text;
 
 class db
 {
-    private const string DatabaseLoc = "../../../Data Source/Cinema.db"; // ✅ simple & reliable
+    private const string DatabaseLoc = "/Data Source/Cinema.db"; // ✅ simple & reliable
+    private const string SeatCSV = "../../../Data Source/auditroiums.csv";
+
     private void SeedSeats(SqliteConnection connection)
     {
         var command = connection.CreateCommand();
 
-        command.CommandText = @"
-        INSERT INTO seats
-        (Id, LocationRow, LocationColumn, IsTaken, PricingType)
-        VALUES
-        (1,1,3,0,'normal'),
-        (2,1,4,0,'normal'),
-        (3,1,5,0,'normal'),
-        (4,1,6,0,'normal'),
-        (5,1,7,0,'normal'),
-        (6,1,8,0,'normal'),
-        (7,1,9,0,'normal'),
-        (8,1,10,0,'normal'),
-        (9,2,3,0,'normal'),
-        (10,2,4,0,'normal'),
-        (11,2,5,0,'normal'),
-        (12,2,6,0,'normal'),
-        (13,2,7,0,'normal'),
-        (14,2,8,0,'normal'),
-        (15,2,9,0,'normal'),
-        (16,2,10,0,'normal'),
-        (17,3,2,0,'normal'),
-        (18,3,3,0,'normal'),
-        (19,3,4,0,'normal'),
-        (20,3,5,0,'normal'),
-        (21,3,6,0,'normal'),
-        (22,3,7,0,'normal'),
-        (23,3,8,0,'normal'),
-        (24,3,9,0,'normal'),
-        (25,3,10,0,'normal'),
-        (26,3,11,0,'normal'),
-        (27,4,1,0,'normal'),
-        (28,4,2,0,'normal'),
-        (29,4,3,0,'normal'),
-        (30,4,4,0,'normal'),
-        (31,4,5,0,'normal'),
-        (32,4,6,0,'luxe'),
-        (33,4,7,0,'luxe'),
-        (34,4,8,0,'normal'),
-        (35,4,9,0,'normal'),
-        (36,4,10,0,'normal'),
-        (37,4,11,0,'normal'),
-        (38,4,12,0,'normal'),
-        (39,5,1,0,'normal'),
-        (40,5,2,0,'normal'),
-        (41,5,3,0,'normal'),
-        (42,5,4,0,'normal'),
-        (43,5,5,0,'luxe'),
-        (44,5,6,0,'luxe'),
-        (45,5,7,0,'luxe'),
-        (46,5,8,0,'luxe'),
-        (47,5,9,0,'normal'),
-        (48,5,10,0,'normal'),
-        (49,5,11,0,'normal'),
-        (50,5,12,0,'normal');
-        ";
+        using (StreamReader reader = new StreamReader(SeatCSV))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] seat = line.Split(',');
+                command.CommandText = @"
+                INSERT INTO seats (Id, Name, LocationRow, LocationColumn, PricingType)
+                VALUES (@Id, @Name, @LocationRow, @LocationColumn, @PricingType)";
 
-        command.ExecuteNonQuery();
+                command.Parameters.AddWithValue("@Id", seat[0]);
+                command.Parameters.AddWithValue("@Name", seat[1]);
+                command.Parameters.AddWithValue("@LocationRow", seat[2]);
+                command.Parameters.AddWithValue("@LocationColumn", seat[3]);
+                command.Parameters.AddWithValue("@PricingType", seat[4]);
+                command.ExecuteNonQuery();
+            }
+        }
     }
     private void SeedMovies(SqliteConnection connection)
     {
@@ -214,9 +177,9 @@ class db
         string seatsTable = @"
         CREATE TABLE IF NOT EXISTS seats (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Seat TEXT NOT NULL,
-            Width INTEGER,
-            Height INTEGER,
+            Name TEXT NOT NULL,
+            LocationRow INTEGER,
+            LocationColumn INTEGER,
             PricingType TEXT
         );";
 
