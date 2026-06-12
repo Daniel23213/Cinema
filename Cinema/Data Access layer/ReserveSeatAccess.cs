@@ -18,7 +18,5 @@ public class ReserveSeatAccess
         command.Parameters.AddWithValue("@isTaken", isTaken);
 
         return Convert.ToInt32(command.ExecuteScalar());
-    }
-
-    
+    }    
 }

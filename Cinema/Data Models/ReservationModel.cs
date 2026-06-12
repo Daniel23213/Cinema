@@ -36,7 +36,7 @@ public class ReservationModel
         _isTaken = true;
     }
 
-    //allergies and dietary method
+    //allergies and dietary
     public List<string> Dietary ()
     {
         Dictionary<string, string> CheckList = new ()
