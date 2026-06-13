@@ -7,6 +7,54 @@ public class MovieMenu
         _service = new MovieServiceLogic();
     }
 
+    //allergies and dietary
+    public List<string> Dietary()
+    {
+        Dictionary<string, string> CheckList = new ()
+        {
+            { "Peanuts", "Severe peanut allergy risk" },
+            { "Tree Nuts", "Almonds, walnuts, cashews, pecans, etc." },
+            { "Dairy / Milk", "Allergic to dairy proteins" },
+            { "Eggs", "Egg allergy" },
+            { "Wheat / Gluten", "Celiac disease or wheat allergy" },
+            { "Soy", "Soy products" },
+            { "Fish", "Finfish (e.g., salmon, cod)" },
+            { "Shellfish", "Crustaceans and mollusks (e.g., shrimp, crab, clams)" },
+            { "Sesame", "Sesame seeds and oil" },
+            { "Vegetarian", "No meat, poultry, or seafood" },
+            { "Vegan", "No animal products (meat, dairy, eggs, honey)" },
+            { "Lactose Intolerant", "Difficulty digesting dairy" },
+            { "Halal", "Requires Halal certified meats / no pork / no alcohol" },
+            { "Kosher", "Requires Kosher certified foods" },
+            { "No Pork", "Avoids pork products strictly" }
+        };
+
+        List<string> UserAnswers = [];
+
+        Console.Clear();
+        Console.WriteLine("Do you have any allergies and dietary wishes?");
+        Console.WriteLine("Type 'Yes' to view allergies and dietary restrictions, or 'No' to continue booking.");
+        string input0 = Console.ReadLine()?.ToLower();
+
+        if (input0 == "yes" || input0 == "ja" || input0 == "y")
+        {
+            foreach (var item in CheckList)
+            {
+                Console.Clear();
+                Console.WriteLine($"--- {item.Key} ---");
+                Console.WriteLine($"Description: {item.Value}");
+                Console.Write("Does this apply to you? (Yes / No): ");
+
+                string answer = Console.ReadLine()?.ToLower();
+                if (answer == "yes" || answer == "y" || answer == "ja")
+                {
+                    UserAnswers.Add(item.Key);
+                }
+            }
+        }
+        return UserAnswers;
+    }
+
     public void ShowManageMoviesMenu()
     {
         bool managing = true;
@@ -185,9 +233,25 @@ public class MovieMenu
         {
             Console.WriteLine("Movie showing added successfully!");
 
+            // Dietary list added in culinary booking
             if (isCulinary)
             {
                 Console.WriteLine("Culinary Cinema enabled (+€50).");
+
+                List<string> AlergyList = Dietary();
+                Console.Clear();
+                Console.WriteLine("=== Saved Dietary Wishes ===");
+                if (AlergyList.Count > 0)
+                {
+                    foreach (var allergy in AlergyList)
+                    {
+                        Console.WriteLine($"- {allergy}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No dietary restrictions specified.");
+                }
             }
         }
         else
@@ -347,6 +411,8 @@ public class MovieMenu
                 if (isCulinary)
                 {
                     Console.WriteLine("Culinary Cinema enabled (+€50)");
+
+                    List<string> AlergyList = Dietary();
                 }
             }
             else

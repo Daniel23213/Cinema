@@ -3,7 +3,7 @@ using System.Text;
 
 class db
 {
-    private const string DatabaseLoc = "../../../Data Source/Cinema.db"; // ✅ simple & reliable
+    private static readonly string DatabaseLoc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cinema.db");
     private void SeedSeats(SqliteConnection connection)
     {
         var command = connection.CreateCommand();
