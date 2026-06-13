@@ -25,7 +25,8 @@ public interface IMovieServiceLogic
         int movieId,
         int theaterId,
         DateTime showTime,
-        bool isCulinary);
+        bool isCulinary,
+        List<string> Alergy);
 
     List<string> GetShowings(UserModel user);
 

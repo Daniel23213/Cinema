@@ -12,7 +12,9 @@ public class MovieShowingModel
 
 	public double ExtraPrice { get; set; }
 
-	public MovieShowingModel(int id, int movieId, int theaterId, DateTime showTime, bool isCulinary, double extraPrice)
+	public List<string> Allergies { get; set; }
+
+	public MovieShowingModel(int id, int movieId, int theaterId, DateTime showTime, bool isCulinary, double extraPrice, List<string> alergy)
 	{
 		Id = id;
 		MovieId = movieId;
@@ -20,5 +22,6 @@ public class MovieShowingModel
 		ShowTime = showTime;
 		IsCulinary = isCulinary;
 		ExtraPrice = extraPrice;
+		Allergies = alergy;
 	}
 }
