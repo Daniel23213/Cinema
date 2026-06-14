@@ -7,36 +7,12 @@ public class MovieServiceLogic : IMovieServiceLogic
         _repo = new MovieAcces();
     }
 
-    public bool AddMovieShowing(
-        int movieId,
-        int theaterId,
-        DateTime showTime,
-        bool isCulinary)
-    {
-        return _repo.AddMovieShowing(
-            movieId,
-            theaterId,
-            showTime,
-            isCulinary);
-    }
-
     public List<MovieModel> GetAiringMovies()
     {
         return _repo.GetAiringMovies();
     }
 
-    public List<string> GetShowings(UserModel user)
-    {
-        return _repo.GetShowings(user);
-    }
-
-    public List<string> GetShowingsByGenre(MoviesGenres genre)
-    {
-        return _repo.GetShowingsByGenre(genre);
-    }
-
-    public void AddMovie(string title, string author, MoviesGenres genre,
-        TimeSpan duration, DateTime premier, int age)
+    public void AddMovie(string title, string author, MoviesGenres genre, TimeSpan duration, DateTime premier, int age)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new ArgumentException("Title cannot be empty");
@@ -47,8 +23,7 @@ public class MovieServiceLogic : IMovieServiceLogic
         _repo.AddMovie(title, author, genre, duration, premier, age);
     }
 
-    public void UpdateMovie(int id, string title, string author,
-        MoviesGenres genre, TimeSpan duration, DateTime premier, int age)
+    public void UpdateMovie(int id, string title, string author, MoviesGenres genre, TimeSpan duration, DateTime premier, int age)
     {
         if (id <= 0)
             throw new ArgumentOutOfRangeException(nameof(id));
