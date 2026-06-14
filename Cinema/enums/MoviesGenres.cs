@@ -6,10 +6,5 @@ public enum MoviesGenres
     Horror,
     SciFi,
     Romance,
-    Thriller,
-    Animation,
-    Crime,
-    Fantasy,
-    Historical,
-    Adventure
+    Thriller
 }
