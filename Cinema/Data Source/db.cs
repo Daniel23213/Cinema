@@ -4,7 +4,8 @@ using System.Text;
 public class db
 {
     private const string DatabaseLoc = "./Data Source/Cinema.db";
-    private const string SeatCSV = "./Data Source/auditroiums.csv";
+    private const string SeatCSV = "./Data Source/Seats.csv";
+    private const string TheaterHasSeatsCSV = "./Data Source/theater_has_seasts.csv";
 
     private void SeedSeats(SqliteConnection connection)
     {
@@ -47,6 +48,29 @@ public class db
         ('3', '30', '20', 'Has a total of 500 seats')";
         
         command.ExecuteNonQuery();
+    }
+
+    private void SeedtheaterHasSeats(SqliteConnection connection)
+    {
+        var command = connection.CreateCommand();
+
+        using (StreamReader reader = new StreamReader(TheaterHasSeatsCSV))
+        {
+            reader.ReadLine();
+            string? line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                command.Parameters.Clear();
+                string[] seat = line.Split(',');
+                command.CommandText = @"
+                INSERT INTO seats (Theater_Id, Seat_Id)
+                VALUES (@Theater_Id, @Seat_Id)";
+
+                command.Parameters.AddWithValue("@Theater_Id", seat[0]);
+                command.Parameters.AddWithValue("@Seats_Id", seat[1]);
+                command.ExecuteNonQuery();
+            }
+        }
     }
 
     private void SeedMovies(SqliteConnection connection)
@@ -250,6 +274,8 @@ public class db
             try
             {
                 SeedTheaters(connection);
+                SeedSeats(connection);
+                SeedtheaterHasSeats(connection);
                 SeedMovies(connection);
                 SeedMovieShowings(connection);
 
