@@ -90,58 +90,127 @@ public class SeatAccess
        
 
     }
-
-    public bool ReserveSeat(int row, int column)
+    public int GetId(string seatName)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
-        // Check if seat exists and is free
-        var checkCommand = connection.CreateCommand();
+        var command = connection.CreateCommand();
 
-        checkCommand.CommandText = @"
-    SELECT IsTaken
+        command.CommandText = @"
+    SELECT Id
     FROM seats
-    WHERE LocationRow = @row
-    AND LocationColumn = @column;
+    WHERE Seat = @seatName;
     ";
 
-        checkCommand.Parameters.AddWithValue("@row", row);
-        checkCommand.Parameters.AddWithValue("@column", column);
+        command.Parameters.AddWithValue("@seatName", seatName);
 
-        var result = checkCommand.ExecuteScalar();
+        var result = command.ExecuteScalar();
+        int res = Convert.ToInt32(result);
+        return res;
 
-        if (result == null)
+
+    }
+
+    public bool ReserveSeat(UserModel user, string seatName, int showingId)
+    {
+        int seatId = GetId(seatName);
+
+        if (seatId == 0)
         {
-            Console.WriteLine("Seat does not exist.");
+            Console.WriteLine("Seat not found!");
             return false;
         }
 
-        int isTaken = Convert.ToInt32(result);
-
-        if (isTaken == 1)
+        if (IsSeatTaken(showingId, seatName))
         {
-            Console.WriteLine("Seat is already taken.");
+            Console.WriteLine("Seat already taken!");
             return false;
         }
 
-        // Reserve seat
-        var updateCommand = connection.CreateCommand();
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
 
-        updateCommand.CommandText = @"
-    UPDATE seats
-    SET IsTaken = 1
-    WHERE LocationRow = @row
-    AND LocationColumn = @column;
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+        INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id)
+        VALUES (@userId, @seatId, @showingId);
     ";
 
-        updateCommand.Parameters.AddWithValue("@row", row);
-        updateCommand.Parameters.AddWithValue("@column", column);
+        cmd.Parameters.AddWithValue("@userId", user.Id);
+        cmd.Parameters.AddWithValue("@seatId", seatId);
+        cmd.Parameters.AddWithValue("@showingId", showingId);
 
-        updateCommand.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
 
-        Console.WriteLine($"Seat ({row}, {column}) reserved.");
-
+        Console.WriteLine("Ticket reserved successfully!");
         return true;
+    }
+
+    public void PrintSeatsByShowingId(int showingId)
+    {
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+        SELECT 
+            seats.Id,
+            seats.Seat,
+            seats.Width,
+            seats.Height,
+            seats.PricingType
+        FROM movie_showings
+        JOIN theater_has_seats 
+            ON movie_showings.Theater_Id = theater_has_seats.Theater_Id
+        JOIN seats 
+            ON theater_has_seats.Seats_Id = seats.Id
+        WHERE movie_showings.Id = @id
+        ORDER BY seats.Width, seats.Height;
+    ";
+
+        cmd.Parameters.AddWithValue("@id", showingId);
+
+        using var reader = cmd.ExecuteReader();
+
+        Console.WriteLine($"\n=== Seats for Showing {showingId} ===");
+
+        while (reader.Read())
+        {
+            int seatId = reader.GetInt32(0);
+            string seatName = reader.GetString(1);
+            int row = reader.GetInt32(2);
+            int col = reader.GetInt32(3);
+            string type = reader.GetString(4);
+
+            bool taken = IsSeatTaken(showingId, seatName);
+
+            Console.WriteLine(
+                $"Seat {seatName} (Row {row}, Col {col}) | " +
+                $"{(taken ? "X Taken" : " Available")} | " +
+                $"{type}"
+            );
+        }
+    }
+    public bool IsSeatTaken(int showingId, string seat)
+    {
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+        SELECT COUNT(*)
+        FROM reservation r
+        JOIN seats s ON s.Id = r.Seats_Id
+        WHERE r.Showing_Id = @showingId
+        AND s.Seat = @seat;
+    ";
+
+        cmd.Parameters.AddWithValue("@showingId", showingId);
+        cmd.Parameters.AddWithValue("@seat", seat);
+
+        long count = (long)cmd.ExecuteScalar();
+
+        return count > 0;
     }
 }

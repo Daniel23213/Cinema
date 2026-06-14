@@ -1,9 +1,9 @@
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using System.Text;
 
 public class db
 {
-    private const string DatabaseLoc = "../../../Data Source/Cinema.db";
+    private const string DatabaseLoc = "./Data Source/Cinema.db";
     private const string SeatCSV = "../../../Data Source/auditroiums.csv";
 
     private void SeedSeats(SqliteConnection connection)
@@ -227,8 +227,11 @@ public class db
         {
             try
             {
+                SeedTheaters(connection);
                 SeedMovies(connection);
                 SeedMovieShowings(connection);
+                SeedSeats(connection);
+                SeedTheaterSeats(connection);
 
                 Console.WriteLine("Database seeded.");
             }
