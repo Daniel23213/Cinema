@@ -5,7 +5,11 @@ public class db
 {
     private const string DatabaseLoc = "./Data Source/Cinema.db";
     private const string SeatCSV = "./Data Source/Seats.csv";
-    private const string TheaterHasSeatsCSV = "./Data Source/theater_has_seasts.csv";
+    private const string TheaterHasSeatsCSV = "./Data Source/theater_has_seats.csv";
+    
+    // =========================
+    // SEED SEATS
+    // =========================
 
     private void SeedSeats(SqliteConnection connection)
     {
@@ -50,6 +54,10 @@ public class db
         command.ExecuteNonQuery();
     }
 
+    //// =========================
+    //// BIND SEATS TO THEATERS
+    //// =========================
+
     private void SeedtheaterHasSeats(SqliteConnection connection)
     {
         var command = connection.CreateCommand();
@@ -61,17 +69,21 @@ public class db
             while ((line = reader.ReadLine()) != null)
             {
                 command.Parameters.Clear();
-                string[] seat = line.Split(',');
+                string[] bindings = line.Split(',');
                 command.CommandText = @"
-                INSERT INTO seats (Theater_Id, Seat_Id)
-                VALUES (@Theater_Id, @Seat_Id)";
+                INSERT INTO theater_has_seats (Theater_Id, Seats_Id)
+                VALUES (@Theater_Id, @Seats_Id)";
 
-                command.Parameters.AddWithValue("@Theater_Id", seat[0]);
-                command.Parameters.AddWithValue("@Seats_Id", seat[1]);
+                command.Parameters.AddWithValue("@Theater_Id", bindings[0]);
+                command.Parameters.AddWithValue("@Seats_Id", bindings[1]);
                 command.ExecuteNonQuery();
             }
         }
     }
+
+    // =========================
+    // SEED MOVIES
+    // =========================
 
     private void SeedMovies(SqliteConnection connection)
     {
@@ -113,6 +125,11 @@ public class db
 
         command.ExecuteNonQuery();
     }
+
+
+    // =========================
+    // SEED SHOWINGS
+    // =========================
 
     private void SeedMovieShowings(SqliteConnection connection)
     {
@@ -303,154 +320,4 @@ public class db
         command.ExecuteNonQuery();
     }
 
-    // =========================
-    // SEED SEATS
-    // =========================
-
-    //private void SeedSeats(SqliteConnection connection)
-    //{
-    //    var command = connection.CreateCommand();
-
-    //    command.CommandText = @"
-    //    INSERT INTO seats
-    //    (Id, LocationRow, LocationColumn, IsTaken, PricingType)
-    //    VALUES
-    //    (1,1,1,0,'normal'),
-    //    (2,1,2,0,'normal'),
-    //    (3,1,3,0,'normal'),
-    //    (4,1,4,0,'normal'),
-    //    (5,1,5,0,'normal'),
-
-    //    (6,2,1,0,'normal'),
-    //    (7,2,2,0,'normal'),
-    //    (8,2,3,0,'normal'),
-    //    (9,2,4,0,'normal'),
-    //    (10,2,5,0,'normal'),
-
-    //    (11,3,1,0,'normal'),
-    //    (12,3,2,0,'normal'),
-    //    (13,3,3,0,'luxe'),
-    //    (14,3,4,0,'luxe'),
-    //    (15,3,5,0,'normal'),
-
-    //    (16,4,1,0,'normal'),
-    //    (17,4,2,0,'normal'),
-    //    (18,4,3,0,'luxe'),
-    //    (19,4,4,0,'luxe'),
-    //    (20,4,5,0,'normal'),
-
-    //    (21,5,1,0,'normal'),
-    //    (22,5,2,0,'normal'),
-    //    (23,5,3,0,'normal'),
-    //    (24,5,4,0,'normal'),
-    //    (25,5,5,0,'normal'),
-
-    //    (26,1,1,0,'normal'),
-    //    (27,1,2,0,'normal'),
-    //    (28,1,3,0,'normal'),
-    //    (29,1,4,0,'normal'),
-    //    (30,1,5,0,'normal'),
-
-    //    (31,2,1,0,'normal'),
-    //    (32,2,2,0,'normal'),
-    //    (33,2,3,0,'normal'),
-    //    (34,2,4,0,'normal'),
-    //    (35,2,5,0,'normal'),
-
-    //    (36,3,1,0,'normal'),
-    //    (37,3,2,0,'normal'),
-    //    (38,3,3,0,'VIP'),
-    //    (39,3,4,0,'VIP'),
-    //    (40,3,5,0,'normal'),
-
-    //    (41,4,1,0,'normal'),
-    //    (42,4,2,0,'normal'),
-    //    (43,4,3,0,'VIP'),
-    //    (44,4,4,0,'VIP'),
-    //    (45,4,5,0,'normal'),
-
-    //    (46,5,1,0,'normal'),
-    //    (47,5,2,0,'normal'),
-    //    (48,5,3,0,'normal'),
-    //    (49,5,4,0,'normal'),
-    //    (50,5,5,0,'normal');
-    //    ";
-
-    //    command.ExecuteNonQuery();
-    //}
-
-    //// =========================
-    //// BIND SEATS TO THEATERS
-    //// =========================
-
-    private void SeedTheaterSeats(SqliteConnection connection)
-    {
-        var command = connection.CreateCommand();
-
-        var sql = new StringBuilder();
-
-        // Seats 1-25 => Theater 1
-        for (int i = 1; i <= 25; i++)
-        {
-            sql.AppendLine(
-                $"INSERT INTO theater_has_seats (Theater_Id, Seats_Id) VALUES (1, {i});"
-            );
-        }
-
-        // Seats 26-50 => Theater 2
-        for (int i = 26; i <= 50; i++)
-        {
-            sql.AppendLine(
-                $"INSERT INTO theater_has_seats (Theater_Id, Seats_Id) VALUES (2, {i});"
-            );
-        }
-
-        command.CommandText = sql.ToString();
-
-        command.ExecuteNonQuery();
-    }
-
-    // =========================
-    // SEED MOVIES
-    // =========================
-
-    //private void SeedMovies(SqliteConnection connection)
-    //{
-    //    var command = connection.CreateCommand();
-
-    //    command.CommandText = @"
-    //    INSERT INTO movies 
-    //    (Title, Duration, Author, Genre, Premier, Age)
-    //    VALUES
-    //    ('Avengers', '02:30:00', 'Marvel', 'Action', '2025-01-01', 12),
-    //    ('Joker', '02:02:00', 'DC', 'Drama', '2025-01-02', 18),
-    //    ('Toy Story', '01:30:00', 'Pixar', 'Comedy', '2025-01-03', 6),
-    //    ('Interstellar', '02:49:00', 'Nolan', 'SciFi', '2025-01-05', 12),
-    //    ('Titanic', '03:15:00', 'Cameron', 'Drama', '2025-01-06', 12);
-    //    ";
-
-    //    command.ExecuteNonQuery();
-    //}
-
-    //// =========================
-    //// SEED SHOWINGS
-    //// =========================
-
-    //private void SeedMovieShowings(SqliteConnection connection)
-    //{
-    //    var command = connection.CreateCommand();
-
-    //    command.CommandText = @"
-    //    INSERT INTO movie_showings 
-    //    (Movie_Id, Theater_Id, ShowTime, IsCulinary, ExtraPrice)
-    //    VALUES
-    //    (1,1,'2025-06-01 18:00:00',0,0),
-    //    (2,2,'2025-06-01 20:00:00',1,50),
-    //    (3,1,'2025-06-01 14:00:00',0,0),
-    //    (4,2,'2025-06-02 19:00:00',1,50),
-    //    (5,1,'2025-06-02 17:00:00',0,0);
-    //    ";
-
-    //    command.ExecuteNonQuery();
-    //}
 }
