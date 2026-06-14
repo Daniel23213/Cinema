@@ -12,9 +12,11 @@ public class db
 
         using (StreamReader reader = new StreamReader(SeatCSV))
         {
-            string line;
+            reader.ReadLine();
+            string? line;
             while ((line = reader.ReadLine()) != null)
             {
+                command.Parameters.Clear();
                 string[] seat = line.Split(',');
                 command.CommandText = @"
                 INSERT INTO seats (Id, Name, LocationRow, LocationColumn, PricingType)
@@ -29,6 +31,24 @@ public class db
             }
         }
     }
+
+    // =========================
+    // SEED THEATERS
+    // =========================
+    
+    private void SeedTheaters(SqliteConnection connection)
+    {
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+        INSERT INTO theater (Id, Width, Length, Description) VALUES
+        ('1', '12', '14', 'Has a total of 150 seats'),
+        ('2', '18', '19', 'Has a total of 300 seats'),
+        ('3', '30', '20', 'Has a total of 500 seats')";
+        
+        command.ExecuteNonQuery();
+    }
+
     private void SeedMovies(SqliteConnection connection)
     {
         var command = connection.CreateCommand();
@@ -155,7 +175,9 @@ public class db
         string theaterTable = @"
         CREATE TABLE IF NOT EXISTS theater (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Description TEXT NOT NULL
+            Width INTEGER NOT NULL,
+            Length INTEGER NOT NULL,
+            Description TEXT
         );";
 
         // MOVIE SHOWINGS
@@ -227,6 +249,7 @@ public class db
         {
             try
             {
+                SeedTheaters(connection);
                 SeedMovies(connection);
                 SeedMovieShowings(connection);
 
@@ -251,24 +274,6 @@ public class db
     {
         using var command = connection.CreateCommand();
         command.CommandText = sql;
-        command.ExecuteNonQuery();
-    }
-
-    // =========================
-    // SEED THEATERS
-    // =========================
-
-    private void SeedTheaters(SqliteConnection connection)
-    {
-        var command = connection.CreateCommand();
-
-        command.CommandText = @"
-        INSERT INTO theater (Id, Description)
-        VALUES
-        (1, 'Main Theater'),
-        (2, 'VIP Theater');
-        ";
-
         command.ExecuteNonQuery();
     }
 
