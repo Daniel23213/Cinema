@@ -2,7 +2,7 @@ using Microsoft.Data.Sqlite;
 
 public class MovieAcces : IMovieAcces
 {
-    private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
+    private const string ConnectionString = "Data Source=./Data Source/Cinema.db";
 
     public List<MovieModel> GetAiringMovies()
     {
@@ -214,7 +214,7 @@ public class MovieAcces : IMovieAcces
         }
     }
 
-    public bool AddMovieShowing(int movieId, int theaterId, DateTime showTime, bool isCulinary)
+    public bool AddMovieShowing(int movieId, int theaterId, DateTime showTime, bool isCulinary,List<string> Dietary1)
     {
         using var connection = new SqliteConnection(ConnectionString);
         connection.Open();
@@ -234,8 +234,11 @@ public class MovieAcces : IMovieAcces
         var theaterCheck = connection.CreateCommand();
         theaterCheck.CommandText = "SELECT COUNT(*) FROM theater WHERE Id = @id";
         theaterCheck.Parameters.AddWithValue("@id", theaterId);
-
         long theaterExists = (long)theaterCheck.ExecuteScalar();
+
+        string Dietary2 = Dietary1 != null && Dietary1.Count > 0
+        ? string.Join(", ", Dietary1)
+        : "";
 
         Console.WriteLine($"Theater exists: {theaterExists}");
 
@@ -247,13 +250,14 @@ public class MovieAcces : IMovieAcces
         INSERT INTO movie_showings 
         (Movie_Id, Theater_Id, ShowTime, ExtraPrice, IsCulinary)
         VALUES 
-        (@movieId, @theaterId, @showTime, @extraPrice, @isCulinary)";
+        (@movieId, @theaterId, @showTime, @extraPrice, @isCulinary, @Dietary)";
 
         command.Parameters.AddWithValue("@movieId", movieId);
         command.Parameters.AddWithValue("@theaterId", theaterId);
         command.Parameters.AddWithValue("@showTime", showTime.ToString("yyyy-MM-dd HH:mm:ss"));
         command.Parameters.AddWithValue("@extraPrice", extraPrice);
         command.Parameters.AddWithValue("@isCulinary", isCulinary ? 1 : 0);
+        command.Parameters.AddWithValue("@Dietary", Dietary2);
 
         return command.ExecuteNonQuery() > 0;
     }

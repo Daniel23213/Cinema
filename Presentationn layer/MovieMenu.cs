@@ -7,8 +7,8 @@ public class MovieMenu
         _service = new MovieServiceLogic();
     }
 
-    //allergies and dietary
-    public List<string> Dietary ()
+    // allergies and dietary
+    public List<string> Dietary()
     {
         Dictionary<string, string> CheckList = new ()
         {
@@ -32,30 +32,33 @@ public class MovieMenu
         List<string> UserAnswers = [];
 
         Console.Clear();
-        Console.WriteLine("Do you have any allergies and dietary whishes");
+        Console.WriteLine("Do you have any allergies and dietary wishes?");
         Console.WriteLine("Type 'Yes' to view allergies and dietary restrictions, or 'No' to continue booking.");
+        
+    
         string input0 = Console.ReadLine().ToLower();
 
-        if (input0 == "yes" || input0 == "ja")
+        if (input0 == "yes" || input0 == "ja" || input0 == "y")
         {
             foreach (var item in CheckList)
             {
-                Console.WriteLine($"---{item.Key}---");
-                Console.WriteLine($"Description: {item.Value}");
-                Console.WriteLine("Does this apply to you (Yes / No)");
+                Console.Clear();
+                Console.WriteLine($"=== {item.Key} ===");
+                Console.WriteLine($"Description: {item.Value}\n");
+                Console.WriteLine("Does this apply to you type (Yes / No) [Or type '--> Stop <--' if you are done]");
 
-                string answer = Console.ReadLine().ToLower();
+                string answer = (Console.ReadLine() ?? "").ToLower();
+                
                 if (answer == "yes" || answer == "y" || answer == "ja")
                 {
                     UserAnswers.Add(item.Key);
                 }
+                else if (answer == "stop" || answer == "q" || answer == "Stop")
+                {
+                    break;
+                }
             }
         }
-        else if (input0 == "no" || input0 == "n")
-        {
-            // user skip the allergies and dietary list and continue on.
-        }
-
         return UserAnswers;
     }
 
@@ -164,16 +167,18 @@ public class MovieMenu
         Console.WriteLine("Is this Culinary Cinema? (y/n): ");
         bool isCulinary = Console.ReadLine()?.ToLower() == "y";
 
+        List<string> AlergyList = [];
+        if (isCulinary)
+        {
+            Console.WriteLine("Culinary Cinema enabled (+€50)");
+            AlergyList = Dietary();
+        }
+
         MovieAcces movieAcces = new();
 
-        if (movieAcces.AddMovieShowing(id, theaterId ,showTime, isCulinary))
+        if (movieAcces.AddMovieShowing(id, theaterId ,showTime, isCulinary, AlergyList))
         {
             Console.WriteLine("Movie showing added!");
-
-            if (isCulinary)
-            {
-                Console.WriteLine("Culinary Cinema enabled (+€50)");
-            }
         }
 
         Pause();
@@ -259,17 +264,19 @@ public class MovieMenu
             }
             Console.WriteLine("Is this Culinary Cinema? (y/n): ");
             bool isCulinary = Console.ReadLine()?.ToLower() == "y";
+        
+            List<string> AlergyList = [];
+            if (isCulinary)
+            {
+                Console.WriteLine("Culinary Cinema enabled (+€50)");
+                AlergyList = Dietary();
+            }
 
             MovieAcces movieAcces = new();
 
-            if (movieAcces.AddMovieShowing(id, theaterId, showTime, isCulinary))
+            if (movieAcces.AddMovieShowing(id, theaterId, showTime, isCulinary,AlergyList))
             {
                 Console.WriteLine("Movie showing added!");
-
-                if (isCulinary)
-                {
-                    Console.WriteLine("Culinary Cinema enabled (+€50)");
-                }
             }
         }
         Pause();
