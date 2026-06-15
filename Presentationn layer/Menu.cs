@@ -1,13 +1,10 @@
 //using Cinema.Presentationn_layer;
 
-using System.Net.Sockets;
 using System.Threading.Channels;
 
 public static class Menu
 {
-    private static readonly MovieMenu movieMenu = new();
-    private static readonly MovieServiceLogic movieService = new();
-    
+    private static MovieMenu movieMenu = new();
 
     public static void ShowMenu()
     {
@@ -16,11 +13,6 @@ public static class Menu
 
         while (running)
         {
-            Console.Clear();
-            if (isLogged == null)
-            {
-                Console.WriteLine("To Book a ticket make account first!");
-            }
             // User first Name and Last Name print put up in another if not to confuse the user
             if (isLogged != null)
             {
@@ -64,150 +56,92 @@ public static class Menu
             switch (input)
             {
                 case "1":
-                    Console.Clear();
+                    MovieAcces movieAcces = new();
+                    movieAcces.GetShowings(isLogged);
 
-                    Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
-                    Console.WriteLine("1 - Show all showings");
-                    Console.WriteLine("2 - Filter by genre");
-                    Console.Write("\nChoose option: ");
+                        Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
+                        Console.WriteLine("1 - Show all showings");
+                        Console.WriteLine("2 - Filter by genre");
+                        Console.Write("\nChoose option: ");
 
-                    string option = Console.ReadLine();
+                        string option = Console.ReadLine();
 
-                    if (option == "1")
-                    {
-                        Console.Clear();
-
-                        var allShowings = movieService.GetShowings(isLogged);
-
-                        Console.WriteLine("\n=== MOVIE SHOWINGS ===\n");
-
-                        foreach (var showing in allShowings)
+                        if (option == "1")
                         {
-                            Console.WriteLine(showing);
+                            movieAcces.GetShowings(isLogged);
                         }
-                    }
-                    else if (option == "2")
-                    {
-                        Console.Clear();
-                        Console.WriteLine("\nAvailable genres:");
-
-                        var genres = Enum.GetValues(typeof(MoviesGenres));
-
-                        for (int i = 0; i < genres.Length; i++)
+                        else if (option == "2")
                         {
-                            Console.WriteLine($"[{i + 1}] {genres.GetValue(i)}");
-                        }
+                            Console.WriteLine("\nAvailable genres:");
 
-                        Console.Write("\nChoose genre: ");
-
-                        if (int.TryParse(Console.ReadLine(), out int genreChoice)
-                            && genreChoice >= 1
-                            && genreChoice <= genres.Length)
-                        {
-                            MoviesGenres genre =
-                                (MoviesGenres)genres.GetValue(genreChoice - 1);
-
-                            Console.Clear();
-
-                            var genreShowings = movieService.GetShowingsByGenre(genre);
-
-                            Console.WriteLine($"\n=== SHOWINGS ({genre}) ===\n");
-
-                            foreach (var showing in genreShowings)
+                            foreach (MoviesGenres g in Enum.GetValues(typeof(MoviesGenres)))
                             {
-                                Console.WriteLine(showing);
+                                Console.WriteLine($"- {g}");
+                            }
+
+                            Console.Write("\nEnter genre: ");
+                            string genreInput = Console.ReadLine();
+
+                            if (Enum.TryParse<MoviesGenres>(genreInput, true, out var genre))
+                            {
+                                movieAcces.GetShowingsByGenre(genre);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid genre.");
                             }
                         }
                         else
                         {
-                            Console.WriteLine("Invalid genre.");
+                            Console.WriteLine("Invalid option.");
                         }
-                    }
 
-                    Pause();
-                    break;
-
+                        break;
+                    
 
                 case "2":
-
-                    var showings = movieService.GetShowings(isLogged);
-
-                    Console.WriteLine("\n=== MOVIE SHOWINGS ===\n");
-
-                    foreach (var showing in showings)
-                    {
-                        Console.WriteLine(showing);
-                    }
-
+                    //implement buy tickets movies
+                    MovieAcces movieAccess = new();
+                    movieAccess.GetShowings(isLogged);
                     Console.Write("Enter showing ID: ");
                     string choiceInput = Console.ReadLine();
+
 
                     if (!int.TryParse(choiceInput, out int choice))
                     {
                         Console.WriteLine("Please enter a valid number.");
-                        Pause();
+
                         break;
                     }
-
+                    movieAccess.PrintSeatsByShowingId(choice);
                     SeatAccess seatAccess = new();
+                    int row = Convert.ToInt32(Console.ReadLine());
+                    int col = Convert.ToInt32(Console.ReadLine());
 
-                    seatAccess.PrintSeatsByShowingId(choice);
-
-                    string seat = Console.ReadLine();
-                    int seatid = seatAccess.GetId(seat);
-
-                    if (!seatAccess.IsSeatTaken(choice, seat))
+                    if (seatAccess.ReserveSeat(row, col))
                     {
                         Console.WriteLine("Seat reserved successfully.");
+                        UserAccess user = new();
+                        user.ReserveToUser(isLogged, seatAccess.GetId(row, col), choice);
 
-                        UserService user = new();
-                        user.ReserveTicket(isLogged, seatid, choice);
+
                     }
 
-                    Pause();
                     break;
 
                 case "3":
                     //implement view booked tickets
-                    UserService user3 = new();
-                    foreach (dynamic ticket in user3.ShowTickets(isLogged.Id)) 
-                    {
-                        Console.WriteLine(ticket);
-                    }
-
-                    Pause();
+                    Console.WriteLine("View booked tickets feature coming soon...");
                     break;
 
                 case "4":
                     //implement cancel ticket
-                    UserService usercancelticket = new();
-                    foreach (dynamic ticket in usercancelticket.ShowTickets(isLogged.Id))
-                    {
-                        Console.WriteLine(ticket);
-                    }
-                    Console.WriteLine("Which ticket would you like to cancel? (enter ReservationId)");
-                    int reservationId = int.Parse(Console.ReadLine());
-                    {
-                        Console.WriteLine("Do you really want to cancel ur ticket?");
-                        string answer = Console.ReadLine();
-                        if(answer == "yes" || answer == "y") 
-                        {
-                            usercancelticket.CancelTicket(reservationId, isLogged.Id);
-                        }
-                        else 
-                        {
-                            Pause();
-                        }
-                        
-
-                    }
-                    Pause();
+                    Console.WriteLine("Cancel ticket feature coming soon...");
                     break;
 
                 case "5":
                     //implement food menu
                     Console.WriteLine("Food menu feature coming soon...");
-                    Pause();
                     break;
 
                 case "6":
@@ -215,12 +149,12 @@ public static class Menu
                     Console.WriteLine("Manage account feature coming soon...");
                     Console.WriteLine("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
                     string manageInput = Console.ReadLine();
-                    UserService userAccess = new();
+                    UserAccess userAccess = new();
                     if (manageInput == "D" || manageInput == "d")
                     {
                         // Implement delete account
 
-                        userAccess.DeleteUser(isLogged.Id);
+                        userAccess.Delete(isLogged);
                         Console.WriteLine("Your account has been deleted!");
                         isLogged = null;
                         continue;
@@ -231,7 +165,7 @@ public static class Menu
                     {
                         // Implement change password
                         string newpassword = Console.ReadLine();
-                        userAccess.ChangePassword(isLogged.Id, newpassword);
+                        userAccess.UpdatePassword(isLogged.Id, newpassword);
                     }
                     break;
                 case "R" or "r":
@@ -250,7 +184,7 @@ public static class Menu
                 case "U" or "u":
 
                     ManageUsers.Show();
-                    Pause();
+
                     break;
                 case "M" or "m":
                     if (isLogged != null &&
@@ -261,7 +195,6 @@ public static class Menu
                     else
                     {
                         Console.WriteLine("Access denied.");
-                        Pause();
                     }
                     break;
                 case "E" or "e":
@@ -271,15 +204,8 @@ public static class Menu
 
                 default:
                     Console.WriteLine("Invalid option, please try again.");
-                    Pause();
                     break;
             }
         }
-    }
-    private static void Pause()
-    {
-        Console.WriteLine("\nPress any key to continue...");
-        Console.ReadKey();
-        Console.Clear();
     }
 }

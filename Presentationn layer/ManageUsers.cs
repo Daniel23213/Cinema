@@ -2,8 +2,8 @@
 {
     public static void Show()
     {
-        UserService acess = new();
-        var users = acess.GetAllUsers();
+        UserAccess acess = new();
+        var users = acess.ShowUsers();
 
         foreach(var user in users) 
         {
@@ -16,7 +16,7 @@
         {
             if(user.Id == del_user) 
             {
-                acess.DeleteUser(user.Id);
+                acess.Delete(user);
 
             }
         }

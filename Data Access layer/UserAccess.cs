@@ -1,119 +1,84 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
+using System.Security.Principal;
 
-public class UserAccess : IUserAccess
+
+
+
+public class UserAccess
 {
-    private readonly string _connectionString =
-        "Data Source=../../../Data Source/Cinema.db";
+    private SqliteConnection _connection =
+    new("Data Source=../../../Data Source/Cinema.db");
 
-    private SqliteConnection CreateConnection()
-        => new SqliteConnection(_connectionString);
 
-    // ---------------- USERS ----------------
+    private string Table = "users";
 
-    public bool InsertUser(UserModel user)
+    public bool Write(UserModel account)
     {
-        using var conn = CreateConnection();
-        conn.Open();
 
-        string sql = @"
-            INSERT INTO users (FirstName, Lastname, Email, Password, Age)
-            VALUES (@FirstName, @LastName, @Email, @Password, @Age);
-        ";
+        int count = _connection.ExecuteScalar<int>(
+     $"SELECT COUNT(*) FROM {Table} WHERE Email = @Email",
+     new { Email = account.Email }
+ );
 
-        return conn.Execute(sql, user) > 0;
+        if (count > 0)
+        {
+            return false; // user already exists
+        }
+        string sql = $"INSERT INTO {Table} (FirstName, Lastname, Email, Password, Age ) VALUES (@FirstName, @LastName, @Email, @Password, @Age)";
+        _connection.Execute(sql, account);
+        return true;
     }
 
     public UserModel GetByEmail(string email)
     {
-        using var conn = CreateConnection();
-        conn.Open();
-
-        return conn.QueryFirstOrDefault<UserModel>(
-            "SELECT * FROM users WHERE Email = @Email",
-            new { Email = email }
-        );
+        string sql = $"SELECT * FROM {Table} WHERE email = @Email";
+        return _connection.QueryFirstOrDefault<UserModel>(sql, new { Email = email });
     }
 
-    public IEnumerable<UserModel> GetAllUsers()
+    public UserModel Login(string email, string password)
     {
-        using var conn = CreateConnection();
-        conn.Open();
-
-        return conn.Query<UserModel>("SELECT * FROM users");
+        password = UserModel.HashPassword(password);
+        string sql = $"SELECT * FROM {Table} WHERE email = @Email AND password = @Password";
+        return _connection.QueryFirstOrDefault<UserModel>(sql, new { Email = email, Password = password });
     }
 
-    public void DeleteUser(int id)
+    public void Update(UserModel account)
     {
-        using var conn = CreateConnection();
-        conn.Open();
-
-        conn.Execute("DELETE FROM users WHERE Id = @Id", new { Id = id });
+        string sql = $"UPDATE {Table} SET email = @EmailAddress, password = @Password, fullname = @FullName WHERE id = @Id";
+        _connection.Execute(sql, account);
     }
 
-    public void UpdatePassword(int id, string hashedPassword)
+    public void Delete(UserModel account)
     {
-        using var conn = CreateConnection();
-        conn.Open();
-
-        conn.Execute(
-            "UPDATE users SET Password = @Password WHERE Id = @Id",
-            new { Id = id, Password = hashedPassword }
-        );
+        string sql = $"DELETE FROM {Table} WHERE id = @Id";
+        _connection.Execute(sql, new { Id = account.Id });
+        account = null;
     }
-
-    // ---------------- RESERVATIONS ----------------
-
-    public void InsertReservation(int userId, int seatId, int showingId)
+    public IEnumerable<UserModel> ShowUsers()
     {
-        using var conn = CreateConnection();
-        conn.Open();
-
-        string sql = @"
-        INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id)
-        VALUES (@UserId, @SeatId, @ShowId);
-    ";
-
-        conn.Execute(sql, new
-        {
-            UserId = userId,
-            SeatId = seatId,
-            ShowId = showingId
-        });
+     
+        string sql = $"SELECT * FROM {Table}";
+        return _connection.Query<UserModel>(sql).ToList();
     }
 
-    public List<dynamic> GetTickets(int userId)
+    public void Delete(int  id)
     {
-        using var conn = CreateConnection();
-        conn.Open();
-
-        string sql = @"
-            SELECT 
-                r.Id AS ReservationId,
-                u.Firstname,
-                u.Lastname,
-                m.Title AS MovieTitle,
-                ms.ShowTime,
-                s.Seat
-            FROM reservation r
-            JOIN users u ON u.Id = r.Users_Id
-            JOIN movie_showings ms ON ms.Id = r.Showing_Id
-            JOIN movies m ON m.Id = ms.Movie_Id
-            JOIN seats s ON s.Id = r.Seats_Id
-            WHERE r.Users_Id = @userId;
-        ";
-
-        return conn.Query(sql, new { userId }).ToList();
+        string sql = $"DELETE FROM {Table} WHERE id = @Id";
+        _connection.Execute(sql, new { Id = id });
     }
-
-    public bool DeleteReservation(int reservationId, int userId)
+    public void UpdatePassword(int id ,string password)
     {
-        using var conn = CreateConnection();
-        conn.Open();
-
-        return conn.Execute(@"
-            DELETE FROM reservation
-            WHERE Id = @id AND Users_Id = @userId;
-        ", new { id = reservationId, userId }) > 0;
+        string sql = $"UPDATE {Table} SET  Password = @Password  WHERE id = @Id";
+        _connection.Execute(sql, new { Id = id, Password = UserModel.HashPassword(password) });
     }
+
+    public void ReserveToUser(UserModel user , int seatId, int show_id)
+    {
+        string sql = "INSERT INTO reservation (Users_Id, Seats_Id, Showing_Id) VALUES (@UserId, @SeatId, @ShowId)";
+        _connection.Execute(sql, new { UserId = user.Id, SeatId = seatId, ShowId = show_id });
+    }
+
+
+
 }

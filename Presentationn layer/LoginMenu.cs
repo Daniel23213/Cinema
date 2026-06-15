@@ -1,31 +1,27 @@
-﻿static class LoginMenu
+﻿static class LoginMenu 
 {
-   
-    public static UserModel Show()
+    public static UserModel  Show() 
     {
-        Console.Write("Email: ");
+        Console.WriteLine("\n--- Login ---");
+        Console.Write("Enter your email: ");
         string email = Console.ReadLine();
         Console.Write("Enter your password: ");
-        string password = RegisterMenu.CreateMyPasswordTextBox();
-
-        Console.WriteLine();
-
-       
-        UserService service =
-            new UserService();
-
-        UserModel user =
-            service.Login(email, password);
-
-        if (user == null)
+        string password = Console.ReadLine();
+        UserAccess accountsAccess = new();
+        if (accountsAccess.Login(email, password) != null)
         {
-            Console.WriteLine("Invalid credentials.");
+            Console.WriteLine("Login sucessfull.");
+
+            return accountsAccess.Login(email, password);
+            
+
+        }
+        else
+        {
+            Console.WriteLine("Wrong name or  password!");
             return null;
         }
 
-        Console.WriteLine("Login successful.");
-        return user;
     }
 }
-
 
