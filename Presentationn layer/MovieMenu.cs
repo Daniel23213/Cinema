@@ -367,10 +367,12 @@ public class MovieMenu
             bool isCulinary = Console.ReadLine()?.ToLower() == "y";
 
             int theaterId;
+            List<string> Alergy = [];
 
             if (isCulinary)
             {
                 theaterId = 1;
+                Alergy = Dietary();
             }
             else
             {
@@ -394,7 +396,7 @@ public class MovieMenu
             }
 
 
-            if (_service.AddMovieShowing(id, theaterId, showTime, isCulinary))
+            if (_service.AddMovieShowing(id, theaterId, showTime, isCulinary, Alergy))
             {
                 Console.WriteLine("Movie showing added!");
 

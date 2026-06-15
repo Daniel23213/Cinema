@@ -11,7 +11,8 @@ public class MovieServiceLogic : IMovieServiceLogic
         int movieId,
         int theaterId,
         DateTime showTime,
-        bool isCulinary)
+        bool isCulinary,
+        List<string> alergy)
     {
         return _repo.AddMovieShowing(
             movieId,
