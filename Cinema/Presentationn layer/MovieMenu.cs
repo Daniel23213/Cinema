@@ -23,7 +23,7 @@ public class MovieMenu
             Console.WriteLine("[E] Back");
 
             Console.Write("\nChoose: ");
-            string input = Console.ReadLine();
+            string input = UserInputValidation.NullOrEmptyValidationLoop("\nChoose: ");
 
             switch (input)
             {
@@ -92,11 +92,6 @@ public class MovieMenu
         Pause();
     }
 
-    public void ShowMovies()
-    {
-
-    }
-
     private void AssignMovie()
     {
         Console.Clear();
@@ -117,8 +112,7 @@ public class MovieMenu
 
         Console.WriteLine();
 
-        Console.Write("Enter movie ID: ");
-        string movieInput = Console.ReadLine();
+        string movieInput = UserInputValidation.NullOrEmptyValidationLoop("Enter movie ID: ");
 
         if (movieInput?.ToLower() == "b")
         {
@@ -132,8 +126,7 @@ public class MovieMenu
             return;
         }
 
-        Console.Write("Is this Culinary Cinema? (y/n): ");
-        string culinaryInput = Console.ReadLine();
+        string culinaryInput = UserInputValidation.NullOrEmptyValidationLoop("Is this Culinary Cinema? (y/n): ");
 
         if (culinaryInput?.ToLower() == "b")
         {
@@ -150,8 +143,7 @@ public class MovieMenu
         }
         else
         {
-            Console.Write("Enter theater ID: ");
-            string theaterInput = Console.ReadLine();
+            string theaterInput = UserInputValidation.NullOrEmptyValidationLoop("Enter theater ID: ");
 
             if (theaterInput?.ToLower() == "b")
             {
@@ -166,8 +158,7 @@ public class MovieMenu
             }
         }
 
-        Console.Write("Enter show time (yyyy-MM-dd HH:mm): ");
-        string showTimeInput = Console.ReadLine();
+        string showTimeInput = UserInputValidation.NullOrEmptyValidationLoop("Enter show time (yyyy-MM-dd HH:mm): ");
 
         if (showTimeInput?.ToLower() == "b")
         {
@@ -201,17 +192,18 @@ public class MovieMenu
     private void AddMovie()
     {
         Console.Clear();
-        Console.WriteLine("Enter B at any time to return to the previous menu.\n");
-        Console.Write("Enter title: ");
-        string title = Console.ReadLine();
+
+        string message = "Enter B at any time to return to the previous menu.\nEnter title: ";
+        string title = UserInputValidation.NullOrEmptyValidationLoop(message);
+
+
         if (title?.ToLower() == "b")
         {
             return;
         }
 
-        Console.Write("Enter author: ");
+        string author = UserInputValidation.NullOrEmptyValidationLoop("Enter author: ");
 
-        string author = Console.ReadLine();
         if (author?.ToLower() == "b")
         {
             return;
@@ -228,8 +220,7 @@ public class MovieMenu
             index++;
         }
 
-        Console.Write("Choose: ");
-        string genreInput = Console.ReadLine();
+        string genreInput = UserInputValidation.NullOrEmptyValidationLoop("Choose: ");
 
         if (genreInput?.ToLower() == "b")
         {
@@ -246,8 +237,7 @@ public class MovieMenu
 
         MoviesGenres genre = (MoviesGenres)genres.GetValue(choice - 1);
 
-        Console.Write("Enter duration in minutes: ");
-        string durationInput = Console.ReadLine();
+        string durationInput = UserInputValidation.NullOrEmptyValidationLoop("Enter duration in minutes: ");
 
         if (durationInput?.ToLower() == "b")
         {
@@ -263,8 +253,7 @@ public class MovieMenu
 
         TimeSpan duration = TimeSpan.FromMinutes(minutes);
 
-        Console.Write("Enter premiere date (yyyy-MM-dd): ");
-        string dateInput = Console.ReadLine();
+        string dateInput = UserInputValidation.NullOrEmptyValidationLoop("Enter premiere date (yyyy-MM-dd): ");
 
         if (dateInput?.ToLower() == "b")
         {
@@ -278,8 +267,7 @@ public class MovieMenu
             return;
         }
 
-        Console.Write("Enter Age: ");
-        string ageInput = Console.ReadLine();
+        string ageInput = UserInputValidation.NullOrEmptyValidationLoop("Enter Age: ");
 
         if (ageInput?.ToLower() == "b")
         {
@@ -298,8 +286,9 @@ public class MovieMenu
 
         Console.Clear();
         Console.WriteLine("Movie added!");
-        Console.WriteLine("Do you want to add to auditorium and time(y/n):\n");
-        string input = Console.ReadLine();
+
+        string input = UserInputValidation.NullOrEmptyValidationLoop("Do you want to add to auditorium and time(y/n):\n");
+
         if (input.ToLower() == "yes" || input.ToLower() == "y")
         {
             Console.Clear();
@@ -309,13 +298,13 @@ public class MovieMenu
 
             Console.WriteLine($"\nMovie '{title}' selected automatically (ID: {id})");
 
-            Console.WriteLine("Is this Culinary Cinema? (y/n): ");
-            bool isCulinary = Console.ReadLine()?.ToLower() == "y";
-
+            string isCulinaryString = UserInputValidation.NullOrEmptyValidationLoop("Is this Culinary Cinema? (y/n): ");
+            bool isCulinary = false;
             int theaterId;
 
-            if (isCulinary)
+            if (isCulinaryString.ToLower() == "y" || isCulinaryString.ToLower() == "yes")
             {
+                isCulinary = true;
                 theaterId = 1;
             }
             else
@@ -366,9 +355,9 @@ public class MovieMenu
         PrintMovies();
 
         Console.WriteLine();
-        Console.WriteLine("Enter B at any time to go back.\n");
-        Console.Write("Enter movie ID:");
-        string movieInput = Console.ReadLine();
+
+        string messageTime = "Enter B at any time to go back.\n" + "Enter movie ID:";
+        string movieInput = UserInputValidation.NullOrEmptyValidationLoop(messageTime);
 
         if (movieInput?.ToLower() == "b")
         {
@@ -382,15 +371,15 @@ public class MovieMenu
             return;
         }
 
-        Console.Write("New title: ");
-        string title = Console.ReadLine();
+        string title = UserInputValidation.NullOrEmptyValidationLoop("New title: ");
+
         if (title?.ToLower() == "b")
         {
             return;
         }
 
-        Console.Write("New author: ");
-        string author = Console.ReadLine();
+        string author = UserInputValidation.NullOrEmptyValidationLoop("New author: ");
+
         if (author?.ToLower() == "b")
         {
             return;
@@ -407,7 +396,8 @@ public class MovieMenu
         Console.WriteLine("[B] Back");
         Console.Write("Choose: ");
 
-        string genreInput = Console.ReadLine();
+        string messageGenre = "[B] Back" + "\n" + "Choose: ";
+        string genreInput = UserInputValidation.NullOrEmptyValidationLoop(messageGenre);
 
         if (genreInput?.ToLower() == "b")
         {
@@ -426,8 +416,7 @@ public class MovieMenu
         MoviesGenres genre =
             (MoviesGenres)genres.GetValue(genreChoice - 1);
 
-        Console.Write("New duration (minutes): ");
-        string durationInput = Console.ReadLine();
+        string durationInput = UserInputValidation.NullOrEmptyValidationLoop("New duration (minutes): ");
 
         if (durationInput?.ToLower() == "b")
         {
@@ -443,8 +432,7 @@ public class MovieMenu
 
         TimeSpan duration = TimeSpan.FromMinutes(minutes);
 
-        Console.Write("New premiere date (yyyy-MM-dd): ");
-        string dateInput = Console.ReadLine();
+        string dateInput = UserInputValidation.NullOrEmptyValidationLoop("New premiere date (yyyy-MM-dd): ");
 
         if (dateInput?.ToLower() == "b")
         {
@@ -457,8 +445,9 @@ public class MovieMenu
             Pause();
             return;
         }
-        Console.Write("Enter Age: ");
-        string ageInput = Console.ReadLine();
+
+        string ageInput = UserInputValidation.NullOrEmptyValidationLoop("Enter Age: ");
+
 
         if (ageInput?.ToLower() == "b")
         {
@@ -488,8 +477,7 @@ public class MovieMenu
 
         Console.WriteLine();
 
-        Console.Write("Enter movie ID (or B to go back): ");
-        string movieInput = Console.ReadLine();
+        string movieInput = UserInputValidation.NullOrEmptyValidationLoop("Enter movie ID (or B to go back): ");
 
         if (movieInput?.ToLower() == "b")
         {
@@ -503,8 +491,7 @@ public class MovieMenu
             return;
         }
 
-        Console.Write("Are you sure? (y/n): ");
-        string confirm = Console.ReadLine();
+        string confirm = UserInputValidation.NullOrEmptyValidationLoop("Are you sure? (y/n): ");
 
         if (confirm?.ToLower() != "y")
         {

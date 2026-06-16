@@ -5,8 +5,6 @@ public static class RegisterMenu
     {
         Console.WriteLine("\n--- Register ---");
 
-        //Console.Write("Enter your email: ");
-        //string email = Console.ReadLine();
         string email = UserInputValidation.NullOrEmptyValidationLoop("Enter your email: ");
 
         Console.Write("Enter your password: ");
@@ -14,16 +12,10 @@ public static class RegisterMenu
 
         Console.WriteLine();
 
-        //Console.Write("Enter your first name: ");
-        //string firstName = Console.ReadLine();
         string firstName = UserInputValidation.NullOrEmptyValidationLoop("Enter your first name: ");
 
-        //Console.Write("Enter your last name: ");
-        //string lastName = Console.ReadLine();
         string lastName = UserInputValidation.NullOrEmptyValidationLoop("Enter your last name: ");
 
-        //Console.Write("Enter your age: ");
-        //int  age = Convert.ToInt32(Console.ReadLine());
         int age = UserInputValidation.IntInputValidation("Enter your age");
 
         // Here you would typically call a method to create the account in the database

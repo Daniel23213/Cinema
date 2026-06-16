@@ -3,11 +3,9 @@
    
     public static UserModel Show()
     {
-        Console.Write("Email: ");
-        string email = Console.ReadLine();
+        string email = UserInputValidation.NullOrEmptyValidationLoop("Email: ");
 
-        Console.Write("Password: ");
-        string password = Console.ReadLine();
+        string password = UserInputValidation.NullOrEmptyValidationLoop("Password: ");
 
         UserService service =
             new UserService();

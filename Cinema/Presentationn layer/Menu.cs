@@ -56,10 +56,7 @@ public static class Menu
 
             //use this when UserRole will be implemented
 
-
-
-            Console.Write("Choose an option: ");
-            string input = Console.ReadLine();
+            string input = UserInputValidation.NullOrEmptyValidationLoop("Choose an option: ");
 
             switch (input)
             {
@@ -69,9 +66,8 @@ public static class Menu
                     Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
                     Console.WriteLine("1 - Show all showings");
                     Console.WriteLine("2 - Filter by genre");
-                    Console.Write("\nChoose option: ");
 
-                    string option = Console.ReadLine();
+                    string option = UserInputValidation.NullOrEmptyValidationLoop("\nChoose option: ");
 
                     if (option == "1")
                     {
@@ -139,8 +135,7 @@ public static class Menu
                         Console.WriteLine(showing);
                     }
 
-                    Console.Write("Enter showing ID: ");
-                    string choiceInput = Console.ReadLine();
+                    string choiceInput = UserInputValidation.NullOrEmptyValidationLoop("Enter showing ID: ");
 
                     if (!int.TryParse(choiceInput, out int choice))
                     {
@@ -153,7 +148,7 @@ public static class Menu
 
                     seatAccess.PrintSeatsByShowingId(choice);
 
-                    string seat = Console.ReadLine();
+                    string seat = UserInputValidation.NullOrEmptyValidationLoop("Choose a seat: ");
                     int seatid = seatAccess.GetId(seat);
 
                     if (!seatAccess.IsSeatTaken(choice, seat))
@@ -185,11 +180,11 @@ public static class Menu
                     {
                         Console.WriteLine(ticket);
                     }
-                    Console.WriteLine("Which ticket would you like to cancel? (enter ReservationId)");
-                    int reservationId = int.Parse(Console.ReadLine());
+
+                    int reservationId = UserInputValidation.IntInputValidation("Which ticket would you like to cancel? (enter ReservationId)");
                     {
-                        Console.WriteLine("Do you really want to cancel ur ticket?");
-                        string answer = Console.ReadLine();
+                        string answer = UserInputValidation.NullOrEmptyValidationLoop("Do you really want to cancel ur ticket?");
+
                         if(answer == "yes" || answer == "y") 
                         {
                             usercancelticket.CancelTicket(reservationId, isLogged.Id);
@@ -198,8 +193,6 @@ public static class Menu
                         {
                             Pause();
                         }
-                        
-
                     }
                     Pause();
                     break;
@@ -212,9 +205,8 @@ public static class Menu
 
                 case "6":
                     //implement manage account
-                    Console.WriteLine("Manage account feature coming soon...");
-                    Console.WriteLine("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
-                    string manageInput = Console.ReadLine();
+                    string manageInput = UserInputValidation.NullOrEmptyValidationLoop("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
+
                     UserService userAccess = new();
                     if (manageInput == "D" || manageInput == "d")
                     {
@@ -230,7 +222,7 @@ public static class Menu
                     else if (manageInput == "C" || manageInput == "c")
                     {
                         // Implement change password
-                        string newpassword = Console.ReadLine();
+                        string newpassword = UserInputValidation.NullOrEmptyValidationLoop("Enter the new password: ");
                         userAccess.ChangePassword(isLogged.Id, newpassword);
                     }
                     break;
