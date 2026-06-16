@@ -3,7 +3,7 @@ using Microsoft.Data.Sqlite;
 public class MovieAcces : IMovieAcces
 {
     private const string ConnectionString =
-        "Data Source=../../../Data Source/Cinema.db";
+        "Data Source=./Data Source/Cinema.db";
 
     public List<MovieModel> GetAiringMovies()
     {
@@ -149,7 +149,7 @@ public class MovieAcces : IMovieAcces
             double extraPrice = reader.GetDouble(7);
 
             string culinaryText = isCulinary
-                ? $" | Culinary Cinema (+€{extraPrice})"
+                ? $" | Culinary Cinema (+ï¿½{extraPrice})"
                 : "";
 
             int age = reader.GetInt32(2);
@@ -209,7 +209,7 @@ public class MovieAcces : IMovieAcces
             double extraPrice = reader.GetDouble(7);
 
             string culinaryText = isCulinary
-                ? $" | Culinary Cinema (+€{extraPrice})"
+                ? $" | Culinary Cinema (+ï¿½{extraPrice})"
                 : "";
 
             int age = reader.GetInt32(2);
