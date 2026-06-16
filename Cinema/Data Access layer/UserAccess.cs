@@ -4,7 +4,7 @@ using Microsoft.Data.Sqlite;
 public class UserAccess : IUserAccess
 {
     private readonly string _connectionString =
-        "Data Source=../../../Data Source/Cinema.db";
+        "Data Source=./Data Source/Cinema.db";
 
     private SqliteConnection CreateConnection()
         => new SqliteConnection(_connectionString);
@@ -94,7 +94,7 @@ public class UserAccess : IUserAccess
                 u.Lastname,
                 m.Title AS MovieTitle,
                 ms.ShowTime,
-                s.Seat
+                s.Name
             FROM reservation r
             JOIN users u ON u.Id = r.Users_Id
             JOIN movie_showings ms ON ms.Id = r.Showing_Id

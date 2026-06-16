@@ -5,9 +5,9 @@ using System.Reflection.Emit;
 public class SeatAccess
 {
     private SqliteConnection _connection =
-    new("Data Source=../../../Data Source/Cinema.db");
+    new("Data Source=./Data Source/Cinema.db");
 
-    private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
+    private const string ConnectionString = "Data Source=./Data Source/Cinema.db";
 
     public List<SeatModel> GetSeatsByTheater(int theater)
     {
@@ -20,9 +20,9 @@ public class SeatAccess
         cmd.CommandText = @"
         SELECT 
             s.Id,
-            s.Seat,
-            s.Width,
-            s.Height,
+            s.Name,
+            s.LocationRow,
+            s.LocationColumn,
             s.PricingType
         FROM 
             seats s
@@ -58,10 +58,10 @@ public class SeatAccess
 
         var command = connection.CreateCommand();
         command.CommandText = @"
-        INSERT INTO seats (Seat, IsTaken, PricingType)
-        VALUES (@Seat, @IsTaken, @PricingType)";
+        INSERT INTO seats (Name, IsTaken, PricingType)
+        VALUES (@Name, @IsTaken, @PricingType)";
 
-        command.Parameters.AddWithValue("@Seat", seatName);
+        command.Parameters.AddWithValue("@Name", seatName);
         command.Parameters.AddWithValue("@IsTaken", isTaken ? 1 : 0);
         command.Parameters.AddWithValue("@PricingType", pricingType);
 
@@ -100,7 +100,7 @@ public class SeatAccess
         command.CommandText = @"
     SELECT Id
     FROM seats
-    WHERE Seat = @seatName;
+    WHERE Name = @seatName;
     ";
 
         command.Parameters.AddWithValue("@seatName", seatName);
@@ -156,9 +156,9 @@ public class SeatAccess
         cmd.CommandText = @"
         SELECT 
             seats.Id,
-            seats.Seat,
-            seats.Width,
-            seats.Height,
+            seats.Name,
+            seats.LocationRow,
+            seats.LocationColumn,
             seats.PricingType
         FROM movie_showings
         JOIN theater_has_seats 
@@ -166,7 +166,7 @@ public class SeatAccess
         JOIN seats 
             ON theater_has_seats.Seats_Id = seats.Id
         WHERE movie_showings.Id = @id
-        ORDER BY seats.Width, seats.Height;
+        ORDER BY seats.LocationRow, seats.LocationColumn;
     ";
 
         cmd.Parameters.AddWithValue("@id", showingId);
@@ -203,11 +203,11 @@ public class SeatAccess
         FROM reservation r
         JOIN seats s ON s.Id = r.Seats_Id
         WHERE r.Showing_Id = @showingId
-        AND s.Seat = @seat;
+        AND s.Name = @name;
     ";
 
         cmd.Parameters.AddWithValue("@showingId", showingId);
-        cmd.Parameters.AddWithValue("@seat", seat);
+        cmd.Parameters.AddWithValue("@name", seat);
 
         long count = (long)cmd.ExecuteScalar();
 
