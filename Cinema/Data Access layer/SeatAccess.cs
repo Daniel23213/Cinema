@@ -156,9 +156,9 @@ public class SeatAccess
         cmd.CommandText = @"
         SELECT 
             seats.Id,
-            seats.Seat,
-            seats.Width,
-            seats.Height,
+            seats.Name,
+            seats.LocationRow,
+            seats.LocationColumn,
             seats.PricingType
         FROM movie_showings
         JOIN theater_has_seats 
@@ -166,7 +166,7 @@ public class SeatAccess
         JOIN seats 
             ON theater_has_seats.Seats_Id = seats.Id
         WHERE movie_showings.Id = @id
-        ORDER BY seats.Width, seats.Height;
+        ORDER BY seats.LocationRow, seats.LocationColumn;
     ";
 
         cmd.Parameters.AddWithValue("@id", showingId);
