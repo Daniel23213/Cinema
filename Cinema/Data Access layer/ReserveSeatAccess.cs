@@ -3,7 +3,7 @@ using Microsoft.Data.Sqlite;
 
 public class ReserveSeatAccess
 {
-    private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
+    private const string ConnectionString = "Data Source=./Data Source/Cinema.db";
 
     public int SeatReserve(int usserId, int seatId, bool isTaken)
     {
