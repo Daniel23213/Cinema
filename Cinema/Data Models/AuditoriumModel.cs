@@ -50,6 +50,7 @@ public class AuditoriumModel
                 Console.Write($"|{Diagram[i, j].Name,2}");
             }
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 
