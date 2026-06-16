@@ -20,9 +20,9 @@ public class SeatAccess
         cmd.CommandText = @"
         SELECT 
             s.Id,
-            s.Seat,
-            s.Width,
-            s.Height,
+            s.Name,
+            s.LocationRow,
+            s.LocationColumn,
             s.PricingType
         FROM 
             seats s
@@ -58,10 +58,10 @@ public class SeatAccess
 
         var command = connection.CreateCommand();
         command.CommandText = @"
-        INSERT INTO seats (Seat, IsTaken, PricingType)
-        VALUES (@Seat, @IsTaken, @PricingType)";
+        INSERT INTO seats (Name, IsTaken, PricingType)
+        VALUES (@Name, @IsTaken, @PricingType)";
 
-        command.Parameters.AddWithValue("@Seat", seatName);
+        command.Parameters.AddWithValue("@Name", seatName);
         command.Parameters.AddWithValue("@IsTaken", isTaken ? 1 : 0);
         command.Parameters.AddWithValue("@PricingType", pricingType);
 
@@ -100,7 +100,7 @@ public class SeatAccess
         command.CommandText = @"
     SELECT Id
     FROM seats
-    WHERE Seat = @seatName;
+    WHERE Name = @seatName;
     ";
 
         command.Parameters.AddWithValue("@seatName", seatName);
@@ -203,11 +203,11 @@ public class SeatAccess
         FROM reservation r
         JOIN seats s ON s.Id = r.Seats_Id
         WHERE r.Showing_Id = @showingId
-        AND s.Seat = @seat;
+        AND s.Name = @name;
     ";
 
         cmd.Parameters.AddWithValue("@showingId", showingId);
-        cmd.Parameters.AddWithValue("@seat", seat);
+        cmd.Parameters.AddWithValue("@name", seat);
 
         long count = (long)cmd.ExecuteScalar();
 
