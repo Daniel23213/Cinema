@@ -175,6 +175,8 @@ public class SeatAccess
 
         Console.WriteLine($"\n=== Seats for Showing {showingId} ===");
 
+        int currentRow = -1;
+
         while (reader.Read())
         {
             int seatId = reader.GetInt32(0);
@@ -185,12 +187,24 @@ public class SeatAccess
 
             bool taken = IsSeatTaken(showingId, seatName);
 
-            Console.WriteLine(
-                $"Seat {seatName} (Row {row}, Col {col}) | " +
-                $"{(taken ? "X Taken" : " Available")} | " +
-                $"{type}"
+            // New row → break line
+            if (row != currentRow)
+            {
+                if (currentRow != -1)
+                    Console.WriteLine(); // spacing between rows
+
+                Console.Write($"Row {row}: ");
+                currentRow = row;
+            }
+
+            Console.Write(
+                $"{seatName} {(taken ? "[X]" : "[ ]")}  "
             );
         }
+
+        Console.WriteLine();
+
+   
     }
     public bool IsSeatTaken(int showingId, string seat)
     {

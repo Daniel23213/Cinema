@@ -6,43 +6,25 @@ class db
     private const string DatabaseLoc = "../../../Data Source/Cinema.db"; // ✅ simple & reliable
     private void SeedSeats(SqliteConnection connection)
     {
-        var command = connection.CreateCommand();
-
-        var sql = new StringBuilder();
-
-        sql.AppendLine(@"
-INSERT INTO seats (Id, Seat, Width, Height, PricingType)
-VALUES");
-
-        int id = 1;
-
-        for (char row = 'A'; row <= 'T'; row++)   // 20 rows
+        for (int row = 1; row <= 5; row++)          // A-E
         {
-            for (int number = 1; number <= 25; number++)   // 25 seats per row
+            for (int col = 1; col <= 20; col++)     // 20 seats per row
             {
-                string pricingType = "normal";
+                string seatName = $"{(char)('A' + row - 1)}{col}";
 
-                // Example: make the middle seats luxe
-                if ((row >= 'H' && row <= 'M') &&
-                    (number >= 10 && number <= 16))
-                {
-                    pricingType = "luxe";
-                }
+                var command = connection.CreateCommand();
+                command.CommandText = @"
+            INSERT INTO seats (Seat, Width, Height, PricingType)
+            VALUES (@Seat, @Width, @Height, @PricingType);";
 
-                sql.Append(
-                    $"({id},'{row}{number}',1,1,'{pricingType}')");
+                command.Parameters.AddWithValue("@Seat", seatName);
+                command.Parameters.AddWithValue("@Width", col);
+                command.Parameters.AddWithValue("@Height", row);
+                command.Parameters.AddWithValue("@PricingType", "Standard");
 
-                if (id < 500)
-                    sql.AppendLine(",");
-                else
-                    sql.AppendLine(";");
-
-                id++;
+                command.ExecuteNonQuery();
             }
         }
-
-        command.CommandText = sql.ToString();
-        command.ExecuteNonQuery();
     }
     private void SeedMovies(SqliteConnection connection)
     {
