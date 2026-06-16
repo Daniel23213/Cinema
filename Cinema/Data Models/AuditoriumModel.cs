@@ -13,38 +13,44 @@ public class AuditoriumModel
         Discription = discription;
     }
 
-    public string ShowAuditoriumDiagram()
+    public void PrintAuditoriumDiagram()
     {
         SeatAccess access = new();
-        string Diagram = "";
-        string[,] Size = new string[Length, Width];
-        for (int i = 0; i < Size.GetLength(0); i++)
-        {
-            for (int j = 0; j < Size.GetLength(1); j++)
-            {
-                Size[i, j] = " ";
-            }
-        }
+        string[,] Diagram = new string[Length, Width];
         List<SeatModel> seats = access.GetSeatsByTheater(ID);
+        Console.WriteLine(seats.Count);
         foreach (SeatModel seat in seats)
         {
-            string type = seat.SeatType switch
-            {
-                "VIP" => "$",
-                "Premium" => "&",
-                _ => "#"
-            };
-            Size[seat.Coordinates.x, seat.Coordinates.y] = type;
+            Diagram[seat.Coordinates.y, seat.Coordinates.x] = seat.SeatType;
         }
-        for (int i = 0; i < Size.GetLength(0); i++)
+        Console.Write("  ");
+        for (int i = 0; i < Diagram.GetLength(1); i++)
         {
-            for (int j = 0; j < Size.GetLength(1); j++)
-            {
-                Diagram += Size[i, j];
-            }
-            Diagram += "\n";
+            Console.Write($"{i,2} ");
         }
-        return Diagram;
+        Console.WriteLine();
+        for (int i = 0; i < Diagram.GetLength(0); i++)
+        {
+            Console.Write($"{(char)('A' + i),2}");
+            for (int j = 0; j < Diagram.GetLength(1); j++)
+            {
+                
+                if (Diagram[i, j] == "VIP")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else if (Diagram[i, j] == "Premium")
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                }
+                Console.Write($"|{Diagram[i, j].Name,2}");
+            }
+            Console.WriteLine();
+        }
     }
 
     public override string ToString() => $"Auditorium ID: {ID}, Length: {Length}, Width: {Width}, Description: {Discription}";

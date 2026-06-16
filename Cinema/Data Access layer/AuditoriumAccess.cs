@@ -1,4 +1,3 @@
-using Dapper;
 using Microsoft.Data.Sqlite;
 public class AuditoriumAccess
 {
@@ -6,9 +5,22 @@ public class AuditoriumAccess
     
     public AuditoriumModel GetAuditoriumByID(int id)
     {
-        string sql = "SELECT * FROM theater WHERE id = @ID";
+        string query = "SELECT * FROM theater WHERE id = @ID";
         SqliteConnection connection = new($"Data Source={_databaseLoc}");
-        AuditoriumModel Auditorium = connection.QueryFirst<AuditoriumModel>(sql, new { @ID = id });
-        return Auditorium;
+        connection.Open();
+        using SqliteCommand command = new(query, connection);
+        command.Parameters.AddWithValue("@ID", id);
+        SqliteDataReader result = command.ExecuteReader();
+        result.Read();
+        AuditoriumModel? auditorium = new
+        (
+            Convert.ToInt32(result["Id"]),
+            Convert.ToInt32(result["Length"]),
+            Convert.ToInt32(result["Width"]),
+            Convert.ToString(result["Description"])
+            
+        );
+        connection.Close();
+        return auditorium;
     }
 }
