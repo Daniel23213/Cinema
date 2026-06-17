@@ -33,20 +33,19 @@ public class SeatAccess
         JOIN 
             theater t ON ths.Theater_Id = t.Id
         WHERE 
-            t.Id = @TheaterId";
+            t.Description = @TheaterDescription";
 
-        cmd.Parameters.AddWithValue("@TheaterId", theater);
+        cmd.Parameters.AddWithValue("@TheaterDescription", theater);
 
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
             int id = reader.GetInt32(0);
-            string name = reader.IsDBNull(1) ? "" : reader.GetString(1);
             int x = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
             int y = reader.IsDBNull(3) ? 0 : reader.GetInt32(3);
             string seatType = reader.IsDBNull(4) ? "Standard" : reader.GetString(4);
 
-            var seat = new SeatModel(id, name, x, y, seatType);
+            var seat = new SeatModel(x, y, seatType, id);
 
             seatsList.Add(seat);
         }
@@ -227,23 +226,5 @@ public class SeatAccess
         long count = (long)cmd.ExecuteScalar();
 
         return count > 0;
-    }
-    public bool IsSeatTaken(int seatId)
-    {
-        using var connection = new SqliteConnection(ConnectionString);
-        connection.Open();
-
-        var cmd = connection.CreateCommand();
-        cmd.CommandText = @"
-        SELECT IsTaken
-        FROM reservation
-        WHERE Seats_Id = @seatId
-    ";
-
-        cmd.Parameters.AddWithValue("@seatId", seatId);
-
-        object? result = cmd.ExecuteScalar();
-
-        return Convert.ToBoolean(result);
     }
 }
