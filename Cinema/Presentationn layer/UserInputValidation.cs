@@ -5,7 +5,7 @@
         string input = null;
         do
         {
-            Console.WriteLine(message);
+            Console.Write(message);
 
             input = Console.ReadLine();
         }
