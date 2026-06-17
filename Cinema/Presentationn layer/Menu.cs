@@ -146,8 +146,10 @@ public static class Menu
                     }
 
                     SeatAccess seatAccess = new();
-
-                    seatAccess.PrintSeatsByShowingId(choice);
+                    AuditoriumAccess auditoriumAccess = new();
+                    AuditoriumModel auditoriumModel = auditoriumAccess.GetAuditoriumByShowingID(int.Parse(choiceInput));
+                    auditoriumModel.PrintAuditoriumDiagram();
+                    Console.Write("Please select a seat: ");
 
                     string seat = UserInputValidation.NullOrEmptyValidationLoop("Choose a seat: ");
                     int seatid = seatAccess.GetId(seat);
