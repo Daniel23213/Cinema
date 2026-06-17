@@ -225,6 +225,10 @@ public static class Menu
                         // change password
                         string newpassword = UserInputValidation.NullOrEmptyValidationLoop("Enter the new password: ");
                         userAccess.ChangePassword(isLogged.Id, newpassword);
+
+                        Console.ReadLine();
+                        Console.WriteLine("Password changed!");
+                        Console.ReadLine();
                     }
                     break;
                 case "R":
