@@ -4,20 +4,20 @@ public static class RegisterMenu
     public static UserModel ShowRegisterMenu()
     {
         Console.WriteLine("\n--- Register ---");
-        Console.Write("Enter your email: ");
-        string email = Console.ReadLine();
+
+        string email = UserInputValidation.NullOrEmptyValidationLoop("Enter your email: ");
+
         Console.Write("Enter your password: ");
         string password = CreateMyPasswordTextBox();
- 
-        // going to the next line becuase of the method is didnt happen
+
         Console.WriteLine();
- 
-        Console.Write("Enter your first name: ");
-        string firstName = Console.ReadLine();
-        Console.Write("Enter your last name: ");
-        string lastName = Console.ReadLine();
-        Console.Write("Enter your age: ");
-        int  age = Convert.ToInt32(Console.ReadLine());
+
+        string firstName = UserInputValidation.NullOrEmptyValidationLoop("Enter your first name: ");
+
+        string lastName = UserInputValidation.NullOrEmptyValidationLoop("Enter your last name: ");
+
+        int age = UserInputValidation.IntInputValidation("Enter your age: ");
+
         // Here you would typically call a method to create the account in the database
         // For example:
         
@@ -34,7 +34,9 @@ public static class RegisterMenu
             Console.WriteLine("Email is taken!");
             return null;
         }
+        
     }
+ 
     // Vivesh code hashing input field when typing the password
     public static string CreateMyPasswordTextBox()
     {
@@ -43,6 +45,7 @@ public static class RegisterMenu
             ConsoleKeyInfo cki;
             // Prevent example from ending if CTL+C is pressed.
             Console.TreatControlCAsInput = true;
+ 
             while (true)
             {
                 cki = Console.ReadKey(true);
@@ -65,12 +68,12 @@ public static class RegisterMenu
                     Console.Write("*"); // console.write whitout line otherwise it will be going down
                 }
             }
- 
+
             // turning stuff out
             Console.TreatControlCAsInput = false;
- 
+
             return Password.ToString();
         }
     }
- 
+
 }

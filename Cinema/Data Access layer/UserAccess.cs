@@ -116,4 +116,14 @@ public class UserAccess : IUserAccess
             WHERE Id = @id AND Users_Id = @userId;
         ", new { id = reservationId, userId }) > 0;
     }
+
+    public void UpdateRole(int id, string role)
+    {
+        using var conn = CreateConnection();
+        conn.Open();
+
+        conn.Execute(
+            "UPDATE users SET Role = @Role WHERE Id = @Id",
+            new { Id = id, Role = role });
+    }
 }

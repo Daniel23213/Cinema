@@ -26,14 +26,14 @@ public static class Menu
             {
                 Console.WriteLine($"Logged in as: {isLogged.FirstName} {isLogged.LastName}");
             }
-            Console.WriteLine("\n[1]: Airing movies");
+            Console.WriteLine("\n[A]: Airing movies");
             if (isLogged != null)
             {
 
-                Console.WriteLine("[2]: Buy tickets");
-                Console.WriteLine("[4]: Cancel tickets");
-                Console.WriteLine("[3]: Booked tickets");
-                Console.WriteLine("[6]: Manage account");
+                Console.WriteLine("[B]: Buy tickets");
+                Console.WriteLine("[C]: Cancel tickets");
+                Console.WriteLine("[T]: Booked tickets");
+                Console.WriteLine("[O]: Manage account");
                 if (isLogged.Role == "Admin" || isLogged.Role == "SuperManager")
                 {
                     Console.WriteLine("[M]: Manage movies");
@@ -45,7 +45,7 @@ public static class Menu
                 }
 
             }
-            Console.WriteLine("[5]: Food menu");
+            Console.WriteLine("[F]: Food menu");
 
             Console.WriteLine("[E]: Exit");
             if (isLogged == null)
@@ -56,24 +56,21 @@ public static class Menu
 
             //use this when UserRole will be implemented
 
+            string input = UserInputValidation.NullOrEmptyValidationLoop("Choose an option: ");
 
-
-            Console.Write("Choose an option: ");
-            string input = Console.ReadLine();
-
-            switch (input)
+            switch (input.ToUpper())
             {
-                case "1":
+                case "A":
+                    // Airing Movies
                     Console.Clear();
 
                     Console.WriteLine("\n=== AIRING MOVIES / SHOWINGS ===");
-                    Console.WriteLine("1 - Show all showings");
-                    Console.WriteLine("2 - Filter by genre");
-                    Console.Write("\nChoose option: ");
+                    Console.WriteLine("A - Show all showings");
+                    Console.WriteLine("F - Filter by genre");
 
-                    string option = Console.ReadLine();
+                    string option = UserInputValidation.NullOrEmptyValidationLoop("\nChoose option: ");
 
-                    if (option == "1")
+                    if (option == "A")
                     {
                         Console.Clear();
 
@@ -86,7 +83,7 @@ public static class Menu
                             Console.WriteLine(showing);
                         }
                     }
-                    else if (option == "2")
+                    else if (option == "F")
                     {
                         Console.Clear();
                         Console.WriteLine("\nAvailable genres:");
@@ -127,8 +124,8 @@ public static class Menu
                     Pause();
                     break;
 
-
-                case "2":
+                case "B":
+                    // Buy Ticket
 
                     var showings = movieService.GetShowings(isLogged);
 
@@ -139,8 +136,7 @@ public static class Menu
                         Console.WriteLine(showing);
                     }
 
-                    Console.Write("Enter showing ID: ");
-                    string choiceInput = Console.ReadLine();
+                    string choiceInput = UserInputValidation.NullOrEmptyValidationLoop("Enter showing ID: ");
 
                     if (!int.TryParse(choiceInput, out int choice))
                     {
@@ -153,7 +149,7 @@ public static class Menu
 
                     seatAccess.PrintSeatsByShowingId(choice);
 
-                    string seat = Console.ReadLine();
+                    string seat = UserInputValidation.NullOrEmptyValidationLoop("Choose a seat: ");
                     int seatid = seatAccess.GetId(seat);
 
                     if (!seatAccess.IsSeatTaken(choice, seat))
@@ -167,8 +163,8 @@ public static class Menu
                     Pause();
                     break;
 
-                case "3":
-                    //implement view booked tickets
+                case "T":
+                    // view booked tickets
                     UserService user3 = new();
                     foreach (dynamic ticket in user3.ShowTickets(isLogged.Id)) 
                     {
@@ -178,18 +174,18 @@ public static class Menu
                     Pause();
                     break;
 
-                case "4":
-                    //implement cancel ticket
+                case "C":
+                    // cancel ticket
                     UserService usercancelticket = new();
                     foreach (dynamic ticket in usercancelticket.ShowTickets(isLogged.Id))
                     {
                         Console.WriteLine(ticket);
                     }
-                    Console.WriteLine("Which ticket would you like to cancel? (enter ReservationId)");
-                    int reservationId = int.Parse(Console.ReadLine());
+
+                    int reservationId = UserInputValidation.IntInputValidation("Which ticket would you like to cancel? (enter ReservationId)");
                     {
-                        Console.WriteLine("Do you really want to cancel ur ticket?");
-                        string answer = Console.ReadLine();
+                        string answer = UserInputValidation.NullOrEmptyValidationLoop("Do you really want to cancel ur ticket?").ToLower();
+
                         if(answer == "yes" || answer == "y") 
                         {
                             usercancelticket.CancelTicket(reservationId, isLogged.Id);
@@ -198,23 +194,20 @@ public static class Menu
                         {
                             Pause();
                         }
-                        
-
                     }
                     Pause();
                     break;
 
-                case "5":
-                    //implement food menu
+                case "F":
+                    // food menu
                     Console.WriteLine("Food menu feature coming soon...");
                     Pause();
                     break;
 
-                case "6":
+                case "O":
                     //implement manage account
-                    Console.WriteLine("Manage account feature coming soon...");
-                    Console.WriteLine("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
-                    string manageInput = Console.ReadLine();
+                    string manageInput = UserInputValidation.NullOrEmptyValidationLoop("You can change your password, or delete your account.\n Choose an Option\n[D]: Delete Account\n[C]: Change Password\n");
+
                     UserService userAccess = new();
                     if (manageInput == "D" || manageInput == "d")
                     {
@@ -230,29 +223,37 @@ public static class Menu
                     else if (manageInput == "C" || manageInput == "c")
                     {
                         // Implement change password
-                        string newpassword = Console.ReadLine();
+                        // add hashing when changing the passwo
+                        Console.Write("Enter the new password(Must be atleast 6 characters long): ");
+                        string newpassword = RegisterMenu.CreateMyPasswordTextBox();
+
                         userAccess.ChangePassword(isLogged.Id, newpassword);
+
+                        Console.ReadLine();
+                        Console.WriteLine("Password changed!");
+                        Console.ReadLine();
                     }
                     break;
-                case "R" or "r":
+                    break;
+                case "R":
                     //Register sysyem
 
                     isLogged = RegisterMenu.ShowRegisterMenu();
 
 
                     break;
-                case "L" or "l":
+                case "L":
                     //login sysyem
 
                     isLogged = LoginMenu.Show();
 
                     break;
-                case "U" or "u":
+                case "U":
 
-                    ManageUsers.Show();
+                    ManageUsers.Show(isLogged);
                     Pause();
                     break;
-                case "M" or "m":
+                case "M":
                     if (isLogged != null &&
                         (isLogged.Role == "Admin" || isLogged.Role == "SuperManager"))
                     {
@@ -264,7 +265,7 @@ public static class Menu
                         Pause();
                     }
                     break;
-                case "E" or "e":
+                case "E":
                     Console.WriteLine("Exiting...");
                     running = false;
                     break;
