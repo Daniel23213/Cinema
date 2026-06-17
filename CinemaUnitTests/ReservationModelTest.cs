@@ -7,7 +7,7 @@ namespace ReservationSystem.Tests
     public class ReservationModelTests
     {
         [TestMethod]
-        public void MakeSeatTaken_WhenCalled_SetsIsTakenToTrue()
+        public void MakeSeatTaken()
         {
             var reservation = new ReservationModel();
             var seat = new SeatModel { ID = 10 };
@@ -19,7 +19,7 @@ namespace ReservationSystem.Tests
         }
 
         [TestMethod]
-        public void SeatAvailble_WhenSeatIsAlreadyTaken_ReturnsTakenMessage()
+        public void SeatAvailble()
         {
             var reservation = new ReservationModel();
             var seat = new SeatModel { ID = 5 };
