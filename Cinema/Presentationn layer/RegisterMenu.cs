@@ -16,7 +16,7 @@ public static class RegisterMenu
 
         string lastName = UserInputValidation.NullOrEmptyValidationLoop("Enter your last name: ");
 
-        int age = UserInputValidation.IntInputValidation("Enter your age");
+        int age = UserInputValidation.IntInputValidation("Enter your age: ");
 
         // Here you would typically call a method to create the account in the database
         // For example:
