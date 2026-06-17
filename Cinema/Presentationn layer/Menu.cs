@@ -218,7 +218,28 @@ public static class Menu
 
                 case "5":
                     //implement food menu
-                    Console.WriteLine("Food menu feature coming soon...");
+                    string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                    string filepath = Path.Combine(baseDirectory, "Data Source", "BarLoungeMenu.json");
+
+                    try
+                    {
+                        string filename = Path.GetFileName(filepath);
+
+                        Console.Clear();
+                        Console.WriteLine($"=== Here is the the Bar & Lounge menu ===");
+
+                        string loungeMenu = File.ReadAllText(filepath);
+                        Console.WriteLine(loungeMenu);
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        Console.WriteLine("Json file is not found");
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine($"Something went wrong {e.Message}");
+                    }
+
                     Pause();
                     break;
 
