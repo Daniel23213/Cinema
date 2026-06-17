@@ -45,7 +45,10 @@
     public void ChangePassword(int id, string newPassword)
     {
         if (newPassword.Length < 6)
-            throw new Exception("Password too short");
+        {
+            Console.WriteLine("Password too short");
+            return;
+        }           
 
         _db.UpdatePassword(id, UserModel.HashPassword(newPassword));
     }

@@ -196,28 +196,39 @@ public static class Menu
                 case "C":
                     // cancel ticket
                     UserService usercancelticket = new();
-                    foreach (dynamic ticket in usercancelticket.ShowTickets(isLogged.Id))
+
+                    var tickets = usercancelticket.ShowTickets(isLogged.Id);
+
+                    if (tickets == null || !tickets.Any())
+                    {
+                        Console.WriteLine("No tickets found.");
+                        Pause();
+                        break;
+                    }
+
+                    foreach (var ticket in tickets)
                     {
                         Console.WriteLine(ticket);
                     }
 
-                    int reservationId = UserInputValidation.IntInputValidation("Which ticket would you like to cancel? (enter ReservationId)");
-                    {
-                        string answer = UserInputValidation.NullOrEmptyValidationLoop("Do you really want to cancel ur ticket?").ToLower();
+                    int reservationId = UserInputValidation.IntInputValidation(
+                        "Which ticket would you like to cancel? (enter ReservationId)");
 
-                        if(answer == "yes" || answer == "y") 
-                        {
-                            usercancelticket.CancelTicket(reservationId, isLogged.Id);
-                        }
-                        else 
-                        {
-                            Pause();
-                        }
+                    string answer = UserInputValidation
+                        .NullOrEmptyValidationLoop("Do you really want to cancel your ticket?")
+                        .ToLower();
+
+                    if (answer == "yes" || answer == "y")
+                    {
+                        usercancelticket.CancelTicket(reservationId, isLogged.Id);
                     }
+
                     Pause();
+
+
                     break;
 
-                case "5":
+                case "F":
                     //implement food menu
                     string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                     string filepath = Path.Combine(baseDirectory, "Data Source", "BarLoungeMenu.json");
