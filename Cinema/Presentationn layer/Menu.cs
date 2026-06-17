@@ -205,8 +205,8 @@ public static class Menu
                     break;
 
                 case "O":
-                    // manage account
-                    string manageInput = UserInputValidation.NullOrEmptyValidationLoop("You can change your password, or delete your account.\n Choose an Option \n Delete Account - D \n Change Password - C");
+                    //implement manage account
+                    string manageInput = UserInputValidation.NullOrEmptyValidationLoop("You can change your password, or delete your account.\n Choose an Option\n[D]: Delete Account\n[C]: Change Password\n");
 
                     UserService userAccess = new();
                     if (manageInput == "D" || manageInput == "d")
@@ -222,14 +222,18 @@ public static class Menu
                     }
                     else if (manageInput == "C" || manageInput == "c")
                     {
-                        // change password
-                        string newpassword = UserInputValidation.NullOrEmptyValidationLoop("Enter the new password: ");
+                        // Implement change password
+                        // add hashing when changing the passwo
+                        Console.Write("Enter the new password(Must be atleast 6 characters long): ");
+                        string newpassword = RegisterMenu.CreateMyPasswordTextBox();
+
                         userAccess.ChangePassword(isLogged.Id, newpassword);
 
                         Console.ReadLine();
                         Console.WriteLine("Password changed!");
                         Console.ReadLine();
                     }
+                    break;
                     break;
                 case "R":
                     //Register sysyem
