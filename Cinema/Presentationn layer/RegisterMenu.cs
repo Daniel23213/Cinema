@@ -20,6 +20,7 @@ public static class RegisterMenu
 
         // Here you would typically call a method to create the account in the database
         // For example:
+        
         UserModel newAccount = new(firstName, lastName, email, password, age);
         UserService accountsAccess = new();
         if(accountsAccess.Register(newAccount)== true) 
