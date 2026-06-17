@@ -4,6 +4,7 @@ public class MovieAcces : IMovieAcces
 {
     private const string ConnectionString =
         "Data Source=../../../Data Source/Cinema.db";
+        //@"Data Source=C:\Cinema\Cinema\cinema\Data Source\Cinema.db"; //vivesh db path
 
     public List<MovieModel> GetAiringMovies()
     {
@@ -149,7 +150,7 @@ public class MovieAcces : IMovieAcces
             double extraPrice = reader.GetDouble(7);
 
             string culinaryText = isCulinary
-                ? $" | Culinary Cinema (+€{extraPrice})"
+                ? $" | Culinary Cinema (+ï¿½{extraPrice})"
                 : "";
 
             int age = reader.GetInt32(2);
@@ -209,7 +210,7 @@ public class MovieAcces : IMovieAcces
             double extraPrice = reader.GetDouble(7);
 
             string culinaryText = isCulinary
-                ? $" | Culinary Cinema (+€{extraPrice})"
+                ? $" | Culinary Cinema (+ï¿½{extraPrice})"
                 : "";
 
             int age = reader.GetInt32(2);

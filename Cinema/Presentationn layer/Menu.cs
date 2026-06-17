@@ -157,6 +157,25 @@ public static class Menu
 
                         UserService user = new();
                         user.ReserveTicket(isLogged, seatid, choice);
+
+                        Console.WriteLine("\n=== Proceed to culinary options ===");
+                        Pause();
+
+                        ReservationModel reserve = new ReservationModel();
+                        List<String> Alergy = reserve.Dietary();
+
+                        if(Alergy.Count > 0)
+                        {
+                            Console.WriteLine("Saved dietary options");
+                            foreach(var item in Alergy)
+                            {
+                                Console.WriteLine($"- {item}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nothing is selected");
+                        }
                     }
 
                     Pause();

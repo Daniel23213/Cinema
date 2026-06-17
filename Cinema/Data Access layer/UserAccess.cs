@@ -5,6 +5,7 @@ public class UserAccess : IUserAccess
 {
     private readonly string _connectionString =
         "Data Source=../../../Data Source/Cinema.db";
+        //@"Data Source=C:\Cinema\Cinema\cinema\Data Source\Cinema.db";
 
     private SqliteConnection CreateConnection()
         => new SqliteConnection(_connectionString);
