@@ -15,39 +15,38 @@ public class MovieMenu
         {
             Console.Clear();
             Console.WriteLine("\nManage Movies\n");
-            Console.WriteLine("[1] Show Movies");
-            Console.WriteLine("[2] Add Movie");
-            Console.WriteLine("[3] Update Movie");
-            Console.WriteLine("[4] Delete Movie");
-            Console.WriteLine("[5] Assign a movie");
+            Console.WriteLine("[S] Show Movies");
+            Console.WriteLine("[A] Add Movie");
+            Console.WriteLine("[U] Update Movie");
+            Console.WriteLine("[D] Delete Movie");
+            Console.WriteLine("[M] Assign a movie");
             Console.WriteLine("[E] Back");
 
             Console.Write("\nChoose: ");
             string input = UserInputValidation.NullOrEmptyValidationLoop("\nChoose: ");
 
-            switch (input)
+            switch (input.ToUpper())
             {
-                case "1":
+                case "S":
                     GetAiringMovies();
                     break;
 
-                case "2":
+                case "A":
                     AddMovie();
                     break;
 
-                case "3":
+                case "U":
                     UpdateMovie();
                     break;
 
-                case "4":
+                case "D":
                     DeleteMovie();
                     break;
-                case "5":
+                case "M":
                     AssignMovie();
                     break;
 
                 case "E":
-                case "e":
                     managing = false;
                     break;
 
