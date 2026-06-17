@@ -154,7 +154,7 @@ public static class Menu
                     AuditoriumAccess auditoriumAccess = new();
                     AuditoriumModel auditoriumModel = auditoriumAccess.GetAuditoriumByID(1);
                     auditoriumModel.PrintAuditoriumDiagram();
-                    Console.WriteLine("Please select a seat: ");
+                    Console.Write("Please select a seat: ");
 
                     string seat = Console.ReadLine();
                     int seatid = seatAccess.GetId(seat);
