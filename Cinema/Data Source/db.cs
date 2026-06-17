@@ -4,6 +4,7 @@ using System.Text;
 class db
 {
     private const string DatabaseLoc = "../../../Data Source/Cinema.db"; // ✅ simple & reliable
+    //private const string DatabaseLoc = @"C:\Cinema\Cinema\Cinema\Data Source\Cinema.db"; //vivesh db path
     private void SeedSeats(SqliteConnection connection)
     {
         var command = connection.CreateCommand();

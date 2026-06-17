@@ -61,14 +61,17 @@ public static class RegisterMenu
                         Console.Write("\b \b");
                     }
                 }
-                else if(!char.IsControl(cki.KeyChar)) //char.IsControl() check if its not arrow button or escape button
+                //char.IsControl() check if its not arrow button or escape button
+                else if(!char.IsControl(cki.KeyChar)) 
                 {
                     Password.Append(cki.KeyChar);
-                    Console.Write("*"); // console.write whitout line otherwise it will be going down
+
+                    // console.write whitout line otherwise it will be going down
+                    Console.Write("*");
                 }
             }
 
-            // turning stuff out
+            // turning hashing off
             Console.TreatControlCAsInput = false;
 
             return Password.ToString();
