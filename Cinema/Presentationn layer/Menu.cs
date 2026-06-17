@@ -241,7 +241,7 @@ public static class Menu
                     break;
                 case "U" or "u":
 
-                    ManageUsers.Show();
+                    ManageUsers.Show(isLogged);
                     Pause();
                     break;
                 case "M" or "m":
