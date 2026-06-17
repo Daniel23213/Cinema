@@ -187,24 +187,22 @@ public class SeatAccess
 
             bool taken = IsSeatTaken(showingId, seatName);
 
-            // New row → break line
             if (row != currentRow)
             {
-                if (currentRow != -1)
-                    Console.WriteLine(); // spacing between rows
-
-                Console.Write($"Row {row}: ");
+                if (currentRow != -1) Console.WriteLine();
+                // {row, -2} ensures "1" and "10" take the same space
+                Console.Write($"Row {row,-2}: ");
                 currentRow = row;
             }
 
-            Console.Write(
-                $"{seatName} {(taken ? "[X]" : "[ ]")}  "
-            );
+            string status = taken ? "[X]" : "[ ]";
+
+            // Column 1: The Seat Name (Fixed width of 4, left-aligned)
+            // Column 2: The Status (Fixed width of 4, left-aligned)
+            Console.Write($"{seatName,-4}{status,-4} ");
         }
 
         Console.WriteLine();
-
-   
     }
     public bool IsSeatTaken(int showingId, string seat)
     {
