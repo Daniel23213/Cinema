@@ -151,10 +151,10 @@ public static class Menu
 
                     SeatAccess seatAccess = new();
 
-                    seatAccess.PrintSeatsByShowingId(choice);
-                    //AuditoriumAccess auditoriumAccess = new();
-                    //AuditoriumModel auditoriumModel = auditoriumAccess.GetAuditoriumByID(1);
-                    //auditoriumModel.PrintAuditoriumDiagram();
+                    AuditoriumAccess auditoriumAccess = new();
+                    AuditoriumModel auditoriumModel = auditoriumAccess.GetAuditoriumByID(1);
+                    auditoriumModel.PrintAuditoriumDiagram();
+                    Console.WriteLine("Please select a seat: ");
 
                     string seat = Console.ReadLine();
                     int seatid = seatAccess.GetId(seat);

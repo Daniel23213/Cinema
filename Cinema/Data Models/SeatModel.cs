@@ -18,13 +18,14 @@
             _coordinates = value;
         }
     }
-    public string Theater { get; set; }
+    public string Name { get; set; }
 
-    public SeatModel(int x, int y, string seatType, int id)
+    public SeatModel(int id, string name, int x, int y, string seatType)
     {
         ID = id;
         Coordinates = (x, y);
         SeatType = seatType;
+        Name = name;
 
         // have to adjust db and methods for now remove the price
         //Price = PriceCalculatorLogic.GetPrice(seatType);
@@ -34,7 +35,7 @@
 
     public override string ToString()
     {
-        return $"ID: {ID}\nTheater: {Theater}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
+        return $"ID: {ID}\nName: {Name}\nSeatType: {SeatType}\nCoordinates: {_coordinates}\nPrice: {Price}";
     }
 
     public bool Equals(SeatModel? other)
@@ -43,7 +44,7 @@
 
         return this._coordinates == other._coordinates
             && this.Price == other.Price
-            && this.Theater == other.Theater
+            && this.Name == other.Name
             && this.SeatType == other.SeatType;
     }
 
@@ -56,6 +57,6 @@
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(_coordinates, Price, Theater, SeatType);
+        return HashCode.Combine(_coordinates, Price, Name, SeatType);
     }
 }

@@ -15,8 +15,8 @@ public class AuditoriumAccess
         AuditoriumModel? auditorium = new
         (
             Convert.ToInt32(result["Id"]),
-            Convert.ToInt32(result["Length"]),
             Convert.ToInt32(result["Width"]),
+            Convert.ToInt32(result["Length"]),
             Convert.ToString(result["Description"])
             
         );

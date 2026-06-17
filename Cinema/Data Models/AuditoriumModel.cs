@@ -5,7 +5,7 @@ public class AuditoriumModel
     public int Width { get; }
     public string Discription { get; }
     
-    public AuditoriumModel(int id, int length, int width, string discription)
+    public AuditoriumModel(int id, int width, int length, string discription)
     {
         ID = id;
         Length = length;
@@ -16,42 +16,58 @@ public class AuditoriumModel
     public void PrintAuditoriumDiagram()
     {
         SeatAccess access = new();
-        string[,] Diagram = new string[Length, Width];
+        SeatModel[,] diagram = new SeatModel[Length + 1, Width + 1];
         List<SeatModel> seats = access.GetSeatsByTheater(ID);
-        Console.WriteLine(seats.Count);
+
+        // Assign seat to location
         foreach (SeatModel seat in seats)
         {
-            Diagram[seat.Coordinates.y, seat.Coordinates.x] = seat.SeatType;
+            diagram[seat.Coordinates.x, seat.Coordinates.y] = seat;
         }
-        Console.Write("  ");
-        for (int i = 0; i < Diagram.GetLength(1); i++)
+
+        // Print header numbers
+        Console.Write("   ");
+        for (int i = 1; i < diagram.GetLength(1); i++)
         {
-            Console.Write($"{i,2} ");
+            Console.Write($" {i,3}");
         }
         Console.WriteLine();
-        for (int i = 0; i < Diagram.GetLength(0); i++)
+
+        // Print auditorium
+        SeatModel? currentSeat;
+        for (int i = diagram.GetLength(0) - 1; i > 0; i--)
         {
-            Console.Write($"{(char)('A' + i),2}");
-            for (int j = 0; j < Diagram.GetLength(1); j++)
+            Console.Write($"{(char)('A' + i - 1),2} ");
+            for (int j = 1; j < diagram.GetLength(1); j++)
             {
-                
-                if (Diagram[i, j] == "VIP")
+                Console.Write("|");
+                currentSeat = diagram[i, j];
+                if (currentSeat is null)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("   ");
+                    continue;
                 }
-                else if (Diagram[i, j] == "Premium")
+                if (access.IsSeatTaken(currentSeat.ID))
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.Write($"{"X",3}");
+                    continue;
                 }
-                else
+                Console.ForegroundColor = currentSeat.SeatType switch
                 {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                }
-                Console.Write($"|{Diagram[i, j].Name,2}");
+                    "luxe plus" => ConsoleColor.Red,
+                    "luxe" => ConsoleColor.Yellow,
+                    _ => ConsoleColor.Blue
+                };
+                Console.Write($"{currentSeat.Name,3}");
+                Console.ForegroundColor = ConsoleColor.White;
             }
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.White;
         }
+        Console.WriteLine("Grey Seats: Unavaliable");
+        Console.WriteLine("Red Seats: VIP");
+        Console.WriteLine("Yellow Seats: Premium");
+        Console.WriteLine("Blue Seats: Standard");
     }
 
     public override string ToString() => $"Auditorium ID: {ID}, Length: {Length}, Width: {Width}, Description: {Discription}";
