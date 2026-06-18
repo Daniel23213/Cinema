@@ -1,4 +1,4 @@
-﻿
+﻿Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 db db = new();
 db.InitializeDatabase();
