@@ -67,6 +67,9 @@ public class UserAccess : IUserAccess
 
     public void InsertReservation(int userId, int seatId, int showingId)
     {
+        Console.WriteLine($"DEBUG: Attempting to insert -> User: {userId}, Seat: {seatId}, Showing: {showingId}");
+        Console.ReadLine();
+
         using var conn = CreateConnection();
         conn.Open();
 

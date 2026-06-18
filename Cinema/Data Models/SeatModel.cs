@@ -20,16 +20,14 @@
     }
     public string Theater { get; set; }
 
-    public SeatModel(int x, int y, string seatType, int id)
+    // Update your constructor to accept theater name
+    public SeatModel(int x, int y, string seatType, int id, string theater)
     {
         ID = id;
         Coordinates = (x, y);
         SeatType = seatType;
-
-        // have to adjust db and methods for now remove the price
-        //Price = PriceCalculatorLogic.GetPrice(seatType);
+        Theater = theater; // Add this!
         Price = 1;
-        ID = id;
     }
 
     public override string ToString()

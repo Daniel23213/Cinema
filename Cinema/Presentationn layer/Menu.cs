@@ -150,7 +150,10 @@ public static class Menu
 
                     SeatAccess seatAccess = new();
 
-                    seatAccess.PrintSeatsByShowingId(choice);
+                    //seatAccess.PrintSeatsByShowingId(choice);
+                    AuditoriumAccess auditoriumAccess = new();
+                    AuditoriumModel auditoriumModel = auditoriumAccess.GetAuditoriumByShowingID(int.Parse(choiceInput));
+                    auditoriumModel.PrintAuditoriumDiagram();
 
                     string seat = UserInputValidation.NullOrEmptyValidationLoop("Choose a seat (or B to back): "); // Added option
 

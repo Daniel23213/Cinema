@@ -1,32 +1,72 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Dapper;
+using Microsoft.Data.Sqlite;
 using System.Text;
 
 class db
 {
-    private const string DatabaseLoc = "../../../Data Source/Cinema.db"; // ✅ simple & reliable
-    //private const string DatabaseLoc = @"C:\Cinema\Cinema\Cinema\Data Source\Cinema.db"; //vivesh db path
-    private void SeedSeats(SqliteConnection connection)
+    private const string DatabaseLoc = "../../../Data Source/Cinema.db";
+
+    private string SeatCSV => FindFile("Seats.csv");
+    private string TheaterHasSeatsCSV => FindFile("theater_has_seats.csv");
+
+
+private void SeedSeats(SqliteConnection connection)
+{
+    Console.WriteLine($"DEBUG: Attempting to open file at: {Path.GetFullPath(SeatCSV)}");
+
+    if (!File.Exists(SeatCSV)) {
+        Console.WriteLine("CRITICAL: File does not exist at that path!");
+        return;
+    }
+
+    var command = connection.CreateCommand();
+    command.CommandText = "INSERT INTO seats (Id, Seat, Width, Height, PricingType) VALUES (@Id, @Seat, @Width, @Height, @PricingType)";
+
+    using var transaction = connection.BeginTransaction();
+    command.Transaction = transaction;
+
+    int lineCount = 0;
+    try
     {
-        for (int row = 1; row <= 5; row++)          // A-E
+        using (StreamReader reader = new StreamReader(SeatCSV))
         {
-            for (int col = 1; col <= 20; col++)     // 20 seats per row
+            string? header = reader.ReadLine();
+            Console.WriteLine($"DEBUG: Header read as: {header}");
+
+            string? line;
+            while ((line = reader.ReadLine()) != null)
             {
-                string seatName = $"{(char)('A' + row - 1)}{col}";
+                if (string.IsNullOrWhiteSpace(line)) continue;
 
-                var command = connection.CreateCommand();
-                command.CommandText = @"
-            INSERT INTO seats (Seat, Width, Height, PricingType)
-            VALUES (@Seat, @Width, @Height, @PricingType);";
+                string[] s = line.Split(',');
+                
+                // FORCE: This will tell us if your comma separation is working
+                if (s.Length < 5) {
+                    Console.WriteLine($"DEBUG: Skipping line (Only {s.Length} columns found): {line}");
+                    continue;
+                }
 
-                command.Parameters.AddWithValue("@Seat", seatName);
-                command.Parameters.AddWithValue("@Width", col);
-                command.Parameters.AddWithValue("@Height", row);
-                command.Parameters.AddWithValue("@PricingType", "Standard");
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@Id", s[0].Trim());
+                command.Parameters.AddWithValue("@Seat", $"{s[1].Trim()}-{s[2].Trim()}");
+                command.Parameters.AddWithValue("@Width", s[2].Trim());
+                command.Parameters.AddWithValue("@Height", s[1].Trim());
+                command.Parameters.AddWithValue("@PricingType", s[4].Trim());
 
                 command.ExecuteNonQuery();
+                lineCount++;
             }
         }
+        transaction.Commit();
+        Console.WriteLine($"SUCCESS: Seeded {lineCount} rows.");
     }
+    catch (Exception ex)
+    {
+        transaction.Rollback();
+        Console.WriteLine($"FATAL ERROR in SeedSeats: {ex.Message}");
+    }
+}
+
     private void SeedMovies(SqliteConnection connection)
     {
         var command = connection.CreateCommand();
@@ -67,7 +107,6 @@ class db
 
         command.ExecuteNonQuery();
     }
-
     private void SeedMovieShowings(SqliteConnection connection)
     {
         var command = connection.CreateCommand();
@@ -112,20 +151,19 @@ class db
 
         command.ExecuteNonQuery();
     }
-
     public void InitializeDatabase()
     {
         using var connection = new SqliteConnection($"Data Source={DatabaseLoc}");
         connection.Open();
+        DiagnoseDatabase(connection); // <--- Add this
+        Console.ReadLine();
 
-        // Enable foreign keys
         using (var pragma = connection.CreateCommand())
         {
             pragma.CommandText = "PRAGMA foreign_keys = ON;";
             pragma.ExecuteNonQuery();
         }
 
-        // USERS
         string usersTable = @"
         CREATE TABLE IF NOT EXISTS users (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -137,7 +175,6 @@ class db
             Role TEXT
         );";
 
-        // MOVIES
         string moviesTable = @"
         CREATE TABLE IF NOT EXISTS movies (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -149,14 +186,14 @@ class db
             Age INTEGER NOT NULL
         );";
 
-        // THEATER
         string theaterTable = @"
         CREATE TABLE IF NOT EXISTS theater (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Description TEXT NOT NULL
+            Description TEXT NOT NULL,
+            Width INTEGER,
+            Length INTEGER
         );";
 
-        // MOVIE SHOWINGS
         string movieShowingsTable = @"
         CREATE TABLE IF NOT EXISTS movie_showings (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -171,7 +208,6 @@ class db
             FOREIGN KEY (Theater_Id) REFERENCES theater(Id)
         );";
 
-        // SEATS
         string seatsTable = @"
         CREATE TABLE IF NOT EXISTS seats (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -181,7 +217,6 @@ class db
             PricingType TEXT
         );";
 
-        // THEATER_HAS_SEATS
         string theaterSeatsTable = @"
         CREATE TABLE IF NOT EXISTS theater_has_seats (
             Theater_Id INTEGER,
@@ -193,7 +228,6 @@ class db
             FOREIGN KEY (Seats_Id) REFERENCES seats(Id)
         );";
 
-        // RESERVATIONS
         string reservationTable = @"
         CREATE TABLE IF NOT EXISTS reservation (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -207,7 +241,6 @@ class db
             FOREIGN KEY (Showing_Id) REFERENCES movie_showings(Id)
         );";
 
-        // Create tables
         Execute(connection, usersTable);
         Execute(connection, moviesTable);
         Execute(connection, theaterTable);
@@ -223,23 +256,48 @@ class db
 
         if (count == 0)
         {
+            Console.WriteLine("Starting seed sequence...");
+
             try
             {
+                Console.WriteLine("Attempting to seed Theaters...");
                 SeedTheaters(connection);
-                SeedMovies(connection);
-                SeedMovieShowings(connection);
-                SeedSeats(connection);
-                SeedTheaterSeats(connection);
+            }
+            catch (Exception ex) { Console.WriteLine($"Failed at SeedTheaters: {ex.Message}"); }
 
-                Console.WriteLine("Database seeded.");
-            }
-            catch (Exception ex)
+            try
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Attempting to seed Movies...");
+                SeedMovies(connection);
             }
+            catch (Exception ex) { Console.WriteLine($"Failed at SeedMovies: {ex.Message}"); }
+
+            try
+            {
+                Console.WriteLine("Attempting to seed MovieShowings...");
+                SeedMovieShowings(connection);
+            }
+            catch (Exception ex) { Console.WriteLine($"Failed at SeedMovieShowings: {ex.Message}"); }
+
+            try
+            {
+                Console.WriteLine("Attempting to seed Seats...");
+                SeedSeats(connection);
+            }
+            catch (Exception ex) { Console.WriteLine($"Failed at SeedSeats: {ex.Message}"); }
+
+            try
+            {
+                Console.WriteLine("Attempting to seed TheaterHasSeats...");
+                SeedTheaterHasSeats(connection);
+            }
+            catch (Exception ex) { Console.WriteLine($"Failed at SeedTheaterHasSeats: {ex.Message}"); }
+
+            Console.WriteLine("Seeding sequence finished.");
+
+            Console.ReadLine();
         }
 
-        // Debug: show all tables
         using var check = connection.CreateCommand();
         check.CommandText = "SELECT name FROM sqlite_master WHERE type='table';";
 
@@ -255,172 +313,90 @@ class db
         command.ExecuteNonQuery();
     }
 
-    // =========================
-    // SEED THEATERS
-    // =========================
-
     private void SeedTheaters(SqliteConnection connection)
     {
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-        INSERT INTO theater (Id, Description)
-        VALUES
-        (1, 'Main Theater'),
-        (2, 'VIP Theater');
-        ";
+        INSERT INTO theater (Id, Width, Length, Description) VALUES
+        ('1', '12', '14', 'Has a total of 150 seats'),
+        ('2', '18', '19', 'Has a total of 300 seats'),
+        ('3', '30', '20', 'Has a total of 500 seats')";
 
         command.ExecuteNonQuery();
     }
 
-    // =========================
-    // SEED SEATS
-    // =========================
-
-    //private void SeedSeats(SqliteConnection connection)
-    //{
-    //    var command = connection.CreateCommand();
-
-    //    command.CommandText = @"
-    //    INSERT INTO seats
-    //    (Id, LocationRow, LocationColumn, IsTaken, PricingType)
-    //    VALUES
-    //    (1,1,1,0,'normal'),
-    //    (2,1,2,0,'normal'),
-    //    (3,1,3,0,'normal'),
-    //    (4,1,4,0,'normal'),
-    //    (5,1,5,0,'normal'),
-
-    //    (6,2,1,0,'normal'),
-    //    (7,2,2,0,'normal'),
-    //    (8,2,3,0,'normal'),
-    //    (9,2,4,0,'normal'),
-    //    (10,2,5,0,'normal'),
-
-    //    (11,3,1,0,'normal'),
-    //    (12,3,2,0,'normal'),
-    //    (13,3,3,0,'luxe'),
-    //    (14,3,4,0,'luxe'),
-    //    (15,3,5,0,'normal'),
-
-    //    (16,4,1,0,'normal'),
-    //    (17,4,2,0,'normal'),
-    //    (18,4,3,0,'luxe'),
-    //    (19,4,4,0,'luxe'),
-    //    (20,4,5,0,'normal'),
-
-    //    (21,5,1,0,'normal'),
-    //    (22,5,2,0,'normal'),
-    //    (23,5,3,0,'normal'),
-    //    (24,5,4,0,'normal'),
-    //    (25,5,5,0,'normal'),
-
-    //    (26,1,1,0,'normal'),
-    //    (27,1,2,0,'normal'),
-    //    (28,1,3,0,'normal'),
-    //    (29,1,4,0,'normal'),
-    //    (30,1,5,0,'normal'),
-
-    //    (31,2,1,0,'normal'),
-    //    (32,2,2,0,'normal'),
-    //    (33,2,3,0,'normal'),
-    //    (34,2,4,0,'normal'),
-    //    (35,2,5,0,'normal'),
-
-    //    (36,3,1,0,'normal'),
-    //    (37,3,2,0,'normal'),
-    //    (38,3,3,0,'VIP'),
-    //    (39,3,4,0,'VIP'),
-    //    (40,3,5,0,'normal'),
-
-    //    (41,4,1,0,'normal'),
-    //    (42,4,2,0,'normal'),
-    //    (43,4,3,0,'VIP'),
-    //    (44,4,4,0,'VIP'),
-    //    (45,4,5,0,'normal'),
-
-    //    (46,5,1,0,'normal'),
-    //    (47,5,2,0,'normal'),
-    //    (48,5,3,0,'normal'),
-    //    (49,5,4,0,'normal'),
-    //    (50,5,5,0,'normal');
-    //    ";
-
-    //    command.ExecuteNonQuery();
-    //}
-
-    //// =========================
-    //// BIND SEATS TO THEATERS
-    //// =========================
-
-    private void SeedTheaterSeats(SqliteConnection connection)
+    private void SeedTheaterHasSeats(SqliteConnection connection)
     {
         var command = connection.CreateCommand();
+        command.CommandText = @"
+        INSERT INTO theater_has_seats (Theater_Id, Seats_Id)
+        VALUES (@Theater_Id, @Seats_Id)";
 
-        var sql = new StringBuilder();
+        // Use a transaction so that if one row fails, the whole process rolls back
+        using var transaction = connection.BeginTransaction();
+        command.Transaction = transaction;
 
-        // Seats 1-25 => Theater 1
-        for (int i = 1; i <= 150; i++)
+        try
         {
-            sql.AppendLine(
-                $"INSERT INTO theater_has_seats (Theater_Id, Seats_Id) VALUES (1, {i});"
-            );
-        }
+            using (StreamReader reader = new StreamReader(TheaterHasSeatsCSV))
+            {
+                reader.ReadLine(); // Skip the header row
+                string? line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] s = line.Split(',');
+                    if (s.Length < 2) continue; // Ignore empty/malformed lines
 
-        // Seats 26-50 => Theater 2
-        for (int i = 1; i <= 200; i++)
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@Theater_Id", s[0]);
+                    command.Parameters.AddWithValue("@Seats_Id", s[1]);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            transaction.Commit();
+            Console.WriteLine("Theater-Seats mapping successfully seeded.");
+        }
+        catch (Exception ex)
         {
-            sql.AppendLine(
-                $"INSERT INTO theater_has_seats (Theater_Id, Seats_Id) VALUES (2, {i});"
-            );
+            transaction.Rollback();
+            Console.WriteLine($"ERROR in SeedTheaterHasSeats: {ex.Message}");
         }
-
-        command.CommandText = sql.ToString();
-
-        command.ExecuteNonQuery();
     }
 
-    // =========================
-    // SEED MOVIES
-    // =========================
+    public void DiagnoseDatabase(SqliteConnection connection)
+    {
+        string[] tables = { "seats", "theater", "theater_has_seats" };
+        foreach (var table in tables)
+        {
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = $"SELECT COUNT(*) FROM {table}";
+            long count = (long)cmd.ExecuteScalar();
+            Console.WriteLine($"DEBUG: Table '{table}' contains {count} rows.");
+        }
+    }
+    private string FindFile(string fileName)
+    {
+        // This looks in the same relative path as your DatabaseLoc
+        string relativePath = Path.Combine("../../../Data Source/", fileName);
+        string fullPath = Path.GetFullPath(relativePath);
 
-    //private void SeedMovies(SqliteConnection connection)
-    //{
-    //    var command = connection.CreateCommand();
+        if (!File.Exists(fullPath))
+        {
+            Console.WriteLine($"DEBUG: Failed to find file at: {fullPath}");
 
-    //    command.CommandText = @"
-    //    INSERT INTO movies 
-    //    (Title, Duration, Author, Genre, Premier, Age)
-    //    VALUES
-    //    ('Avengers', '02:30:00', 'Marvel', 'Action', '2025-01-01', 12),
-    //    ('Joker', '02:02:00', 'DC', 'Drama', '2025-01-02', 18),
-    //    ('Toy Story', '01:30:00', 'Pixar', 'Comedy', '2025-01-03', 6),
-    //    ('Interstellar', '02:49:00', 'Nolan', 'SciFi', '2025-01-05', 12),
-    //    ('Titanic', '03:15:00', 'Cameron', 'Drama', '2025-01-06', 12);
-    //    ";
+            // Secondary check: If the relative path failed, 
+            // check if it's in the bin/Debug folder (the application's base directory)
+            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data Source", fileName);
+            if (File.Exists(baseDir))
+            {
+                Console.WriteLine($"DEBUG: Found file in BaseDirectory instead: {baseDir}");
+                return baseDir;
+            }
+        }
 
-    //    command.ExecuteNonQuery();
-    //}
-
-    //// =========================
-    //// SEED SHOWINGS
-    //// =========================
-
-    //private void SeedMovieShowings(SqliteConnection connection)
-    //{
-    //    var command = connection.CreateCommand();
-
-    //    command.CommandText = @"
-    //    INSERT INTO movie_showings 
-    //    (Movie_Id, Theater_Id, ShowTime, IsCulinary, ExtraPrice)
-    //    VALUES
-    //    (1,1,'2025-06-01 18:00:00',0,0),
-    //    (2,2,'2025-06-01 20:00:00',1,50),
-    //    (3,1,'2025-06-01 14:00:00',0,0),
-    //    (4,2,'2025-06-02 19:00:00',1,50),
-    //    (5,1,'2025-06-02 17:00:00',0,0);
-    //    ";
-
-    //    command.ExecuteNonQuery();
-    //}
+        return fullPath;
+    }
 }

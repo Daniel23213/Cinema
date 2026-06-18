@@ -11,7 +11,7 @@ public class SeatAccess
     private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
     //private const string ConnectionString = @"Data Source=C:\Cinema\Cinema\Cinema\Data Source\Cinema.db"; //vivesh db path
 
-    public List<SeatModel> GetSeatsByTheater(int theater)
+    public List<SeatModel> GetSeatsByTheater(int theaterId)
     {
         var seatsList = new List<SeatModel>();
 
@@ -19,34 +19,27 @@ public class SeatAccess
         connection.Open();
 
         var cmd = connection.CreateCommand();
+        // Ensure we select them in this specific order:
         cmd.CommandText = @"
-        SELECT 
-            s.Id,
-            s.Seat,
-            s.Width,
-            s.Height,
-            s.PricingType
-        FROM 
-            seats s
-        JOIN 
-            theater_has_seats ths ON s.Id = ths.Seats_Id
-        JOIN 
-            theater t ON ths.Theater_Id = t.Id
-        WHERE 
-            t.Description = @TheaterDescription";
+        SELECT s.Id, s.Width, s.Height, s.PricingType
+        FROM seats s
+        JOIN theater_has_seats ths ON s.Id = ths.Seats_Id
+        WHERE ths.Theater_Id = @TheaterId";
 
-        cmd.Parameters.AddWithValue("@TheaterDescription", theater);
+        cmd.Parameters.AddWithValue("@TheaterId", theaterId);
 
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
+            // 0: Id, 1: Width (X), 2: Height (Y), 3: PricingType
             int id = reader.GetInt32(0);
-            int x = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
-            int y = reader.IsDBNull(3) ? 0 : reader.GetInt32(3);
-            string seatType = reader.IsDBNull(4) ? "Standard" : reader.GetString(4);
+            int x = reader.IsDBNull(1) ? 1 : reader.GetInt32(1);
+            int y = reader.IsDBNull(2) ? 1 : reader.GetInt32(2);
 
-            var seat = new SeatModel(x, y, seatType, id);
+            // This is the line that captures the Type
+            string seatType = reader.IsDBNull(3) ? "Standard" : reader.GetString(3);
 
+            var seat = new SeatModel(x, y, seatType, id, theaterId.ToString());
             seatsList.Add(seat);
         }
 
@@ -222,6 +215,24 @@ public class SeatAccess
 
         cmd.Parameters.AddWithValue("@showingId", showingId);
         cmd.Parameters.AddWithValue("@seat", seat);
+
+        long count = (long)cmd.ExecuteScalar();
+
+        return count > 0;
+    }
+    public bool IsSeatTaken(int seatId)
+    {
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+        SELECT COUNT(*)
+        FROM reservation
+        WHERE Seats_Id = @seatId
+    ";
+
+        cmd.Parameters.AddWithValue("@seatId", seatId);
 
         long count = (long)cmd.ExecuteScalar();
 
