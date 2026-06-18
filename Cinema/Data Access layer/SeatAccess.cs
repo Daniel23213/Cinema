@@ -221,15 +221,15 @@ public class SeatAccess
 
         var cmd = connection.CreateCommand();
         cmd.CommandText = @"
-        SELECT IsTaken
+        SELECT COUNT(*)
         FROM reservation
         WHERE Seats_Id = @seatId
     ";
 
         cmd.Parameters.AddWithValue("@seatId", seatId);
 
-        object? result = cmd.ExecuteScalar();
+        long count = (long)cmd.ExecuteScalar();
 
-        return Convert.ToBoolean(result);
+        return count > 0;
     }
 }

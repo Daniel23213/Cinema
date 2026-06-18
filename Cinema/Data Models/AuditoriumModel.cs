@@ -49,8 +49,9 @@ public class AuditoriumModel
                 }
                 if (access.IsSeatTaken(currentSeat.ID))
                 {
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.Write($"{"X",3}");
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.Write($" X ");
+                    Console.ForegroundColor = ConsoleColor.White;
                     continue;
                 }
                 Console.ForegroundColor = currentSeat.SeatType switch
