@@ -3,7 +3,8 @@ using Microsoft.Data.Sqlite;
 public class MovieAcces : IMovieAcces
 {
     private const string ConnectionString =
-        "Data Source=./Data Source/Cinema.db";
+        "Data Source=../../../Data Source/Cinema.db";
+        //@"Data Source=C:\Cinema\Cinema\cinema\Data Source\Cinema.db"; //vivesh db path
 
     public List<MovieModel> GetAiringMovies()
     {

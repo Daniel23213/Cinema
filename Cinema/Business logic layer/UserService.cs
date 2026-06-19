@@ -69,4 +69,12 @@
     {
         return _db.DeleteReservation(reservationId, userId);
     }
+
+    public void ChangeRole(int id, string role)
+    {
+        if (role != "User" && role != "Admin")
+            throw new Exception("Invalid role");
+
+        _db.UpdateRole(id, role);
+    }
 }

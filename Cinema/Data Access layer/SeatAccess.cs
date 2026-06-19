@@ -5,9 +5,11 @@ using System.Reflection.Emit;
 public class SeatAccess
 {
     private SqliteConnection _connection =
-    new("Data Source=./Data Source/Cinema.db");
+    new("Data Source=../../../Data Source/Cinema.db");
+    //new(@"Data Source=C:\Cinema\Cinema\cinema\Data Source\Cinema.db");
 
-    private const string ConnectionString = "Data Source=./Data Source/Cinema.db";
+    private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
+    //private const string ConnectionString = @"Data Source=C:\Cinema\Cinema\Cinema\Data Source\Cinema.db"; //vivesh db path
 
     public List<SeatModel> GetSeatsByTheater(int theater)
     {
@@ -20,9 +22,9 @@ public class SeatAccess
         cmd.CommandText = @"
         SELECT 
             s.Id,
-            s.Name,
-            s.LocationRow,
-            s.LocationColumn,
+            s.Seat,
+            s.Width,
+            s.Height,
             s.PricingType
         FROM 
             seats s
@@ -59,10 +61,10 @@ public class SeatAccess
 
         var command = connection.CreateCommand();
         command.CommandText = @"
-        INSERT INTO seats (Name, IsTaken, PricingType)
-        VALUES (@Name, @IsTaken, @PricingType)";
+        INSERT INTO seats (Seat, IsTaken, PricingType)
+        VALUES (@Seat, @IsTaken, @PricingType)";
 
-        command.Parameters.AddWithValue("@Name", seatName);
+        command.Parameters.AddWithValue("@Seat", seatName);
         command.Parameters.AddWithValue("@IsTaken", isTaken ? 1 : 0);
         command.Parameters.AddWithValue("@PricingType", pricingType);
 
@@ -101,7 +103,7 @@ public class SeatAccess
         command.CommandText = @"
     SELECT Id
     FROM seats
-    WHERE Name = @seatName;
+    WHERE Seat = @seatName;
     ";
 
         command.Parameters.AddWithValue("@seatName", seatName);
@@ -157,9 +159,9 @@ public class SeatAccess
         cmd.CommandText = @"
         SELECT 
             seats.Id,
-            seats.Name,
-            seats.LocationRow,
-            seats.LocationColumn,
+            seats.Seat,
+            seats.Width,
+            seats.Height,
             seats.PricingType
         FROM movie_showings
         JOIN theater_has_seats 
@@ -167,7 +169,7 @@ public class SeatAccess
         JOIN seats 
             ON theater_has_seats.Seats_Id = seats.Id
         WHERE movie_showings.Id = @id
-        ORDER BY seats.LocationRow, seats.LocationColumn;
+        ORDER BY seats.Width, seats.Height;
     ";
 
         cmd.Parameters.AddWithValue("@id", showingId);
@@ -175,6 +177,8 @@ public class SeatAccess
         using var reader = cmd.ExecuteReader();
 
         Console.WriteLine($"\n=== Seats for Showing {showingId} ===");
+
+        int currentRow = -1;
 
         while (reader.Read())
         {
@@ -186,12 +190,22 @@ public class SeatAccess
 
             bool taken = IsSeatTaken(showingId, seatName);
 
-            Console.WriteLine(
-                $"Seat {seatName} (Row {row}, Col {col}) | " +
-                $"{(taken ? "X Taken" : " Available")} | " +
-                $"{type}"
-            );
+            if (row != currentRow)
+            {
+                if (currentRow != -1) Console.WriteLine();
+                // {row, -2} ensures "1" and "10" take the same space
+                Console.Write($"Row {row,-2}: ");
+                currentRow = row;
+            }
+
+            string status = taken ? "[X]" : "[ ]";
+
+            // Column 1: The Seat Name (Fixed width of 4, left-aligned)
+            // Column 2: The Status (Fixed width of 4, left-aligned)
+            Console.Write($"{seatName,-4}{status,-4} ");
         }
+
+        Console.WriteLine();
     }
     public bool IsSeatTaken(int showingId, string seat)
     {
@@ -204,11 +218,11 @@ public class SeatAccess
         FROM reservation r
         JOIN seats s ON s.Id = r.Seats_Id
         WHERE r.Showing_Id = @showingId
-        AND s.Name = @name;
+        AND s.Seat = @seat;
     ";
 
         cmd.Parameters.AddWithValue("@showingId", showingId);
-        cmd.Parameters.AddWithValue("@name", seat);
+        cmd.Parameters.AddWithValue("@seat", seat);
 
         long count = (long)cmd.ExecuteScalar();
 
