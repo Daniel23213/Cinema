@@ -8,6 +8,11 @@ public class ReservationModel
 
     private ReserveSeatAccess _db = new();
 
+    public ReservationModel()
+    {
+        // keep this empty
+    }
+
     public ReservationModel(int reservtionid, string username, SeatModel reserveSeat, int userId)
     {
         ReservationId = reservtionid;
@@ -88,11 +93,4 @@ public class ReservationModel
         return UserAnswers;
     }
 
-}   
-
-// As a customer, I want to specify allergies and dietary requirements so suitable food alternatives can be prepared.
-
-// Acceptance Criteria:
-// Allergy form during booking
-// Dietary options stored with reservation
-// Chef/admin can view requirements
+}

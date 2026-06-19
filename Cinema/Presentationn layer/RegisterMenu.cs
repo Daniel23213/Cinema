@@ -4,22 +4,23 @@ public static class RegisterMenu
     public static UserModel ShowRegisterMenu()
     {
         Console.WriteLine("\n--- Register ---");
-        Console.Write("Enter your email: ");
-        string email = Console.ReadLine();
+
+        string email = UserInputValidation.NullOrEmptyValidationLoop("Enter your email: ");
+
         Console.Write("Enter your password: ");
         string password = CreateMyPasswordTextBox();
- 
-        // going to the next line becuase of the method is didnt happen
+
         Console.WriteLine();
- 
-        Console.Write("Enter your first name: ");
-        string firstName = Console.ReadLine();
-        Console.Write("Enter your last name: ");
-        string lastName = Console.ReadLine();
-        Console.Write("Enter your age: ");
-        int  age = Convert.ToInt32(Console.ReadLine());
+
+        string firstName = UserInputValidation.NullOrEmptyValidationLoop("Enter your first name: ");
+
+        string lastName = UserInputValidation.NullOrEmptyValidationLoop("Enter your last name: ");
+
+        int age = UserInputValidation.IntInputValidation("Enter your age: ");
+
         // Here you would typically call a method to create the account in the database
         // For example:
+        
         UserModel newAccount = new(firstName, lastName, email, password, age);
         UserService accountsAccess = new();
         if(accountsAccess.Register(newAccount)== true) 
@@ -33,7 +34,9 @@ public static class RegisterMenu
             Console.WriteLine("Email is taken!");
             return null;
         }
+        
     }
+ 
     // Vivesh code hashing input field when typing the password
     public static string CreateMyPasswordTextBox()
     {
@@ -42,6 +45,7 @@ public static class RegisterMenu
             ConsoleKeyInfo cki;
             // Prevent example from ending if CTL+C is pressed.
             Console.TreatControlCAsInput = true;
+ 
             while (true)
             {
                 cki = Console.ReadKey(true);
@@ -58,18 +62,21 @@ public static class RegisterMenu
                         Console.Write("\b \b");
                     }
                 }
-                else if(!char.IsControl(cki.KeyChar)) //char.IsControl() check if its not arrow button or escape button
+                //char.IsControl() check if its not arrow button or escape button
+                else if(!char.IsControl(cki.KeyChar)) 
                 {
                     Password.Append(cki.KeyChar);
-                    Console.Write("*"); // console.write whitout line otherwise it will be going down
+
+                    // console.write whitout line otherwise it will be going down
+                    Console.Write("*");
                 }
             }
- 
-            // turning stuff out
+
+            // turning hashing off
             Console.TreatControlCAsInput = false;
- 
+
             return Password.ToString();
         }
     }
- 
+
 }

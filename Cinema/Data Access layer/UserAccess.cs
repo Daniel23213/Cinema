@@ -5,6 +5,7 @@ public class UserAccess : IUserAccess
 {
     private readonly string _connectionString =
         "Data Source=../../../Data Source/Cinema.db";
+        //@"Data Source=C:\Cinema\Cinema\cinema\Data Source\Cinema.db";
 
     private SqliteConnection CreateConnection()
         => new SqliteConnection(_connectionString);
@@ -94,7 +95,7 @@ public class UserAccess : IUserAccess
                 u.Lastname,
                 m.Title AS MovieTitle,
                 ms.ShowTime,
-                s.Name
+                s.Seat
             FROM reservation r
             JOIN users u ON u.Id = r.Users_Id
             JOIN movie_showings ms ON ms.Id = r.Showing_Id
@@ -115,5 +116,15 @@ public class UserAccess : IUserAccess
             DELETE FROM reservation
             WHERE Id = @id AND Users_Id = @userId;
         ", new { id = reservationId, userId }) > 0;
+    }
+
+    public void UpdateRole(int id, string role)
+    {
+        using var conn = CreateConnection();
+        conn.Open();
+
+        conn.Execute(
+            "UPDATE users SET Role = @Role WHERE Id = @Id",
+            new { Id = id, Role = role });
     }
 }

@@ -5,13 +5,18 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="haha you are bad\" />
     <Folder Include="UnitTests\DatabaseTests\" />
     <Folder Include="UnitTests\UserTests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data Source\BarLoungeMenu.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
