@@ -1,7 +1,9 @@
 using Dapper;
 using Microsoft.Data.Sqlite;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 public class AuditoriumAccess
 {
+    private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
     private const string _databaseLoc = "./Cinema.db";
     
     public AuditoriumModel GetAuditoriumByID(int id)
