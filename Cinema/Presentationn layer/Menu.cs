@@ -1,6 +1,7 @@
 //using Cinema.Presentationn_layer;
 
 using System.Net.Sockets;
+using System.Text.Json;
 using System.Threading.Channels;
 
 public static class Menu
@@ -236,29 +237,30 @@ public static class Menu
                     break;
 
                 case "F" or "f":
-                    //implement food menu
-                    string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                    string filepath = Path.Combine(baseDirectory, "Data Source", "BarLoungeMenu.json");
+                    Console.Clear();
+                    FoodMenuAccess FoodMenuAccesss = new FoodMenuAccess();
 
                     try
                     {
-                        string filename = Path.GetFileName(filepath);
+                        Console.WriteLine("=== Here is the Bar & Lounge menu ===");
 
-                        Console.Clear();
-                        Console.WriteLine($"=== Here is the the Bar & Lounge menu ===");
+                        Console.WriteLine("\n=== DRINKS ===");
+                        foreach (var item in FoodMenuAccesss.GetItemsByCategory("drinks"))
+                        {
+                            Console.WriteLine($"{item.Category} | {item.Name} - €{item.Price:F2}");
+                        }
 
-                        string loungeMenu = File.ReadAllText(filepath);
-                        Console.WriteLine(loungeMenu);
+                        Console.WriteLine("\n=== SNACKS ===");
+                        foreach (var item in FoodMenuAccesss.GetItemsByCategory("snacks"))
+                        {
+                            Console.WriteLine($"{item.Category} | {item.Name} - €{item.Price:F2}");
+                        }
                     }
-                    catch (FileNotFoundException)
+                    catch (Exception e)
                     {
-                        Console.WriteLine("Json file is not found");
+                        Console.WriteLine($"Something went wrong: {e.Message}");
                     }
-                    catch(Exception e)
-                    {
-                        Console.WriteLine($"Something went wrong {e.Message}");
-                    }
-
+                    
                     Pause();
                     break;
 
@@ -286,7 +288,9 @@ public static class Menu
                     }
                     else if (manageInput.ToLower() == "c")
                     {
-                        string newpassword = UserInputValidation.NullOrEmptyValidationLoop("Enter the new password (or B to back): "); // Validation loop
+                        Console.Write("Enter the new password(Must be atleast 6 characters long): ");
+                        string newpassword = RegisterMenu.CreateMyPasswordTextBox();
+                        Console.WriteLine();
 
                         if (newpassword.ToLower() == "b") { break; } // Check for back
 
