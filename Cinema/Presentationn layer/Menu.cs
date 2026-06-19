@@ -288,7 +288,9 @@ public static class Menu
                     }
                     else if (manageInput.ToLower() == "c")
                     {
-                        string newpassword = UserInputValidation.NullOrEmptyValidationLoop("Enter the new password (or B to back): "); // Validation loop
+                        Console.Write("Enter the new password(Must be atleast 6 characters long): ");
+                        string newpassword = RegisterMenu.CreateMyPasswordTextBox();
+                        Console.WriteLine();
 
                         if (newpassword.ToLower() == "b") { break; } // Check for back
 
