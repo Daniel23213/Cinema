@@ -22,7 +22,7 @@
 
     public UserModel Login(string email, string password)
     {
-        var hashed = UserModel.HashPassword(password);
+        var hashed = PasswordHasherLogic.HashPassword(password);
         return _db.GetByEmail(email)?.Password == hashed
             ? _db.GetByEmail(email)
             : null;
@@ -47,7 +47,7 @@
         if (newPassword.Length < 6)
             throw new Exception("Password too short");
 
-        _db.UpdatePassword(id, UserModel.HashPassword(newPassword));
+        _db.UpdatePassword(id, PasswordHasherLogic.HashPassword(newPassword));
     }
 
     // ---------------- RESERVATION ----------------

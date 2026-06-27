@@ -20,19 +20,12 @@ public class UserModel : IEquatable<UserModel>
         FirstName = firstName;
         LastName = lastName;
         Email = email;
-        Password = HashPassword(password);
+        Password = PasswordHasherLogic.HashPassword(password);
         Age = age;
     }
     public UserModel()
     {
 
-    }
-
-    public static string HashPassword(string password)
-    {
-        using var sha = SHA256.Create();
-        var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return Convert.ToBase64String(bytes);
     }
 
     public bool Equals(UserModel other) 

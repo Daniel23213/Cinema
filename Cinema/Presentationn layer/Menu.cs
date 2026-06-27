@@ -169,7 +169,7 @@ public static class Menu
                         Pause();
 
                         ReservationModel reserve = new ReservationModel();
-                        List<String> Alergy = reserve.Dietary();
+                        List<String> Alergy = DieteryQuestionnarie.Dietary();
 
                         if(Alergy.Count > 0)
                         {
