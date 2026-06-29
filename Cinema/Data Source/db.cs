@@ -3,9 +3,9 @@ using System.Text;
 
 public class db
 {
-    private const string DatabaseLoc = "../../../Data Source/Cinema.db";
-    private const string SeatCSV = "../../../Data Source/Seats.csv";
-    private const string TheaterHasSeatsCSV = "../../../Data Source/theater_has_seats.csv";
+    private const string DatabaseLoc = "./Data Source/Cinema.db";
+    private const string SeatCSV = "./Data Source/Seats.csv";
+    private const string TheaterHasSeatsCSV = "./Data Source/theater_has_seats.csv";
     
     // =========================
     // SEED SEATS
