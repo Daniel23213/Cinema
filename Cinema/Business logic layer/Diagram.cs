@@ -1,23 +1,11 @@
-public class AuditoriumModel
+public static class Diagram
 {
-    public int ID { get; }
-    public int Length { get; }
-    public int Width { get; }
-    public string Discription { get; }
-    
-    public AuditoriumModel(int id, int width, int length, string discription)
+    public static void PrintAuditoriumDiagram(int AuditoriumId)
     {
-        ID = id;
-        Length = length;
-        Width = width;
-        Discription = discription;
-    }
-
-    public void PrintAuditoriumDiagram()
-    {
-        SeatAccess access = new();
-        SeatModel[,] diagram = new SeatModel[Length + 1, Width + 1];
-        List<SeatModel> seats = access.GetSeatsByTheater(ID);
+        SeatAccess seatAccess = new();
+        var measurements = AuditoriumAccess.GetAuditoriumMeasurementsByID(AuditoriumId);
+        SeatModel[,] diagram = new SeatModel[measurements.length + 1, measurements.width + 1];
+        List<SeatModel> seats = seatAccess.GetSeatsByTheater(AuditoriumId);
 
         // Assign seat to location
         foreach (SeatModel seat in seats)
@@ -47,7 +35,7 @@ public class AuditoriumModel
                     Console.Write("   ");
                     continue;
                 }
-                if (access.IsSeatTaken(currentSeat.ID))
+                if (seatAccess.IsSeatTaken(currentSeat.ID))
                 {
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.Write($" X ");
@@ -70,6 +58,4 @@ public class AuditoriumModel
         Console.WriteLine("Yellow Seats: Premium");
         Console.WriteLine("Blue Seats: Standard");
     }
-
-    public override string ToString() => $"Auditorium ID: {ID}, Length: {Length}, Width: {Width}, Description: {Discription}";
 }

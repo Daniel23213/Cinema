@@ -1,47 +1,33 @@
 using Microsoft.Data.Sqlite;
-public class AuditoriumAccess
+public static class AuditoriumAccess
 {
     private const string _databaseLoc = "../../../Data Source/Cinema.db";
     
-    public AuditoriumModel GetAuditoriumByID(int id)
+    public static (int width, int length) GetAuditoriumMeasurementsByID(int id)
     {
-        string query = "SELECT * FROM theater WHERE id = @ID";
+        string query = "SELECT Width, Length FROM theater WHERE id = @ID";
         SqliteConnection connection = new($"Data Source={_databaseLoc}");
         connection.Open();
         using SqliteCommand command = new(query, connection);
         command.Parameters.AddWithValue("@ID", id);
         SqliteDataReader result = command.ExecuteReader();
         result.Read();
-        AuditoriumModel? auditorium = new
-        (
-            Convert.ToInt32(result["Id"]),
-            Convert.ToInt32(result["Width"]),
-            Convert.ToInt32(result["Length"]),
-            Convert.ToString(result["Description"])
-            
-        );
+        (int Width, int Length) measurements = (Convert.ToInt32(result["Width"]), Convert.ToInt32(result["Length"]));
         connection.Close();
-        return auditorium;
+        return measurements;
     }
 
-    public AuditoriumModel GetAuditoriumByShowingID(int id)
+    public static int GetAuditoriumIdByShowingId(int showingId)
     {
-        string query = @"SELECT theater.Id, theater.Width, theater.Length, theater.Description FROM movie_showings JOIN theater ON movie_showings.Theater_Id = theater.Id WHERE movie_showings.Id = @ID";
+        string query = @"SELECT theater.Id FROM movie_showings JOIN theater ON movie_showings.Theater_Id = theater.Id WHERE movie_showings.Id = @ID";
         SqliteConnection connection = new($"Data Source={_databaseLoc}");
         connection.Open();
         using SqliteCommand command = new(query, connection);
-        command.Parameters.AddWithValue("@ID", id);
+        command.Parameters.AddWithValue("@ID", showingId);
         SqliteDataReader result = command.ExecuteReader();
         result.Read();
-        AuditoriumModel? auditorium = new
-        (
-            Convert.ToInt32(result["Id"]),
-            Convert.ToInt32(result["Width"]),
-            Convert.ToInt32(result["Length"]),
-            Convert.ToString(result["Description"])
-            
-        );
+        int id = Convert.ToInt32(result["Id"]);
         connection.Close();
-        return auditorium;
+        return id;
     }
 }

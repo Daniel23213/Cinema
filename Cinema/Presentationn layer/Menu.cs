@@ -149,9 +149,7 @@ public static class Menu
                     }
 
                     SeatAccess seatAccess = new();
-                    AuditoriumAccess auditoriumAccess = new();
-                    AuditoriumModel auditoriumModel = auditoriumAccess.GetAuditoriumByShowingID(int.Parse(choiceInput));
-                    auditoriumModel.PrintAuditoriumDiagram();
+                    Diagram.PrintAuditoriumDiagram(AuditoriumAccess.GetAuditoriumIdByShowingId(int.Parse(choiceInput)));
                     Console.Write("Please select a seat: ");
 
                     string seat = UserInputValidation.NullOrEmptyValidationLoop("Choose a seat (or B to back): "); // Added option
@@ -249,13 +247,13 @@ public static class Menu
                         Console.WriteLine("\n=== DRINKS ===");
                         foreach (var item in FoodMenuAccesss.GetItemsByCategory("drinks"))
                         {
-                            Console.WriteLine($"{item.Category} | {item.Name} - €{item.Price:F2}");
+                            Console.WriteLine($"{item.Category} | {item.Name} - ï¿½{item.Price:F2}");
                         }
 
                         Console.WriteLine("\n=== SNACKS ===");
                         foreach (var item in FoodMenuAccesss.GetItemsByCategory("snacks"))
                         {
-                            Console.WriteLine($"{item.Category} | {item.Name} - €{item.Price:F2}");
+                            Console.WriteLine($"{item.Category} | {item.Name} - ï¿½{item.Price:F2}");
                         }
                     }
                     catch (Exception e)
