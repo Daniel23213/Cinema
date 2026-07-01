@@ -218,11 +218,11 @@ public class SeatAccess
         FROM reservation r
         JOIN seats s ON s.Id = r.Seats_Id
         WHERE r.Showing_Id = @showingId
-        AND s.Name = @seat;
+        AND s.Name = @name;
     ";
 
         cmd.Parameters.AddWithValue("@showingId", showingId);
-        cmd.Parameters.AddWithValue("@Name", seat);
+        cmd.Parameters.AddWithValue("@name", seat);
 
         long count = (long)cmd.ExecuteScalar();
 
