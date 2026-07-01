@@ -127,4 +127,20 @@ public class UserAccess : IUserAccess
             "UPDATE users SET Role = @Role WHERE Id = @Id",
             new { Id = id, Role = role });
     }
+
+    public void GiveUserMonthlyTicketByID(int id)
+    {
+        string sql = "UPDATE users SET MonthlyTicket = @MonthlyTicket WHERE Id = @ID";
+        using var conn = CreateConnection();
+        conn.Open();
+        conn.Execute(sql, new { @MonthlyTicket = DateTime.Today, @ID = id });
+    }
+
+    public DateTime? GetMonthlyTicketByID(int id)
+    {
+        string sql = "SELECT MonthlyTicket FROM users WHERE Id = @ID";
+        using var conn = CreateConnection();
+        conn.Open();
+        return conn.QueryFirstOrDefault<DateTime?>(sql, new { @ID = id });
+    }
 }

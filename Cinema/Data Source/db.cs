@@ -134,7 +134,8 @@ class db
             Email TEXT NOT NULL,
             Password TEXT NOT NULL,
             Age INTEGER NOT NULL,
-            Role TEXT
+            Role TEXT,
+            MonthlyTicket TEXT
         );";
 
         // MOVIES

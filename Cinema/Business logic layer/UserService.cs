@@ -77,4 +77,11 @@
 
         _db.UpdateRole(id, role);
     }
+
+    public bool IsMonthlyTicketValid(int userID)
+    {
+        DateTime today = DateTime.Today;
+        DateTime? monthlyTicket = _db.GetMonthlyTicketByID(userID);
+        return monthlyTicket >= today;
+    }
 }
