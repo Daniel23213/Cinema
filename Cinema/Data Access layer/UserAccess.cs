@@ -133,7 +133,7 @@ public class UserAccess : IUserAccess
         string sql = "UPDATE users SET MonthlyTicket = @MonthlyTicket WHERE Id = @ID";
         using var conn = CreateConnection();
         conn.Open();
-        conn.Execute(sql, new { @MonthlyTicket = DateTime.Today, @ID = id });
+        conn.Execute(sql, new { @MonthlyTicket = DateTime.Today.AddMonths(1), @ID = id });
     }
 
     public DateTime? GetMonthlyTicketByID(int id)
@@ -142,5 +142,13 @@ public class UserAccess : IUserAccess
         using var conn = CreateConnection();
         conn.Open();
         return conn.QueryFirstOrDefault<DateTime?>(sql, new { @ID = id });
+    }
+
+    public void RemoveMonthlyTicketByID(int id)
+    {
+        string sql = "UPDATE users SET MonthlyTicket = NULL WHERE Id = @ID";
+        using var conn = CreateConnection();
+        conn.Open();
+        conn.Execute(sql, new { @ID = id });
     }
 }

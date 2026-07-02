@@ -8,7 +8,7 @@ public class SeatAccess
     new("Data Source=../../../Data Source/Cinema.db");
     //new(@"Data Source=C:\Cinema\Cinema\cinema\Data Source\Cinema.db");
 
-    private const string ConnectionString = "Data Source=../../../Data Source/Cinema.db";
+    private const string ConnectionString = "Data Source=./Data Source/Cinema.db";
     //private const string ConnectionString = @"Data Source=C:\Cinema\Cinema\Cinema\Data Source\Cinema.db"; //vivesh db path
 
     public List<SeatModel> GetSeatsByTheater(int theater)

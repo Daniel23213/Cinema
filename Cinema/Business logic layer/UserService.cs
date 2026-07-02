@@ -81,7 +81,22 @@
     public bool IsMonthlyTicketValid(int userID)
     {
         DateTime today = DateTime.Today;
-        DateTime? monthlyTicket = _db.GetMonthlyTicketByID(userID);
+        DateTime? monthlyTicket = GetMonthlyTicketByID(userID);
         return monthlyTicket >= today;
+    }
+
+    public void GiveUserMonthlyTicketByID(int id)
+    {
+        _db.GiveUserMonthlyTicketByID(id);
+    }
+
+    public DateTime? GetMonthlyTicketByID(int id)
+    {
+        return _db.GetMonthlyTicketByID(id);
+    }
+
+    public void RemoveMonthlyTicketByID(int id)
+    {
+        _db.RemoveMonthlyTicketByID(id);
     }
 }

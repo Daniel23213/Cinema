@@ -25,6 +25,13 @@ public static class Menu
             // User first Name and Last Name print put up in another if not to confuse the user
             if (isLogged != null)
             {
+                UserService user = new();
+                if (user.GetMonthlyTicketByID(isLogged.Id) != null && !user.IsMonthlyTicketValid(isLogged.Id));
+                {
+                    Console.WriteLine("Your monthly ticket has expired");
+                    Pause();
+                    Console.Clear();
+                }
                 Console.WriteLine($"Logged in as: {isLogged.FirstName} {isLogged.LastName}");
             }
             Console.WriteLine("\n[A]: Airing movies");
@@ -247,13 +254,13 @@ public static class Menu
                         Console.WriteLine("\n=== DRINKS ===");
                         foreach (var item in FoodMenuAccesss.GetItemsByCategory("drinks"))
                         {
-                            Console.WriteLine($"{item.Category} | {item.Name} - €{item.Price:F2}");
+                            Console.WriteLine($"{item.Category} | {item.Name} - ï¿½{item.Price:F2}");
                         }
 
                         Console.WriteLine("\n=== SNACKS ===");
                         foreach (var item in FoodMenuAccesss.GetItemsByCategory("snacks"))
                         {
-                            Console.WriteLine($"{item.Category} | {item.Name} - €{item.Price:F2}");
+                            Console.WriteLine($"{item.Category} | {item.Name} - ï¿½{item.Price:F2}");
                         }
                     }
                     catch (Exception e)
