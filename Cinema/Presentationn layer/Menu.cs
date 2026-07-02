@@ -28,6 +28,7 @@ public static class Menu
                 UserService user = new();
                 if (user.GetMonthlyTicketByID(isLogged.Id) != null && !user.IsMonthlyTicketValid(isLogged.Id))
                 {
+                    user.RemoveMonthlyTicketByID(isLogged.Id);
                     Console.WriteLine("Your monthly ticket has expired");
                     Pause();
                     Console.Clear();
