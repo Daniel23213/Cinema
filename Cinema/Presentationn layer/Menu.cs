@@ -14,6 +14,7 @@ public static class Menu
     {
         bool running = true;
         UserModel isLogged = null;
+        UserService user = new();
 
         while (running)
         {
@@ -25,7 +26,6 @@ public static class Menu
             // User first Name and Last Name print put up in another if not to confuse the user
             if (isLogged != null)
             {
-                UserService user = new();
                 if (user.GetMonthlyTicketByID(isLogged.Id) != null && !user.IsMonthlyTicketValid(isLogged.Id))
                 {
                     user.RemoveMonthlyTicketByID(isLogged.Id);
@@ -38,10 +38,18 @@ public static class Menu
             Console.WriteLine("\n[A]: Airing movies");
             if (isLogged != null)
             {
-
-                Console.WriteLine("[B]: Buy tickets");
-                Console.WriteLine("[C]: Cancel tickets");
-                Console.WriteLine("[T]: Booked tickets");
+                if (user.IsMonthlyTicketValid(isLogged.Id))
+                {
+                    Console.WriteLine("[B]: Reserve Movie Seat");
+                    Console.WriteLine("[C]: Cancel tickets/reservations");
+                    Console.WriteLine("[T]: Booked tickets/reservations");
+                }
+                else
+                {
+                    Console.WriteLine("[B]: Buy tickets");
+                    Console.WriteLine("[C]: Cancel tickets");
+                    Console.WriteLine("[T]: Booked tickets");
+                }
                 Console.WriteLine("[O]: Manage account");
                 if (isLogged.Role == "Admin" || isLogged.Role == "SuperManager")
                 {
@@ -135,6 +143,22 @@ public static class Menu
 
                 case "B":
                     // Buy Ticket
+                    Console.Clear();
+                    if (!user.IsMonthlyTicketValid(isLogged.Id))
+                    {    
+                        Console.WriteLine("What kind of ticket do you want to buy?");
+                        Console.WriteLine("[N] Normal Ticket");
+                        Console.WriteLine("[M] Monthly Ticket");
+                        option = UserInputValidation.NullOrEmptyValidationLoop("\nChoose option: ");
+                        if (option.ToUpper() == "M")
+                        {
+                            user.GiveUserMonthlyTicketByID(isLogged.Id);
+                            Console.WriteLine("Monthly Ticket bought succesfully");
+
+                            Pause();
+                            break;
+                        }
+                    }
 
                     var showings = movieService.GetShowings(isLogged);
 
@@ -170,7 +194,6 @@ public static class Menu
                     {
                         Console.WriteLine("Seat reserved successfully.");
 
-                        UserService user = new();
                         user.ReserveTicket(isLogged, seatid, choice);
 
                         Console.WriteLine("\n=== Proceed to culinary options ===");
@@ -199,8 +222,12 @@ public static class Menu
                 case "T":
                     Console.Clear();
                     // view booked tickets
-                    UserService user3 = new();
-                    foreach (dynamic ticket in user3.ShowTickets(isLogged.Id)) 
+                    if (user.IsMonthlyTicketValid(isLogged.Id))
+                    {
+                        Console.WriteLine("You have a monthly ticket");
+                        Console.WriteLine($"Expiration date {user.GetMonthlyTicketByID(isLogged.Id):dd/MM/yyyy}\n");
+                    }
+                    foreach (dynamic ticket in user.ShowTickets(isLogged.Id)) 
                     {
                         Console.WriteLine($"ID: {ticket.ReservationId}, Movie: {ticket.MovieTitle}, Time: {ticket.ShowTime}, Seat: {ticket.Seat}");
                     }
