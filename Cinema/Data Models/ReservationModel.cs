@@ -22,22 +22,5 @@ public class ReservationModel
 
     }
 
-    public string SeatAvailble(SeatModel selectedSeat, string customerName)
-    {
-        if (_isTaken)
-        {
-            return $"{selectedSeat.ID} is taken";
-        }
-        else
-        {
-           int NewId = _db.SeatReserve(UserId, selectedSeat.ID, _isTaken);
-           ReservationId = NewId;
-           MakeSeatTaken();
-           return $"Seat: {selectedSeat.ID} is sucessfully reserved on {customerName} ID: {ReservationId}";
-        }
-    }
-    public void MakeSeatTaken()
-    {
-        _isTaken = true;
-    }
+
 }
